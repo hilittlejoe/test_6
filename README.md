@@ -68,6 +68,7 @@
 * 优化图片
 * 调整图片大小
 * 减少资源加载
+* 使得外联型CSS改成内嵌式
 ### 去除卡顿
 #### part1 对 views/js/main.js 进行的优化可使 views/pizza.html 在滚动时保持 60fps 的帧速
 * 针对changeSliderLabel函数进行“var pizzaSize_qs = document.querySelector("#pizzaSize")”函数变量的提取
@@ -114,6 +115,36 @@ for (var i = 2; i < 100; i++) {
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 ```
+* 当页面加载时生成披萨滑窗--对加载的披萨数量进行控制，根据浏览器窗口进行数量的控制
+```bash
+document.addEventListener('DOMContentLoaded', function() {
+  var cols = 8;
+  var s = 256;
+  //获取浏览器窗口大小
+  var winWidth_win = window.innerWidth;
+  var winHeight_win = window.innerHeight;
+  var num_pizza =null;
+    if(winWidth_win<=1024){
+        num_pizza = 24;
+    }
+    else if(winWidth_win>1024){
+        num_pizza = 50;
+    }
+    
+  for (var i = 0; i < num_pizza; i++) {
+    var elem = document.createElement('img');
+    elem.className = 'mover';
+    elem.src = "images/pizza.png";
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
+    elem.basicLeft = (i % cols) * s;
+    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    document.getElementById("movingPizzas1").appendChild(elem);
+  }
+  updatePositions();
+}
+```
+* 对main.js中的id及class用getElementById、getElementsByClassName进行获取
 
 
 
