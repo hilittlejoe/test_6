@@ -1,53 +1,31 @@
-### 安装
+### 搭建环境
+
+```bash
+  $> cd /你的工程目录
+  $> python -m SimpleHTTPServer 8080
 ```
-1、install node
-2、install npm
-```
+打开浏览器，访问 localhost:8080
 
-### 使用
+### 所做的修改
+1. 压缩图片和css
+2. 修改index.html中<script async src="js/perfmatters.js" async></script>添加了async
+3. 修改main.js中
 
-```
-1、npm install
-2、npm start 启动
-3、浏览器输入http://localhost:3000
+将其中一些dom选择提取出来作为一个变量，同时减少计算导致的重新渲染。
 
-```
-
-### 优化
-
-#### 1、index.html
-
-* 增加一张pizzeria.jpg为100*75的尺寸图片，用于首页显示，减少原始图片太大导致请求加载时间与流量消耗问题
-
-* 字体加载：使用js优化加载，不阻塞渲染
-
-* 减少样式http请求，使用内联样式
-
-#### 2、main.js
-
-* DOMContentLoaded：页面初始化创建dom元素时，使用createDocumentFragment碎片，一次性加入所创建好元素，再往dom添加，减少频繁操作dom
-
-* updatePositions：循环外记录top高度，无需循环内重复计算，导致性能损耗
-```
-var top = document.body.scrollTop;
+```window.addEventListener('scroll', function() {
+    window.requestAnimationFrame(updatePositions);
+});
 ```
 
-* 模式一：worker.js多线程：使用worker.js操作业务，不阻塞主线程操作。模式二：获取pizza第一个的宽度，无需每次重复计算pizza宽度
-* 循环外缓存变量，无需循环内重新获取，如下代码
-```js
+```
 function changePizzaSizes(size) {
-            var items = document.querySelectorAll(".randomPizzaContainer");
-            for (var i = 0; i < items.length; i++) {
-                var itemDetail = items[i];
-                var itemOffsetWidth = itemDetail.offsetWidth;
-                var dx = determineDx(itemOffsetWidth, size);
-                var newwidth = (itemOffsetWidth + dx) + 'px';
-                itemDetail.style.width = newwidth;
-            }
-        }
+    var dx = determineDx(document.querySelectorAll(".randomPizzaContainer"), size);
+    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    }
+  }
 ```
-
-
-
 
 
