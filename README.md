@@ -1,140 +1,25 @@
-# 网站优化
-### 优化要求
-- index.html页面在移动和桌面的pagespeed分数至少为90分
-- 保持pizza.html在滚动时60fps的帧数
-- 页面上的 pizza 尺寸滑块调整 pizza 大小的时间小于5毫秒
-### 运行项目
-1. 下载项目
-  
-```
-git clone https://github.com/ZhouXingXingOrJames/websiteOptimize-p2.git
-```
-2.启动服务
-```bash
-  $> cd /工程目录
-  $> python -m SimpleHTTPServer 8080
-``` 
-打开浏览器，访问 localhost:8080
+## 网站性能优化项目
 
+你要做的是尽可能优化这个在线项目的速度。
 
-``` bash
-  $> cd /工程目录
-  $> ./ngrok http 8080
-```
-复制ngrok提供给你的公共URL
-# 优化
-### index.html页面
-- **css**
-将
+### 目标
 
-```
-    <link href="css/print.css" rel="stylesheet">
+- index.html 在移动设备和桌面上的 PageSpeed 分数至少为90分。
+- 对 views/js/main.js 进行的优化可使 views/pizza.html 在滚动时保持 60fps 的帧速。
+- 用 views/pizza.html 页面上的 pizza 尺寸滑块调整 pizza 大小的时间小于5毫秒。
 
-```
-更改为
+### 优化概述
 
-```
-    <link href="css/print.css" rel="stylesheet" media="print">
+#### index.html
+1. 异步加载谷歌字体
+2. css内联
+3. js脚本加上async，异步加载
+4. 使用pagespeed中提供的优化后的图片以及压缩后的js文件（之前也用过gulp来压缩图片和文件，结果pagespeed还是提示图片压缩的不够，所以就直接用pagespeed里面提供的图片和文件了）
 
-```
-只在页面需要打印时加载
-
-- **js** 
-```
-<script src="js/GoogleAnalytics.js" async></script>
-<script src="http://www.google-analytics.com/analytics.js" async></script>
-```
-
- 在JavaScript引用中添加async属性，异步加载。
-- **image**
-将图片使用工具进行压缩，已达到图片容积最优化。这里使用的是[kraken.io](https://kraken.io/web-interface)进行压缩优化
-
-### 优化pizza滑动卡顿
-- 降低滑动时随机生成的pizza数量，从200降到31
-
-```
-document.addEventListener('DOMContentLoaded', function() {
-  var cols = 8;
-  var s = 256;
-  for (var i = 0; i < 31; i--) {
-    var elem = document.createElement('img');
-    elem.className = 'mover';
-    elem.src = "images/pizza.png";
-    elem.style.height = "100px";
-    elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * s;
-    elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
-  }
-  updatePositions();
-});
-```
-- 优化css动画渲染
-使用translateX() 和 translateZ(0)函数渲染
-
-```
-function updatePositions() {
-  frame++;
-  window.performance.mark("mark_start_frame");
-
-  var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-      var left = -items[i].basicLeft + 1000 * phase + 'px';
-      items[i].style.transform = "translateX("+left+") translateZ(0)";
-  }
-
-  // 再次使用User Timing API。这很值得学习
-  // 能够很容易地自定义测量维度
-  window.performance.mark("mark_end_frame");
-  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
-  if (frame % 10 === 0) {
-    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
-    logAverageFrame(timesToUpdatePosition);
-  }
-}
-```
-### 使用requestAnimationFrame函数优化页面滑动时调用updatePositions函数
-
-```
-window.addEventListener('scroll', function() {
-    window.requestAnimationFrame(updatePositions);
-});
-```
-### 优化循环遍历披萨并改变宽度的方法
-
-```
-   function changePizzaSizes(size) {
-        var dx = determineDx(document.querySelector(".randomPizzaContainer"), size);
-        var newwidth = (document.querySelector(".randomPizzaContainer").offsetWidth + dx) + 'px';
-        var elements = document.querySelectorAll(".randomPizzaContainer");
-        for (var i = elements.length; i--;) {
-            elements[i].style.width = newwidth;
-        }
-    }
-```
-创建一个新的变量，保存所有的.randomPizzaContainer元素，在循环外，避免每次循环都去获取所有的元素。
-### 减少for循环中的运算
-```
- var items = document.getElementsByClassName('mover');
-  var top = document.body.scrollTop / 1250;
-  var phase;
-  for (var i = 0; i < items.length; i++) {
-      phase = Math.sin(top + i % 5);
-      var left = -items[i].basicLeft + 1000 * phase + 'px';
-      items[i].style.transform = "translateX("+left+") translateZ(0)";
-  }
-```
-# 联系我
-如果你有更好的优化方式，可以一起讨论一个更好的优化方案
-###### QQ邮箱:1098769275@qq.com
-###### 微信 :1098769275
-
-
-
-
-
-
-
-
-
+#### pizza.html
+1. 按需加载pizza数。通过屏幕可用高度、行高以及一行显示pizza的个数，计算出在可视区中有多少个小pizza。因为实际上可视区外多余的小pizza并没有什么用，反而还增加合成操作。
+2. 用getElementById代替querySelector，并把循环内的获取dom元素操作移到循环外面。
+3. 刚开始生成pizza的时候，用字符串拼接html代替dom创建元素。
+4. transform代替left去移动pizza，避免重绘。
+5. 用requestAnimationFrame代替监听scroll事件，使得scroll更高效。
+6. 修改pizza大小的时候，去掉不必要的代码，直接获取pizza的width。
