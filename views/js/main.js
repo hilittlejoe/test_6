@@ -418,21 +418,45 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
+   // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
+  function determineDx (elem, size) {
+    var oldWidth = elem.offsetWidth;
+    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    var oldSize = oldWidth / windowWidth;
+
+    // 将值转成百分比宽度
+    function sizeSwitcher (size) {
+      switch(size) {
+        case "1":
+          return 0.25;
+        case "2":
+          return 0.3333;
+        case "3":
+          return 0.5;
+        default:
+          console.log("bug in sizeSwitcher");
+      }
+    }
+
+    var newSize = sizeSwitcher(size);
+    var dx = (newSize - oldSize) * windowWidth;
+
+    return dx;
+  }
+
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-    switch(size) {
-      case "1":
-        newwidth = 25;
-      case "2":
-        newwidth = 33.33;
-      case "3":
-        newwidth = 50;
-      default:
-        console.log("bug in sizeSwitcher");
-    }
-    var randowPizzas = document.querySelectorAll(".randomPizzaContainer");
-    for (var i = 0; i < randowPizzas.length; i++) {
-      randowPizzas[i].style.width = newwidth + '%';
+    // for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+    //   var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+    //   var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+    //   document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    // }
+    var randomPizzaContainer = document.getElementsByClassName('randomPizzaContainer');
+    var dx = determineDx(randomPizzaContainer[0], size);
+    var newwidth = (randomPizzaContainer[0].offsetWidth + dx) + 'px';
+    // 改变的宽度一样，没有必要放进循环
+    for (var i = 0; i < randomPizzaContainer.length; i++) {
+      randomPizzaContainer[i].style.width = newwidth;
     }
   }
 
@@ -448,8 +472,10 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // 收集timing数据
 
 // 这个for循环在页面加载时创建并插入了所有的披萨
+//没有必要在每次循环是，进行一次遍历
+var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
+  // var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -476,42 +502,28 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 // 下面的关于背景滑窗披萨的代码来自于Ilya的demo:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
-// 监听animation frame，用raf代替scroll事件
-var scroll = window.requestAnimationFrame ||
-             window.webkitRequestAnimationFrame ||
-             window.mozRequestAnimationFrame ||
-             window.msRequestAnimationFrame ||
-             window.oRequestAnimationFrame ||
-             // IE Fallback, you can even fallback to onscroll
-             function(callback){ window.setTimeout(callback, 1000/60) };
-
 // 基于滚动条位置移动背景中的披萨滑窗
-var lastPosition = -1;
-function updatePositions() {  
-  if (lastPosition == window.pageYOffset) {
-      scroll(updatePositions)
-      return false
-  } else lastPosition = window.pageYOffset
-
+function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
+
+  var items = document.querySelectorAll('.mover');
+  // for (var i = 0; i < items.length; i++) {
+  //   var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+  //   items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  // }
+  //没必要每次循环时，运行一次document.body.scrollTop / 1250
   var scrollTop = (document.body.scrollTop / 1250);
-  var phase = 0,
-      phasearr = [],
-      bleft = 0;
-  for (var i = 0; i < 5; i++) {
-    phase = 100 * Math.sin(scrollTop + (i % 5));
-    phasearr.push(phase);
-  };
-
-  for (var i = 0; i < samllPizzaLen; i++) {
-    // phase = Math.sin(scrollTop + (i % 5));
-    // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-
-    bleft = basicLeftArr[i%cols] + phasearr[i%5];
-    items[i].style.transform = 'translate3d(' + bleft + 'px, 0px, 0px)';
+  var phaseList = [];
+  for (var j= 0 ; j < 5; j++){
+    phaseList.push(Math.sin(scrollTop + j));
   }
-  scroll(updatePositions);
+
+  for (var i = 0; i < items.length; i++) {
+    // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100* phaseList[i%5] + 'px';
+  }
+
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
   window.performance.mark("mark_end_frame");
@@ -522,33 +534,22 @@ function updatePositions() {
   }
 }
 
-var cols = 8,
-    samllPizzaLen = 0,
-    basicLeftArr = [];
+// 在页面滚动时运行updatePositions函数
+window.addEventListener('scroll', updatePositions);
+
 // 当页面加载时生成披萨滑窗
 document.addEventListener('DOMContentLoaded', function() {
-  var s = 256,
-      top1 = 0;
-  // 屏幕可用高度
-  var webHeight = window.innerHeight
-                  || document.documentElement.clientHeight
-                  || document.body.clientHeight;
-  var movingPizzas1 = document.getElementById("movingPizzas1");
-  //小pizza的个数
-  samllPizzaLen = Math.ceil(webHeight / s) * cols;
-  //left数组，后面updatePositions函数会调用
-  for (let i = 0; i < cols; i++) {
-    basicLeftArr.push((i % cols) * s);
-  };
-  var imgHtml = "";
-  //改为字符串拼接
-  for (let i = 0; i < samllPizzaLen; i++) {
-    if (i%cols === 0) {
-      top1 = (Math.floor(i / cols) * s) + 'px';
-    }
-    imgHtml += '<img class="mover" src="images/pizza.png" style="height: 100px; width: 73.333px; top: ' + top1 + '">';
+  var cols = 8;
+  var s = 256;
+  for (var i = 0; i < 200; i++) {
+    var elem = document.createElement('img');
+    elem.className = 'mover';
+    elem.src = "images/pizza.png";
+    elem.style.height = "100px";
+    elem.style.width = "73.333px";
+    elem.basicLeft = (i % cols) * s;
+    elem.style.top = (Math.floor(i / cols) * s) + 'px';
+    document.querySelector("#movingPizzas1").appendChild(elem);
   }
-  movingPizzas1.innerHTML = imgHtml;
-  window.items = document.querySelectorAll('.mover');
   updatePositions();
 });
