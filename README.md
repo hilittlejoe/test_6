@@ -1,74 +1,57 @@
-前端纳米学位网页优化项目
-===============================
+## 网站性能优化项目
 
-# 成功运行应用所需的所有步骤
-* 解压文件
-* 安装NodeJS
-* 在cmd中输入命令node -v 查看nodeJS是否成功安装
-* 输入npm install anywhere -g安装anywhere
-* 使用cd命令进入项目文件根目录
-* 输入anywhere 8080启动本地服务，打开网页(8080为端口号，用户可自行设定)
-* 访问http://ngrok.2bdata.com下载ngrok并安装
-* 使用cd命令进入ngrok根目录
-* 输入 ngrok -config=ngrok.cfg -subdomain xxx 8080将本地的项目映射到外网（为了使用chrome的pagespeed insights插件），
-注意xxx为用户自定义名字，端口号需与项目端口号对应
-* 在chrome中安装pagespeed insights插件，进行评分。
+你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
 
-# 项目1提升pagespeed insights评分的方法
-```
-<script src="http://www.google-analytics.com/analytics.js"></script>
-```
-* 将需要异步加载的JS文件设置async属性
-```
-<link href="css/print.css" rel="stylesheet">
-```
-* 将需要打印时调用的CSS文件设置media=“print”
-* 将本页面需要请求的图片进行压缩
-* 将本页面的JS代码进行压缩
-* 将外联的CSS文件合并压缩并改为内联，解决阻止呈现的问题
+开始前，请导出这个代码库并检查代码。
 
-# 项目2调整披萨大小方法卡顿的解决办法
-```
-function changePizzaSizes(size) {
-  	var randomPizza = document.querySelectorAll(".randomPizzaContainer");
-  	var newwidth = [];
-  	
-  	for(var i = 0; i < randomPizza.length; i++){
-		var dx = determineDx(randomPizza[i], size);
-  		 newwidth[i] = (randomPizza[i].offsetWidth + dx) + 'px';
-  	}
-  	
-    for (var i = 0; i < randomPizza.length; i++){
-      randomPizza[i].style.width = newwidth[i];
-    }
-  }
-```
-将该函数改为以上的方式，避免了强制同步布局
+### 指南
 
-# 项目2滚动动画帧数过低的解决办法
-```
-function updatePositions() {
-  frame++;
-  window.performance.mark("mark_start_frame");
-  var items = document.querySelectorAll('.mover');
+####Part 1: 优化 index.html 的 PageSpeed Insights 得分
 
-  //使用一个for循环来提前获取页面滚动高度来避免同步布局
-  for(var i = 0; i < items.length; i++){
-  	 phase[i] = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-  }
-  
-  for (var i = 0; i < items.length; i++) {
-    items[i].style.left = items[i].basicLeft + 100 * phase[i] + 'px';
-  }
+以下是几个帮助你顺利开始本项目的提示：
 
-  // 再次使用User Timing API。这很值得学习
-  // 能够很容易地自定义测量维度
-  window.performance.mark("mark_end_frame");
-  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
-  if (frame % 10 === 0) {
-    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
-    logAverageFrame(timesToUpdatePosition);
-  }
-}
+1. 将这个代码库导出
+2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
+
+```bash
+  $> cd /你的工程目录
+  $> python -m SimpleHTTPServer 8080
 ```
-将该函数改为以上的方式，避免了强制同步布局
+
+1. 打开浏览器，访问 localhost:8080
+2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
+
+``` bash
+  $> cd /你的工程目录
+  $> ./ngrok http 8080
+```
+
+1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
+
+接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
+
+----
+
+####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+
+你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
+
+你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
+
+### 一些关于优化的提示与诀窍
+* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
+* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
+* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
+* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
+* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
+* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
+
+### 使用 Bootstrap 并定制样式
+这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
+
+* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
+* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
