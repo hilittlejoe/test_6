@@ -1,24 +1,150 @@
 /*
 欢迎来到我们的60fps项目！你的目标是使Cam's Pizzeria网站能流畅的运行在60fps下。
+
 在这里的代码中主要有两个问题使性能低于60fps。你能发现并修复它们吗？
+
 在代码中，你会发现一些使用User Timing API(window.performance)的例子，它们使用
 console.log()将帧率数据输入到浏览器的控制台中。如果你想了解更多关于User Timing API
 的信息，请访问：http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
+
+
 创建者:
 Cameron Pittman, Udacity 课程开发者
 cameron@udacity.com
 */
+
 // 你可能已经发现了，这个网站会随机地生成披萨。
 // 下面的数组是所有可能组成披萨的原料。
 var pizzaIngredients = {};
-pizzaIngredients.meats = ["Pepperoni","Sausage","Fennel Sausage","Spicy Sausage","Chicken","BBQ Chicken","Chorizo","Chicken Andouille","Salami","Tofu","Bacon","Canadian Bacon","Proscuitto","Italian Sausage","Ground Beef","Anchovies","Turkey","Ham","Venison","Lamb","Duck","Soylent Green","Carne Asada","Soppressata Picante","Coppa","Pancetta","Bresola","Lox","Guanciale","Chili","Beef Jerky","Pastrami","Kielbasa","Scallops","Filet Mignon"];
-pizzaIngredients.nonMeats = ["White Onions","Red Onions","Sauteed Onions","Green Peppers","Red Peppers","Banana Peppers","Ghost Peppers","Habanero Peppers","Jalapeno Peppers","Stuffed Peppers","Spinach","Tomatoes","Pineapple","Pear Slices","Apple Slices","Mushrooms","Arugula","Basil","Fennel","Rosemary","Cilantro","Avocado","Guacamole","Salsa","Swiss Chard","Kale","Sun Dried Tomatoes","Walnuts","Artichoke","Asparagus","Caramelized Onions","Mango","Garlic","Olives","Cauliflower","Polenta","Fried Egg","Zucchini","Hummus"];
-pizzaIngredients.cheeses = ["American Cheese","Swiss Cheese","Goat Cheese","Mozzarella Cheese","Parmesean Cheese","Velveeta Cheese","Gouda Cheese","Muenster Cheese","Applewood Cheese","Asiago Cheese","Bleu Cheese","Boursin Cheese","Brie Cheese","Cheddar Cheese","Chevre Cheese","Havarti Cheese","Jack Cheese","Pepper Jack Cheese","Gruyere Cheese","Limberger Cheese","Manchego Cheese","Marscapone Cheese","Pecorino Cheese","Provolone Cheese","Queso Cheese","Roquefort Cheese","Romano Cheese","Ricotta Cheese","Smoked Gouda"];
-pizzaIngredients.sauces = ["Red Sauce","Marinara","BBQ Sauce","No Sauce","Hot Sauce"];
-pizzaIngredients.crusts = ["White Crust","Whole Wheat Crust","Flatbread Crust","Stuffed Crust"];
+pizzaIngredients.meats = [
+  "Pepperoni",
+  "Sausage",
+  "Fennel Sausage",
+  "Spicy Sausage",
+  "Chicken",
+  "BBQ Chicken",
+  "Chorizo",
+  "Chicken Andouille",
+  "Salami",
+  "Tofu",
+  "Bacon",
+  "Canadian Bacon",
+  "Proscuitto",
+  "Italian Sausage",
+  "Ground Beef",
+  "Anchovies",
+  "Turkey",
+  "Ham",
+  "Venison",
+  "Lamb",
+  "Duck",
+  "Soylent Green",
+  "Carne Asada",
+  "Soppressata Picante",
+  "Coppa",
+  "Pancetta",
+  "Bresola",
+  "Lox",
+  "Guanciale",
+  "Chili",
+  "Beef Jerky",
+  "Pastrami",
+  "Kielbasa",
+  "Scallops",
+  "Filet Mignon"
+];
+pizzaIngredients.nonMeats = [
+  "White Onions",
+  "Red Onions",
+  "Sauteed Onions",
+  "Green Peppers",
+  "Red Peppers",
+  "Banana Peppers",
+  "Ghost Peppers",
+  "Habanero Peppers",
+  "Jalapeno Peppers",
+  "Stuffed Peppers",
+  "Spinach",
+  "Tomatoes",
+  "Pineapple",
+  "Pear Slices",
+  "Apple Slices",
+  "Mushrooms",
+  "Arugula",
+  "Basil",
+  "Fennel",
+  "Rosemary",
+  "Cilantro",
+  "Avocado",
+  "Guacamole",
+  "Salsa",
+  "Swiss Chard",
+  "Kale",
+  "Sun Dried Tomatoes",
+  "Walnuts",
+  "Artichoke",
+  "Asparagus",
+  "Caramelized Onions",
+  "Mango",
+  "Garlic",
+  "Olives",
+  "Cauliflower",
+  "Polenta",
+  "Fried Egg",
+  "Zucchini",
+  "Hummus"
+];
+pizzaIngredients.cheeses = [
+  "American Cheese",
+  "Swiss Cheese",
+  "Goat Cheese",
+  "Mozzarella Cheese",
+  "Parmesean Cheese",
+  "Velveeta Cheese",
+  "Gouda Cheese",
+  "Muenster Cheese",
+  "Applewood Cheese",
+  "Asiago Cheese",
+  "Bleu Cheese",
+  "Boursin Cheese",
+  "Brie Cheese",
+  "Cheddar Cheese",
+  "Chevre Cheese",
+  "Havarti Cheese",
+  "Jack Cheese",
+  "Pepper Jack Cheese",
+  "Gruyere Cheese",
+  "Limberger Cheese",
+  "Manchego Cheese",
+  "Marscapone Cheese",
+  "Pecorino Cheese",
+  "Provolone Cheese",
+  "Queso Cheese",
+  "Roquefort Cheese",
+  "Romano Cheese",
+  "Ricotta Cheese",
+  "Smoked Gouda"
+];
+pizzaIngredients.sauces = [
+  "Red Sauce",
+  "Marinara",
+  "BBQ Sauce",
+  "No Sauce",
+  "Hot Sauce"
+];
+pizzaIngredients.crusts = [
+  "White Crust",
+  "Whole Wheat Crust",
+  "Flatbread Crust",
+  "Stuffed Crust"
+];
+
 // 名称生成器取自 http://saturdaykid.com/usernames/generator.html
 // 将每个单词的首字母大写
-String.prototype.capitalize = function() {return this.charAt(0).toUpperCase() + this.slice(1);};
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 // 用生成器发出的随机数来从数组中取出形容词
 function getAdj(x){
   switch(x) {
@@ -82,6 +208,7 @@ function getAdj(x){
       return scientific_default;
   }
 }
+
 // 用生成器发出的随机数来从数组中取出名词
 function getNoun(y) {
   switch(y) {
@@ -151,8 +278,10 @@ function getNoun(y) {
       return scifi_default;
   }
 }
+
 var adjectives = ["dark", "color", "whimsical", "shiny", "noisy", "apocalyptic", "insulting", "praise", "scientific"];  // 披萨名字形容词的种类
 var nouns = ["animals", "everyday", "fantasy", "gross", "horror", "jewelry", "places", "scifi"];                        // 披萨名字名词的种类
+
 // 生成器随机地为getAdj和getNoun函数生成数字，并返回一个新的披萨名称
 function generator(adj, noun) {
   var adjectives = getAdj(adj);
@@ -162,55 +291,70 @@ function generator(adj, noun) {
   var name = "The " + adjectives[randomAdjective].capitalize() + " " + nouns[randomNoun].capitalize();
   return name;
 }
+
 // 选择随机的形容词及名词
 function randomName() {
   var randomNumberAdj = parseInt(Math.random() * adjectives.length);
   var randomNumberNoun = parseInt(Math.random() * nouns.length);
   return generator(adjectives[randomNumberAdj], nouns[randomNumberNoun]);
 }
+
 // 这些函数从各自的原料目录中取出并返回随机的原料
 var selectRandomMeat = function() {
   var randomMeat = pizzaIngredients.meats[Math.floor((Math.random() * pizzaIngredients.meats.length))];
   return randomMeat;
 };
+
 var selectRandomNonMeat = function() {
   var randomNonMeat = pizzaIngredients.nonMeats[Math.floor((Math.random() * pizzaIngredients.nonMeats.length))];
   return randomNonMeat;
 };
+
 var selectRandomCheese = function() {
   var randomCheese = pizzaIngredients.cheeses[Math.floor((Math.random() * pizzaIngredients.cheeses.length))];
   return randomCheese;
 };
+
 var selectRandomSauce = function() {
   var randomSauce = pizzaIngredients.sauces[Math.floor((Math.random() * pizzaIngredients.sauces.length))];
   return randomSauce;
 };
+
 var selectRandomCrust = function() {
   var randomCrust = pizzaIngredients.crusts[Math.floor((Math.random() * pizzaIngredients.crusts.length))];
   return randomCrust;
 };
+
 var ingredientItemizer = function(string) {
   return "<li>" + string + "</li>";
 };
+
 // 返回嵌套在<li>中的披萨原料字符串
 var makeRandomPizza = function() {
   var pizza = "";
+
   var numberOfMeats = Math.floor((Math.random() * 4));
   var numberOfNonMeats = Math.floor((Math.random() * 3));
   var numberOfCheeses = Math.floor((Math.random() * 2));
+
   for (var i = 0; i < numberOfMeats; i++) {
     pizza = pizza + ingredientItemizer(selectRandomMeat());
   }
+
   for (var j = 0; j < numberOfNonMeats; j++) {
     pizza = pizza + ingredientItemizer(selectRandomNonMeat());
   }
+
   for (var k = 0; k < numberOfCheeses; k++) {
     pizza = pizza + ingredientItemizer(selectRandomCheese());
   }
+
   pizza = pizza + ingredientItemizer(selectRandomSauce());
   pizza = pizza + ingredientItemizer(selectRandomCrust());
+
   return pizza;
 };
+
 // 为每个披萨分别返回一个DOM元素
 var pizzaElementGenerator = function(i) {
   var pizzaContainer,             // 披萨的名称、图片及原料清单容器
@@ -250,10 +394,14 @@ var pizzaElementGenerator = function(i) {
 
   return pizzaContainer;
 };
+
 // 当网站中"Our Pizzas"的滑窗部分移动时调用resizePizzas(size)函数
 var resizePizzas = function(size) {
-  // window.performance.mark("mark_start_resize");   // User Timing API 函数
+  window.performance.mark("mark_start_resize");   // User Timing API 函数
+
   // 改变滑窗前披萨的尺寸值
+
+  /*这里把公用部分抽出来，并去掉了百分比转化为px的多余操作*/
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
@@ -269,100 +417,106 @@ var resizePizzas = function(size) {
         console.log("bug in changeSliderLabel");
     }
   }
+
   changeSliderLabel(size);
-  //***************
-  //***************更改pizza大小
-  //***************
-  function changePizzaSizes(size) {
-    var pizzaContainer = document.getElementsByClassName("randomPizzaContainer");
-    var pizzaSize = "";
-    switch(size) {
-        case "1":
-          pizzaSize = "18.9%";
-          break;
-        case "2":
-          pizzaSize = "33.33%";
-          break;
-        case "3":
-          pizzaSize = "45%";
-          break;
-        default:
-          console.log("bug in sizeSwitcher");
+
+  function changePizzaSizes(size){
+    switch(size){
+      case "1":
+        newwidth = 25;
+        break;
+      case "2":
+        newwidth = 33.3;
+        break;
+      case "3":
+        newwidth = 50;
+        break;
+      default:
+        console.log('bug');
     }
-    for(var i = 0;i<pizzaContainer.length;i++){
-      pizzaContainer[i].style.width = pizzaSize;
-      // console.log(pizzaContainer[i].className);
+    var randomPizzas = document.getElementsByClassName('randomPizzaContainer');
+
+    for (var i = 0; i < randomPizzas.length; i++) {
+      randomPizzas[i].style.width = newwidth + '%';
     }
   }
+
+
   changePizzaSizes(size);
+
   // User Timing API 太棒了
-  // window.performance.mark("mark_end_resize");
-  // window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
-  // var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
-  // console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
+  window.performance.mark("mark_end_resize");
+  window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
+  var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
+  console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
 };
-// window.performance.mark("mark_start_generating"); // 收集timing数据
+
+window.performance.mark("mark_start_generating"); // 收集timing数据
+
 // 这个for循环在页面加载时创建并插入了所有的披萨
-// for (var i = 2; i < 100; i++) {
-//   var pizzasDiv = document.getElementById("randomPizzas");
-//   pizzasDiv.appendChild(pizzaElementGenerator(i));
-// }
+for (var i = 2; i < 100; i++) {
+  var pizzasDiv = document.getElementById("randomPizzas");
+  pizzasDiv.appendChild(pizzaElementGenerator(i));
+}
 
 // 使用User Timing API。这里的测量数据告诉了你生成初始的披萨用了多长时间
-// window.performance.mark("mark_end_generating");
-// window.performance.measure("measure_pizza_generation", "mark_start_generating", "mark_end_generating");
-// var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
-// console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "ms");
+window.performance.mark("mark_end_generating");
+window.performance.measure("measure_pizza_generation", "mark_start_generating", "mark_end_generating");
+var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
+console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "ms");
 
 // 背景披萨滚动时调用函数的次数和
 // 由updatePositions()函数使用，用来决定什么时候记录平均帧率
-// var frame = 0;
+var frame = 0;
+
 // 记录滚动时背景滑窗披萨移动的每10帧的平均帧率
-// function logAverageFrame(times) {   // times参数是updatePositions()由User Timing得到的测量数据
-//   var numberOfEntries = times.length;
-//   var sum = 0;
-//   for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
-//     sum = sum + times[i].duration;
-//   }
-//   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
-// }
+function logAverageFrame(times) {   // times参数是updatePositions()由User Timing得到的测量数据
+  var numberOfEntries = times.length;
+  var sum = 0;
+  for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
+    sum = sum + times[i].duration;
+  }
+  console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
+}
+
 // 下面的关于背景滑窗披萨的代码来自于Ilya的demo:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
+
 // 基于滚动条位置移动背景中的披萨滑窗
 function updatePositions() {
-  // frame++;
-  // window.performance.mark("mark_start_frame");
-  var items = document.querySelectorAll('.mover');
-  //*****************
-  //*****************get scrollTop from loop. but it's better to remove this function.
-  //*****************
-  var scrollTop1 = document.body.scrollTop;
+  frame++;
+  window.performance.mark("mark_start_frame");
+
+  var items = document.getElementsByClassName('mover');
+  /*这里把 document.body.scrollTop 的计算抽出来*/
+  var stander = document.body.scrollTop / 1250;
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(( scrollTop1 / 1250) + (i % 5));
+    var phase = Math.sin(stander + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-    // console.log(items[i].style.left);
   }
+
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
-  // window.performance.mark("mark_end_frame");
-  // window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
-  // if (frame % 10 === 0) {
-  //   var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
-  //   logAverageFrame(timesToUpdatePosition);
-  // }
-  //*****************
-  //*****************put updatePositions into requestAnimationFrame
-  //*****************
-  requestAnimationFrame(updatePositions);
+  window.performance.mark("mark_end_frame");
+  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+  if (frame % 10 === 0) {
+    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+    logAverageFrame(timesToUpdatePosition);
+  }
 }
+
 // 在页面滚动时运行updatePositions函数
-window.addEventListener('scroll', requestAnimationFrame(updatePositions));
+window.addEventListener('scroll', updatePositions);
+
 // 当页面加载时生成披萨滑窗
-// window.performance.mark("mark_start_DOMLoaded");
 document.addEventListener('DOMContentLoaded', function() {
-  var cols = 6;
+  var cols = 8;
   var s = 256;
-  for (var i = 0; i < 42; i++) {
+  
+  /*以屏幕当前高度以及一行的个数规定披萨的个数*/
+  var lNum = Math.ceil((window.innerHeight+100) / s * cols);
+  
+  for (var i = 0; i < lNum; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -370,15 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
-  // updatePositions();
-  for (var i = 2; i < 100; i++) {
-    var pizzasDiv = document.getElementById("randomPizzas");
-    pizzasDiv.appendChild(pizzaElementGenerator(i));
-  }
+  updatePositions();
 });
-// window.performance.mark("mark_end_DOMLoaded");
-// window.performance.measure("measure_DOMLoaded","mark_start_DOMLoaded","mark_end_DOMLoaded");
-// var timeToDOM = window.performance.getEntriesByName("measure_DOMLoaded");
-// console.log("Time to DOM loadled: "+timeToDOM[timeToDOM.length-1].duration+"ms");
