@@ -55,3 +55,16 @@
 
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+
+打开方式：
+双击index.html即可
+
+
+优化：
+1.为print.css文件加入媒体查询，将style.css内嵌入index.html中，perfmatters.js改为异步加载
+
+2.将querySelector* 替换为 getElements*这样一类方法
+
+3.修改了changePizzaSizes和updatePositions函数
+
+4.将图片pizzeria.jpg缩小
