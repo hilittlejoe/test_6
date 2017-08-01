@@ -535,17 +535,8 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  if (window.innerHeight){
-    winHeight = window.innerHeight;
-  }
-  else if ((document.body) && (document.body.clientHeight)){
-    winHeight = document.body.clientHeight;
-  }
-  var numberofPizza=winHeight/s*cols;
-
-  console.log(numberofPizza);
-
-
+  
+  var numberofPizza=window.innerHeight/s*cols;
   for (var i = 0; i < numberofPizza; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
