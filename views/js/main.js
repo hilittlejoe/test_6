@@ -542,6 +542,10 @@ document.addEventListener('DOMContentLoaded', function() {
     winHeight = document.body.clientHeight;
   }
   var numberofPizza=winHeight/s*cols;
+
+  console.log(numberofPizza);
+
+
   for (var i = 0; i < numberofPizza; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
