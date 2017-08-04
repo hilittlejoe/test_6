@@ -1,90 +1,125 @@
-var gulp = require('gulp'),
-    minifycss = require('gulp-clean-css'),
-    autoprefixer = require('gulp-autoprefixer'),
-    uglify = require('gulp-uglify'),
-    imagemin = require('gulp-imagemin'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    notify = require('gulp-notify'),
-    cache = require('gulp-cache'),
-    del = require('del');
-    htmlmin = require('gulp-htmlmin')
+const gulp = require('gulp'),
+      connect = require('gulp-connect'),
+      csso = require('gulp-csso'),
+      htmlmin = require('gulp-htmlmin'),
+      uglify = require('gulp-uglify'),
+      imagemin = require('gulp-imagemin'),
+      del = require('del'),
+      psi = require('psi'),
+      sequence = require('run-sequence'),
+      ngrok = require('ngrok'),
+      port = 8080;
+const config = {
+  html: [
+    '*.html',
+    'views/*.html'
+  ],
+  img: [
+    'img/*',
+    'views/images/*'
+  ],
+  css: [
+    'css/*.css',
+    'views/css/*.css'
+  ],
+  js: [
+    'js/*.js',
+    'views/js/*.js'
+  ]
+};
+var site = '';
 
-gulp.task('styles', function () {
-    return gulp.src('src/styles/*.css')
-        .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-        .pipe(gulp.dest('dist/css'))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(minifycss())
-        .pipe(gulp.dest('dist/css'))
-        .pipe(notify({ message: 'Styles task complete' }));
+gulp.task('clean', function() {
+  return del(['dist']).then(paths => {
+    console.log('Deleted files and folders:\n', paths.join('\n'));
+  });
 });
 
-gulp.task('images', function() {
-  return gulp.src('src/images/*')
-    .pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
-    .pipe(gulp.dest('dist/img'))
-    .pipe(notify({ message: 'Images task complete' }));
-});
-
-gulp.task('imagesPizza', function() {
-  return gulp.src('views/images/*')
-    .pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
-    .pipe(gulp.dest('views/images'))
-    .pipe(notify({ message: 'Images task complete' }));
-});
-
-gulp.task('clean', function(cb) {
-    del(['dist/img', 'dist/css'], cb)
-});
-
-gulp.task('scripts', function() {
-  return gulp.src('src/scripts/*.js')
-    .pipe(rename({suffix: '.min'}))
-    .pipe(uglify())
-    .pipe(gulp.dest('dist/js'))
-    .pipe(notify({ message: 'Scripts task complete' }));
-});
-gulp.task('minifyHtml', function() {
-  return gulp.src('src/index.html')
+gulp.task('minify', function() {
+  return gulp.src(config.html, {base: '.'})
     .pipe(htmlmin({collapseWhitespace: true}))
-    .pipe(gulp.dest(''))
-    .pipe(notify({message:'html task complete'}));
+    .pipe(gulp.dest('dist'));
 });
 
-// gulp.task('default', ['clean'], function() {
-//     gulp.start('styles', 'images');
-// });
-gulp.task('default', ['styles','images','scripts','imagesPizza','minifyHtml']);
+gulp.task('optimizeCSS', function() {
+  return gulp.src(config.css, {base: '.'})
+      .pipe(csso())
+      .pipe(gulp.dest('dist'));
+});
 
-gulp.task('pizzaStyle',function(){
-    return gulp.src('views/src/css/*.css')
-        .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-        .pipe(gulp.dest('views/css'))
-        .pipe(minifycss())
-        .pipe(gulp.dest('views/css'))
-        .pipe(notify({ message: 'Pizza styles task complete' }));
-})
-
-gulp.task('pizzaImages',function(){
-return gulp.src('views/src/images/*')
-    .pipe(imagemin({ optimizationLevel: 3, progressive: true, interlaced: true }))
-    .pipe(gulp.dest('views/images'))
-    .pipe(notify({ message: 'Pizza images task complete' }));
-})
-
-gulp.task("pizzaJs",function(){
-return gulp.src('views/src/js/*.js')
+gulp.task('compressJS', function() {
+  return gulp.src(config.js, {base: '.'})
     .pipe(uglify())
-    .pipe(gulp.dest('views/js'))
-    .pipe(notify({ message: 'Pizza scripts task complete' }));
-})
-
-gulp.task("pizzaHtml",function(){
-return gulp.src('views/src/*.html')
-    .pipe(htmlmin({collapseWhitespace: true}))
-    .pipe(gulp.dest('views'))
-    .pipe(notify({message:'Pizza html task complete'}));
+    .pipe(gulp.dest('dist'));
 });
 
-gulp.task('pizza', ['pizzaStyle','pizzaImages','pizzaJs','pizzaHtml']);
+gulp.task('minImages', function() {
+  return gulp.src(config.img, {base: '.'})
+    .pipe(imagemin())
+    .pipe(gulp.dest('dist'))
+});
+
+gulp.task('ngrok-url', function(cb) {
+  return ngrok.connect(port, function (err, url) {
+    site = url;
+    console.log('serving your tunnel from: ' + site);
+    cb();
+  });
+});
+
+gulp.task('psi-mobile', function () {
+    return psi(site, {
+        nokey: 'true',
+        strategy: 'mobile',
+    }).then(function (data) {
+      console.log('Speed score: ' + data.ruleGroups.SPEED.score);
+      console.log('Usability score: ' + data.ruleGroups.USABILITY.score);
+    });
+});
+
+gulp.task('psi-desktop', function () {
+  return psi(site, {
+    nokey: 'true',
+    strategy: 'desktop',
+  }).then(function (data) {
+    console.log('Speed score: ' + data.ruleGroups.SPEED.score);
+  });
+});
+
+gulp.task('psi-seq', function (cb) {
+  return sequence(
+    'serve-dist',
+    'ngrok-url',
+    'psi-desktop',
+    'psi-mobile',
+    cb
+  );
+});
+
+gulp.task('build', function(cb){
+  return sequence(
+    'clean',
+    'minify',
+    'optimizeCSS',
+    'compressJS',
+    'minImages',
+    cb
+  );
+});
+
+gulp.task('serve-dist', ['build'], function(){
+  connect.server({
+    root: "dist",
+    port: port
+  });
+});
+
+gulp.task('serve-psi', ['psi-seq'], function(){
+  console.log('Woohoo! Check out your page speed scores!')
+});
+
+gulp.task('default', function(){
+  connect.server({
+    port: port
+  });
+});

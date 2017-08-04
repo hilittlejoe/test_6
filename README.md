@@ -1,121 +1,59 @@
-## 网站性能优化项目
+## Udacity前端项目 -- 网站性能优化项目
 
-### 项目目录结构
+这是[Udacity](https://cn.udacity.com)前端开发（进阶）课程的第二个项目，尽可能优化这个原项目的速度。应用之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。[原项目地址在此](https://github.com/udacity/cn-frontend-development-advanced/tree/master/Website%20Optimization_zh)。
 
-```
-.
-├── README.md  //说明
-├── dist //发布生成目录
-│   ├── css
-│   │   ├── print.css
-│   │   ├── print.min.css
-│   │   ├── style.css
-│   │   └── style.min.css
-│   ├── img
-│   │   ├── 2048.png
-│   │   ├── buildYourOwn.jpg
-│   │   ├── cam_be_like.jpg
-│   │   ├── mobilewebdev.jpg
-│   │   ├── mwd.jpg
-│   │   ├── pizzeria.jpg
-│   │   ├── profilepic.jpg
-│   │   └── wpo.jpg
-│   └── js
-│       └── perfmatters.min.js
-├── gulpfile.js   //gulp配置文件
-├── index.html    //压缩后首页
-├── package.json  //npm配置文件
-├── project-2048.html
-├── project-mobile.html
-├── project-webperf.html
-├── src  //源文件的目录，未压缩的
-│   ├── images
-│   │   ├── 2048.png
-│   │   ├── buildYourOwn.jpg
-│   │   ├── cam_be_like.jpg
-│   │   ├── mobilewebdev.jpg
-│   │   ├── mwd.jpg
-│   │   ├── pizzeria.jpg
-│   │   ├── profilepic.jpg
-│   │   └── wpo.jpg
-│   ├── index.html
-│   ├── scripts
-│   │   └── perfmatters.js
-│   └── styles
-│       ├── print.css
-│       └── style.css
-└── views  //pizza项目
-    ├── css //压缩发布CSS目录
-    │   ├── bootstrap-grid.css
-    │   └── style.css
-    ├── images //压缩发布图片目录
-    │   ├── pizza.png
-    │   └── pizzeria.jpg
-    ├── js //压缩发布JS目录
-    │   └── main.js
-    ├── pizza.html //压缩发布文件
-    └── src  //源文件目录
-        ├── css //未压缩的CSS
-        │   ├── bootstrap-grid.css
-        │   └── style.css
-        ├── images //未压缩的images
-        │   ├── pizza.png
-        │   └── pizzeria.jpg
-        ├── js //未压缩的js
-        │   └── main.js
-        └── pizza.html //未压缩的html 
+Quick Links:
+
+- **[Getting started](#getting-started)**
+- **[Optimization overview](#optimization-overview)**
+- **[Reference](#reference)**
+
+### Getting started
+
+#### Install
+
+```
+ $ npm install
 ```
 
-### 运行指南
+#### Usage
 
-1. clone项目
+1. 直接运行本地版本（未压缩版本）
 
-2. 安装gulp
+   ```
+    $ gulp
+   ```
 
-```bash
-npm gulp -g
-```
+2. 运行的是distribution版本（经过脚本压缩html, js, css, image的版本）
 
-3. 进入工程目录
+   ```
+    $ gulp serve-dist
+   ```
 
-```bash
-npm gulp --save-dev
-npm install 安装依赖包
-```
+3. 运行的是distribution版本并在命令行中打印pagespeed分数
 
-4. 优化index.html
-在工程根目录下
-```bash
-gulp
-```
-出现 `Finished 'default' after xx μs` 表示运行完成
+   ```
+    $ gulp serve-psi
+   ```
 
-5. 优化pizza页面
-执行
-```bash
-gulp pizza
-```
-出现 `Finished 'pizza' after xxx μs` 表示运行完成
+   注意：以上方法均不能实时刷新。另外使用psi测速大概率会由于国内网络原因timeout。
+
+### Optimization overview
+
+这里会简单介绍本项目是如何优化的：
+
+- **index相关**
+  1. 移除了web字体的获取，web字体受网络环境制约太大(国内网络环境无法获取google的web字体)。
+  2. views/images/pizzeria.jpg图片太大，压缩并缩小了尺寸。
+  3. index有几张图片依赖于网络获取，这受网络环境限制，所以我将图片下载到本地，并且进行了压缩。
+  4. google-analytics对于页面呈现并不是必须的，可以加上async或者defer的标签。但在国内网络环境下无法连接到google，所以直接移除了相关代码。
+  5. style.css较小，为优化首页性能，直接内联。
 
 
-### 优化内容
-#### index页面
+- **pizza页面相关**
+  1. 优化调整 pizza 大小的时间小于5毫秒
+  2. 优化 `views/pizza.html` 在滚动时的帧速。
 
-1. 将 fonts.googleapis.com 引用注释掉
-2. 将 perfmatters.js 压缩
-3. 将 http://www.google-analytics.com/analytics.js 改为async异步模式
-4. 将 style.css压缩后变成内联模式
-5. 将 前三个链接的图片，从远程下载到本地并压缩href改为本地链接
-6. 将 pizza图片的拷贝一份新的并改变大小并压缩href指向新图片
-7. 将所有的css,image,js,html全部压缩
+### Reference
 
-#### 优化pizza网站
-
-1. 修改js/main.js
-
-`453`行，把 `pizzaContainer[i].offsetWidth` 从循环中取出变成 `pizzaContainer[0].offsetWidth` 只读取一次值，然后一直使用。
-
- `451` 行，将 `document.querySelectorAll(".randomPizzaContainer")` 变成一个变量，一次查询，多次使用。
-
- `512` 行附近，把 `document.body.scrollTop/1250` 从循环中取出，一次赋值，多次使用。
-
+- [Setting up PageSpeed Insights to test Performance Locally via Gulp](https://una.im/gulp-local-psi/)
