@@ -1,28 +1,44 @@
 ## 网站性能优化项目
 
-尽可能优化这个在线项目的速度。应用之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
+你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
 
+开始前，请导出这个代码库并检查代码。
 
-### 步骤
+### 指南
 
-#### Part 1: 优化 index.html 的 PageSpeed Insights 得分
+####Part 1: 优化 index.html 的 PageSpeed Insights 得分
 
-1. 强制使用 `https` 协议请求字体数据。
-2. 针对 print.css，通过媒体查询取消阻止，优化 CRP。
-3. 把开头不必要的 `<script>` 转移至文档末尾，并使用 `async` 取消阻止。
-4. 最终生成页面的时候消除换行及注释，以压缩空间。
-5. 压缩图片大小，并在文档中的 `img` 标签中强制设定图片大小。
+以下是几个帮助你顺利开始本项目的提示：
+
+1. 将这个代码库导出
+2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
+
+```bash
+  $> cd /你的工程目录
+  $> python -m SimpleHTTPServer 8080
+```
+
+1. 打开浏览器，访问 localhost:8080
+2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
+
+``` bash
+  $> cd /你的工程目录
+  $> ./ngrok http 8080
+```
+
+1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
+
+接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
 
 ----
 
-#### Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
 
-编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。
-1. 停止 FSL，删除代码中不必要的布局反复。
-2. 使用 `requestAnimationFrame` 刷新页面。
+你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
 
+你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
 
-### 附录
+### 一些关于优化的提示与诀窍
 * [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
 * [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
 * [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
@@ -33,3 +49,9 @@
 * <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
 * <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
 * <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
+
+### 使用 Bootstrap 并定制样式
+这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
+
+* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
+* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
