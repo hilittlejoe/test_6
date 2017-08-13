@@ -1,6 +1,11 @@
 /** {
   outline: 1px solid red !important;
 }*/
+
+.c25 .randomPizzaContainer{width: 25%!important;}
+.c33 .randomPizzaContainer{width: 33%!important;}
+.c50 .randomPizzaContainer{width: 50%!important;}
+
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -33,13 +38,22 @@ form {
   position: fixed;
   width: 256px;
   z-index: -1;
+  height:100px;
+  width:73.333px;
 }
 
 .randomPizzaContainer {
   float: left;
   display: flex;
+  width:33.33%;
+  height:325px;
 }
-
+.pizzaImageContainer {
+  width:35%;
+}
+.pizzaDescriptionContainer {
+  width:65%;
+}
 .randomPizzaContainer:after {
   content: "";
   display: table;

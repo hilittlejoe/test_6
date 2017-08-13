@@ -1,11 +1,25 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/bootstrap-grid.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/bootstrap-grid.css">
+<script>
+    function measureCRP() {
+      var t = window.performance.timing,
+        interactive = t.domInteractive - t.domLoading,
+        dcl = t.domContentLoadedEventStart - t.domLoading,
+        complete = t.domComplete - t.domLoading;
+      // var stats = document.createElement('p');
+      // stats.textContent = 'interactive: ' + interactive + 'ms, ' +
+      //     'dcl: ' + dcl + 'ms, complete: ' + complete + 'ms';
+      console.log('interactive: ' + interactive + 'ms, ' +
+          'dcl: ' + dcl + 'ms, complete: ' + complete + 'ms');
+      // document.body.appendChild(stats);
+    }
+  </script>
 </head>
 
-<body>
+<body onload="measureCRP()">
   <div class="container">
     <div id="header" class="row">
       <div class="col-md-6">
@@ -102,11 +116,12 @@
           </div>
         </div>
         <div id="randomPizzas" class="row">
-          <div id="pizza0" class="randomPizzaContainer" style="width:33.33%; height: 325px;">
-            <div style="width:35%">
+          <!-- <div id="pizza0" class="randomPizzaContainer" style="width:33.33%; height: 325px;"> -->
+          <!-- <div id="pizza0" class="randomPizzaContainer">
+            <div>
               <img src="images/pizza.png" class="img-responsive">
             </div>
-            <div style="width:65%">
+            <div>
               <h4>The Udacity Special</h4>
               <ul>
                 <li>Turkey</li>
@@ -118,12 +133,13 @@
                 <li>Whole Wheat Crust</li>
               </ul>
             </div>
-          </div>
-          <div id="pizza1" class="randomPizzaContainer" style="width:33.33%; height: 325px;">
-            <div style="width:35%">
+          </div> -->
+          <!-- <div id="pizza1" class="randomPizzaContainer" style="width:33.33%; height: 325px;"> -->
+          <!-- <div id="pizza1" class="randomPizzaContainer">
+            <div>
               <img src="images/pizza.png" class="img-responsive">
             </div>
-            <div style="width:65%">
+            <div>
               <h4>The Cameron Special</h4>
               <ul>
                 <li>Chicken</li>
@@ -131,8 +147,8 @@
                 <li>White Crust</li>
               </ul>
             </div>
-          </div>
-        </div>
+          </div> -->
+        </div><!-- end -->
       </div>
     </div>
     <div id="footer" class="col-md-12">Thanks for visiting! &copy; 2014 Udacity</div>
@@ -140,5 +156,4 @@
   <script type="text/javascript" src="js/main.js"></script>
 </body>
 
-</html>
 </html>
