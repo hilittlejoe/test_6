@@ -15,9 +15,10 @@ This is the Project of the Udacity Website Performance Optimization class. Visit
 1. Compresse images.
 2. Add async on script analytics.js and perfmatters.js.
 3. Download the font file as font.css.
-4. Move style.css and font.css to the bottom of the body.
-5. Add cache-control on head.
-6. Add media on print.css.
+4. Inline style.css
+5. Use Web Font Loader to load font.
+6. Add cache-control on head.
+7. Add media on print.css.
 
 #### Requirement 2: Eliminate lags
 ##### Frame Speed
