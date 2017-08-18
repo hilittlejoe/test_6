@@ -403,13 +403,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.getElementById("pizzaSize").innerHTML = "Small";
+        document.querySelector("#pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.getElementById("pizzaSize").innerHTML = "Medium";
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.getElementById("pizzaSize").innerHTML = "Large";
+        document.querySelector("#pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -421,7 +421,7 @@ var resizePizzas = function(size) {
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-    var windowWidth = document.getElementsByClassName("#randomPizzas").offsetWidth;
+    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // 将值转成百分比宽度
@@ -445,25 +445,23 @@ var resizePizzas = function(size) {
   }
 
   // 遍历披萨的元素并改变它们的宽度
-  // 优化点 调整pizza大小 减少不必要的强制布局，document.querySelectorAll(".randomPizzaContainer")访问一次即可无需在循环中访问
-  //determineDx函数反复调用直接去掉
   function changePizzaSizes(size) {
-    switch(size) {
+      switch(size) {
         case "1":
-          newwidth = 25;
-          break ;
+          newWidth = 25;
+          break;
         case "2":
-          newwidth = 33.33;
-          break ;
+          newWidth = 33.33;
+          break;
         case "3":
-          newwidth = 50;
-          break ;
+          newWidth = 50;
+          break;
         default:
-          console.log("bug in sizeSwitcher");
       }
-    var randomPizza = document.getElementsByClassName("randomPizzaContainer");
-    for (var i = 0; i < randomPizza.length; i++) {
-      randomPizza[i].style.width = newwidth + "%";
+
+    var allPizza = document.querySelectorAll(".randomPizzaContainer");
+    for (var i = 0; i < allPizza.length; i++) {
+      allPizza[i].style.width = newWidth + '%';
     }
   }
 
@@ -479,10 +477,8 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // 收集timing数据
 
 // 这个for循环在页面加载时创建并插入了所有的披萨
-// 优化点 无需在循环中获取样式
-var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
-  
+  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -514,15 +510,11 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.getElementsByClassName('mover');
-  // 优化点 减少document.body.scrollTop的反复调用，仅读取一次布局属性
-  var temp = 0 ;
-  
-  temp= (document.body.scrollTop / 1250);
-  var length = items.length;
-  for (var i = 0; i < length; i++) {
-    var phase = Math.sin(temp + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  var items = document.querySelectorAll('.mover');
+  var top = document.body.scrollTop;
+  for (var i = 0; i < items.length; i++) {
+    var phase = Math.sin((top / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';;
   }
 
   // 再次使用User Timing API。这很值得学习
@@ -534,25 +526,15 @@ function updatePositions() {
     logAverageFrame(timesToUpdatePosition);
   }
 }
+
 // 在页面滚动时运行updatePositions函数
-// 优化 每一帧开始前加载js
-window.addEventListener('scroll', updateRequest);
+window.addEventListener('scroll', updatePositions);
 
-function updateRequest(){
-  requestAnimationFrame(updatePositions);
-}
 // 当页面加载时生成披萨滑窗
-// 获取浏览器窗口高度
-var height = document.documentElement.clientHeight;
-var width = document.documentElement.clientWidth;
-var eachPizzaHeight = 100;
-var eachPizzaWidth =73.333;
-var pizzaNum = height/eachPizzaHeight *width/eachPizzaWidth;
-
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < pizzaNum; i++) {
+  for (var i = 0; i < 200; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -560,7 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.getElementById("movingPizzas1").appendChild(elem);
+    document.querySelector("#movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
