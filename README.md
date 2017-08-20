@@ -1,57 +1,50 @@
-## 网站性能优化项目
+# 网站性能优化项目
+该项目主要分为对index.html的PageSpeed评分优化以及对views中的main.js进行速度优化。  
 
-你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
+  * [Partone](#partone)
+     * [异步加载JavaSCript](#异步加载javascript)
+     * [CSS优化](#css优化)
+     * [图片优化](#图片优化)
+  * [Part2](#part2)
+     * [querySelector VS <code>getElementById</code> <code>getElementsByClassName</code>](#queryselector-vs-getelementbyidgetelementsbyclassname)
+     * [强制同步布局](#强制同步布局)
+     * [translateX的使用](#translatex的使用)
 
-开始前，请导出这个代码库并检查代码。
+         
 
-### 指南
-
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
-
-以下是几个帮助你顺利开始本项目的提示：
-
-1. 将这个代码库导出
-2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
-
-```bash
-  $> cd /你的工程目录
-  $> python -m SimpleHTTPServer 8080
+## Partone
+### 异步加载JavaSCript
 ```
-
-1. 打开浏览器，访问 localhost:8080
-2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
-
-``` bash
-  $> cd /你的工程目录
-  $> ./ngrok http 8080
+    <script src="http://www.google-analytics.com/analytics.js" async="async"></script >
 ```
+该js文件并非一定需要在项目加载完成前使用，因此改为异步加载
+<br>
 
-1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
+### CSS优化
+项目之前存在的`style.css`体积并非很大，因此可改为内嵌加载。
+<br>
 
-接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
+`print.css`主要负责打印时所做操作，因此运用mediaQuery改至打印时加载。
+### 图片优化
+该项目图片优化主要使用`ImageOptim`进行优化。`pizzeria.jpg`在该页面中所需大小仅为100px，因此对其进行了裁剪。
+## Part2
 
-----
+### `querySelector` VS `getElementById`+`getElementsByClassName`
 
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+querySelector相对于后两种方法性能占用更高，详情参见[getelementById vs querySelector](https://jsperf.com/getelementbyid-vs-queryselector-vs-queryselector-by-id)。
 
-你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
+### 强制同步布局
+原始代码
+```
+function changePizzaSizes(size) {
+  for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+    var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+    var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+    document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+  }
+}
+```
+原代码在循环内对元素选用过多，而且`determineDx`与`newwidth`这些运算由于要设置的每一个 `randomPizzaContainer` 的尺寸是相等的，所以只需要计算一个。
+### translateX的使用
+该项目中最初使用的动画函数为`style.left`,对于该项目，优化最好的方式为将其变更为`translateX`。相对于原函数，它不需要重新再绘制 pizza。
 
-你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
-
-### 一些关于优化的提示与诀窍
-* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
-* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
-* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
-* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
-* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
-
-### 使用 Bootstrap 并定制样式
-这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
-
-* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>

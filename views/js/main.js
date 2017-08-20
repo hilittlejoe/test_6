@@ -403,13 +403,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.querySelectorAll("#pizzaSize").innerHTML = "Small";
+        document.getElementById("pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.querySelectorAll("#pizzaSize").innerHTML = "Medium";
+        document.getElementById("pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.querySelectorAll("#pizzaSize").innerHTML = "Large";
+        document.getElementById("pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -446,13 +446,18 @@ var resizePizzas = function(size) {
 
   // 遍历披萨的元素并改变它们的宽度
 
-  var randomPizzaContainers = document.getElementsByClassName(".randomPizzaContainer");
+  // var randomPizzaContainers = document.getElementsByClassName(".randomPizzaContainer");
 
-    var i = randomPizzaContainers.forEach();
     function changePizzaSizes(size) {
-      var dx = determineDx(i, size);
-      var newwidth = (i.offsetWidth + dx) + 'px';
-      i.style.width = newwidth;
+      var container = document.getElementsByClassName("randomPizzaContainer");
+      //将获取randomPizzaContainer移至循环外
+      var dx = determineDx(container[0], size);
+      //所有container大小均相同，所以dx运算可仅运用containre[0]做一次
+      var newwidth = (container[0].offsetWidth + dx) + 'px';
+      //同理，newwidth也仅需做一次
+      for (var i = 0; i < container.length; i++){
+        container[i].style.width = newwidth;
+      }
     }
   changePizzaSizes(size);
 
@@ -499,11 +504,11 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('mover');
   var scrollTop = document.body.scrollTop
   for (var i = 0; i < items.length; i++) {
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
-    items[i].style.transform = 'translateX(' + items[i].basicLeft + 100 * phase + '+px)';
+    items[i].style.transform = 'translateX(' + 100 * phase + 'px)';
   }
 
   // 再次使用User Timing API。这很值得学习
@@ -523,7 +528,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 50; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -531,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
