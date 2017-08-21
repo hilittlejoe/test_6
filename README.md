@@ -1,50 +1,43 @@
-# 网站性能优化项目
-该项目主要分为对index.html的PageSpeed评分优化以及对views中的main.js进行速度优化。  
+## 网站性能优化项目
 
-  * [Partone](#partone)
-     * [异步加载JavaSCript](#异步加载javascript)
-     * [CSS优化](#css优化)
-     * [图片优化](#图片优化)
-  * [Part2](#part2)
-     * [querySelector VS <code>getElementById</code> <code>getElementsByClassName</code>](#queryselector-vs-getelementbyidgetelementsbyclassname)
-     * [强制同步布局](#强制同步布局)
-     * [translateX的使用](#translatex的使用)
+### 如何开始此应用
 
-         
+以下是几个能帮助你顺利开始本项目的提示:
 
-## Partone
-### 异步加载JavaSCript
-```
-    <script src="http://www.google-analytics.com/analytics.js" async="async"></script >
-```
-该js文件并非一定需要在项目加载完成前使用，因此改为异步加载
-<br>
+1. 给谷歌浏览器装上pagespeed insights插件
 
-### CSS优化
-项目之前存在的`style.css`体积并非很大，因此可改为内嵌加载。
-<br>
+2. 把项目代码clone到本地
 
-`print.css`主要负责打印时所做操作，因此运用mediaQuery改至打印时加载。
-### 图片优化
-该项目图片优化主要使用`ImageOptim`进行优化。`pizzeria.jpg`在该页面中所需大小仅为100px，因此对其进行了裁剪。
-## Part2
+3. 用node搭一个本地服务器
 
-### `querySelector` VS `getElementById`+`getElementsByClassName`
+  ```bash
+  $> 在终端或命令行中输入 node --version。如果没有内容显示或显示错误，(则需安装 Node）
+  $> 输入 npm install -g http-server
+  $> 通过输入 http-server ~/Documents/mysite -p 8000 提供文件（将 ~/Documents/mysite 替换为你的项目目录的路径）
+  $> 在谷歌浏览器中访问 http://localhost:8000/index，进行测试
+  ```
 
-querySelector相对于后两种方法性能占用更高，详情参见[getelementById vs querySelector](https://jsperf.com/getelementbyid-vs-queryselector-vs-queryselector-by-id)。
+4. 打开后，可以点击Build Your Own 2048!、Website Performance Optimization、Mobile Web Development、Cam's Pizzeria这四个网页的详细介绍。并且，在Cam's Pizzeria这个中，可以使用拖动条，来改变pizza的大小。
 
-### 强制同步布局
-原始代码
-```
-function changePizzaSizes(size) {
-  for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-    var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-    var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-    document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
-  }
-}
-```
-原代码在循环内对元素选用过多，而且`determineDx`与`newwidth`这些运算由于要设置的每一个 `randomPizzaContainer` 的尺寸是相等的，所以只需要计算一个。
-### translateX的使用
-该项目中最初使用的动画函数为`style.left`,对于该项目，优化最好的方式为将其变更为`translateX`。相对于原函数，它不需要重新再绘制 pizza。
+# 项目优化
 
+### Index.html优化步骤
+* 根据pagespeed的提示，用tinypng把项目里的图片进行压缩；把大图片pizzeria.jpg的尺寸直接改成100x75，使该图片的体积从M级下降到KB级
+
+* 由于没有别的页面共享style.css文件，所以把style.css从外部引用改成内联，可以减少一次请求的时间
+
+* 通过媒体查询的方式把print.css修改为只在打印的时候才加载
+
+* analytics.js添加async属性，改成异步加载该文件
+
+  ​
+
+  ​
+
+### pizza.html的优化
+
+* 把动画函数updatePositions（）放到requestAnimationFrame（）里面，使动画能够并行运行，并且保证优先运行js
+* 根据课程内容，determineDx（）函数在网页中不仅没有起作用，还在循环中频繁修改pizza的尺寸改造成强制同步布局，需删除；另外把大pizza的尺寸大小的样式从px改成用百分比来呈现
+* document.querySelectorAll(".randomPizzaContainer")函数在文中重复出现达三次，用变量randomPizzas取代，可以节省2次查询节点的时间
+* 通过读取浏览器的高度和小pizza的尺寸，来判断页面中最多可以显示多少个小pizza，从而减少生成不必要的小pizza
+* 给小pizza的.move样式添加change:transform属性，避免页面在上下滑动时候引起小pizza的重新绘制
