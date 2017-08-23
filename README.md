@@ -1,58 +1,35 @@
-## 网站性能优化项目
+Udacity P6
 
-你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
+#### Part 1: 优化 index.html 的 PageSpeed Insights 得分
+- 首先先阅读评审要求
+- ok，我们已经看过要求了，那么先在github里生成一个可访问的链接
+- 在谷歌家的[PageSpeed Insights](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0ahUKEwi7n6axmOrVAhVQ4GMKHUhHDCwQjBAIPzAB&url=https%3A%2F%2Fdevelopers.google.com%2Fspeed%2Fpagespeed%2Finsights%2F%3Fhl%3Dzh-CN&usg=AFQjCNFzptm-kH3PDYdnjoONlz-qmRw96g)里测试一下，获得性能提升意见。
+- 我们看到了三个建议：图片优化，清除阻止呈现的 JavaScript 和 CSS，使用浏览器缓存。
+- 先优化图片吧
+	- 按谷歌的建议找到了名为`jpegcrop`的jpg压缩软件，虽然成功运行了，但得到的图片并不能正常打开
+	- 直接使用画图工具修改图片的到了一个压缩率大约在70%~80%的同等大小图片，不够出色
+	- 还是在pagespeed insight里我发现了可以直接下载谷歌已经提供的优化文件，包括图片和js文件，压缩率良好。就直接使用了。
+- 在css的处理上使用媒体查询使得打印样式不被加载。同时将主样式直接插入HTML文本。
+- 删除了网络字体
+- 对异步的脚本使用async ，统一放到body后面。
+- 对于浏览器缓存我看了一下[谷歌的文档](https://developers.google.com/speed/docs/insights/LeverageBrowserCaching)，发现并不知道怎么操作，论坛里也有相关讨论[页面部署在GitHub Pages时，如何设置缓存控制](https://discussions.youdaxue.com/t/github-pages/36990),然而我没有做这一步也已经达到了要求
 
-开始前，请导出这个代码库并检查代码。
+![](img/result.png)
 
-### 指南
+- 其它有用的链接:
+	- [设置html页面缓存方法](http://www.cnblogs.com/MrZouJian/p/5573326.html)
+	- [网站优化内容小结](https://discussions.youdaxue.com/t/topic/43915)
+	
 
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
+#### Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+- 照常是要先看要求的。
+- chrome已经和教程里的chrome不一样了[开发者工具](https://discussions.youdaxue.com/t/chrome-59-x/43792)
+- 录制timeline，发现强制同步布局，跟踪到具体的js脚本，发现问题所在：
+	- 遍历披萨的元素并改变它们的宽度
+	- 基于滚动条位置移动背景中的披萨滑窗
+	- 当页面加载时生成披萨滑窗
+- 把可以初始获取的项目移出loop
+- 更改选择器选择方法为getElementByClassName
+- 在css里的.mover添加属性will-change: transform;  
 
-以下是几个帮助你顺利开始本项目的提示：
-
-1. 将这个代码库导出
-2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
-
-```bash
-  $> cd /你的工程目录
-  $> python -m SimpleHTTPServer 8080
-```
-
-1. 打开浏览器，访问 localhost:8080
-2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
-
-``` bash
-  $> cd /你的工程目录
-  $> ./ngrok http 8080
-```
-
-1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
-
-接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
-
-----
-
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
-
-你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
-
-你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
-
-### 一些关于优化的提示与诀窍
-* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
-* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
-* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
-* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
-* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
-
-### 使用 Bootstrap 并定制样式
-这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
-
-* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
-# Website-Optimization_zh
+就是这样
