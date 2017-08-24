@@ -55,16 +55,3 @@
 
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
-# Website-Optimization_zh
-### 优化操作
-#### index.html文件
-    1.style.css样式表直接嵌入到html中;
-    2.print.css样式表link标签添加media="print"属性;
-    3.script 标签增加async属性;
-    4.页面图片压缩并裁剪到合理尺寸;
-    5.通过Web Font Loader优化网页字体;
-#### main.js文件
-    1.将querySelector方法改为getElementById;
-    2.将querySelectorAll方法改为getElementsByClassName;
-    3.将循环语句中的不必要代码提取出来放到循环体前执行;
-    4.将背景pizza图片的数量改为可见区域内最多显示的数量;
