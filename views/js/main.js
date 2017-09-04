@@ -539,7 +539,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var max=clientHeight*cols/s;
   for (var i = 0; i < max; i++) {
     if ((i % cols) * s>=clientWidth){continue;}
-    sum+=1;
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
