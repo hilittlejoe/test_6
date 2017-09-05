@@ -537,6 +537,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
   var max=clientHeight*cols/s;
+  var movingP=document.getElementById("movingPizzas1");
   for (var i = 0; i < max; i++) {
     if ((i % cols) * s>=clientWidth){continue;}
     var elem = document.createElement('img');
@@ -546,7 +547,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    movingP.appendChild(elem);
   }
   // updatePositions();
 });
