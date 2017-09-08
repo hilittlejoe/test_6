@@ -1,32 +1,24 @@
-## 网站性能优化项目
+### Part 1: 优化 index.html 的 PageSpeed Insights 得分
 
-## 如何运行
-1. 网站地址 https://imhxc.github.io/Website_Optimization_zh/
-2. 直接克隆到本地
+- 用了gulp~ 命令行里依次输入以下指令：（每次编辑jss或css,将会自动压缩保存它们到dist文件里）
+```
+cd [项目的根目录]
+npm install gulp --save-dev
+npm install
+gulp
+```
+- 利用media query创造非阻塞式的css,如print.css添加media="print";字体下载添加media="none" onload="if(media!='all')media='all'"
+- 用inline css代替外部css,减少浏览器的请求次数；
+- 压缩css
+----
 
-## 优化
+### Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+1. 在changePizzaSizes函数里
+-  “document.querySelectorAll(".randomPizzaContainer")”在函数出现了四次，将其储存在一个变量中感觉会更好点。
+- 将变量newwidth和变量dx移出for循环，并且只需访问一个元素的offsetWidth。
+>  for循环中offsetWidth多次导致强制布局;
+又因为每个有randomPizzaContainer类的元素的offsetWidth是相同的，无需遍历所有元素的offsetWidth。
 
-### index.html 优化
-- 增加对应的css、js压缩处理文件，并将改脚本、样式链接到已压缩的文件。
-  - `print.css -> print.min.css`
-  - `perfmatters.js -> perfmatters_min`
-- 将已压缩的style.css文件内连到index.html中
-
-
-- css、js阻止呈现优化
-  - 使用media属性 `<link href="css/print.min.css" rel="stylesheet" media="print">`
-  - js使用async异步加载
-- img文件下的所有图片进行压缩
-- 增加小尺寸pizzeria_min.png图片，并将index.html页面下的图片链接(pizzeria.jpg)，修改为pizzeria_min.png
-
-
-
-### pizza.html 优化
-
-- 增加对应的css、js压缩处理文件，并重新链接至已压缩文件
-- main.js文件修改`querySelector`为`getElementById`,`querySelectorAll`为`getElementsByClassName`
-- 优化pizza size 的个数 *main.js文件524行*
-- 着重优化main.js文件中的changePizzaSizes方法
-- 压缩图片
-
-
+2. 在updatePosition函数里
+- for循环里的scrollTop导致多次强制布局，可在循环外访问scrollTop并储存在一个变量里
+- 为适应各种屏幕中都有滑动pizza,80个滑动pizza应该足够~
