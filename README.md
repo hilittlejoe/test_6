@@ -6,37 +6,24 @@
 
 ### 指南
 
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
+#### Part 1: 优化 index.html 的 PageSpeed Insights 得分
 
-以下是几个帮助你顺利开始本项目的提示：
+##### 图片优化
+使用google pagespeed推荐的工具jpegtran和optipng无损压缩图片，或者使用[https://tinypng.com/](https://tinypng.com/)网站在线压缩图片。
 
-1. 将这个代码库导出
-2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
+##### 优化css
+将style.css文件中的样式复制到index.html中使用内联样式。
 
-```bash
-  $> cd /你的工程目录
-  $> python -m SimpleHTTPServer 8080
-```
-
-1. 打开浏览器，访问 localhost:8080
-2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
-
-``` bash
-  $> cd /你的工程目录
-  $> ./ngrok http 8080
-```
-
-1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
-
-接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
+##### 部署github page
+上传代码到github后部署github page网页，github page自带缓存优化，gzip等。
 
 ----
 
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
-
-你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
-
-你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
+#### Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+* querySelector* 这一类的方法相对比较消耗资源，替换为 getElements*这样一类方法
+* dx,newwidth,scrollTop 的计算只需要一次就可以，这样就可以将其移动到循环外部啦。
+* 设置left值可以用transform = translateX(100px)方式代替
+* 背景披萨 .mover 实在是太多了，只需要保证在可视区域里数量足够即可。
 
 ### 一些关于优化的提示与诀窍
 * [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
