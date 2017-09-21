@@ -31,14 +31,6 @@
 接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
 
 ----
-###Part 1 优化概述：
-1. 下载云端的图片并在本地压缩
-2. 对项目目录中自带的图片进行压缩（pizza图片需额外调整尺寸）
-3. 压缩css多余空格和换行并在html中内联引用
-4. 对print.css引用加入media="print"
-4. 压缩html文件
-5. asyn js
-6. 压缩html中<script>中js语句的多余空格和换行
 
 ####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
 
@@ -63,10 +55,3 @@
 
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
-###part 2 优化的内容:(main.js为修改后的文件)共有6处，详细参考main文件：
-1. 修改pizzaElementGenerator为无参函数
-2. 每个披萨删除原有的id属性，前两步作用主要为第四处的修改铺垫，直接以cloneNode来创建新披萨
-3. 优化changePizzaSizes函数
-4. 添加cloneNode，省去必须建立所有子节点的麻烦
-5. 把body.scrollTop移到循环外，避免FSL
-6. 把只需一次可以完成的动作移到了循环外，减少不必要的资源浪费
