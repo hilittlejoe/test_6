@@ -55,3 +55,15 @@
 
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+
+### 对该项目进行的优化操作
+#### index.html的优化
+1. 内联style.css的样式到index.html中减少请求css的次数
+2. 通过媒体查询取消阻止print.css阻止DOM渲染
+3. 把图片进行压缩，减小关键资源大小
+4. 去除外部的web字体引用
+
+#### pizza.html的卡顿优化
+1. resizePizzas中函数determineDx去掉，不需要将百分比的宽度转换成px值，去除卡顿
+2. resizePizzas中的document.querySelectorAll(".randomPizzaContainer")用变量randomPizzas存储
+3. 基于滚动条位置移动背景中的披萨滑窗把改变left属性改为改变transform属性，不用重新layout
