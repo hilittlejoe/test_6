@@ -516,15 +516,18 @@ function updatePositions() {
 }
 
 // 在页面滚动时运行updatePositions函数
-requestanimationFrame(updatePositions);
+requestAnimationFrame(updatePositions);
 window.addEventListener('scroll', updatePositions);
 
 // 当页面加载时生成披萨滑窗
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var size = 256;
-  var rows = window.height / size;
-  var num = row * cols
+  var rows = window.innerHeight / size;
+  var num = rows * cols
+
+  console.log(num, rows, cols)
+
   for (var i = 0; i < num; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
