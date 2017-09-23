@@ -56,14 +56,20 @@
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
 
-### 对该项目进行的优化操作
-#### index.html的优化
-1. 内联style.css的样式到index.html中减少请求css的次数
-2. 通过媒体查询取消阻止print.css阻止DOM渲染
-3. 把图片进行压缩，减小关键资源大小
-4. 去除外部的web字体引用
 
-#### pizza.html的卡顿优化
-1. resizePizzas中函数determineDx去掉，不需要将百分比的宽度转换成px值，去除卡顿
-2. resizePizzas中的document.querySelectorAll(".randomPizzaContainer")用变量randomPizzas存储
-3. 基于滚动条位置移动背景中的披萨滑窗把改变left属性改为改变transform属性，不用重新layout
+测试的方式：
+
+1.index.html 的优化
+压缩图片的方法: TinyPng35,
+异步加载 Google font34
+利用 media:none 不阻塞渲染地加载 CSS 方法31
+
+2.pizza 的滚动优化
+getelementById vs querySelector33
+tramsform36 代替 left 去移动pizza ，因为它不需要重新再绘制 pizza
+会导致重新布局的属性列表37
+用requestAnimationFrame优化Web动画36
+减少 pizza 个数，留意 : 以下的代码中的变量 s （size）为 pizza 大小的意思，即其边长为 256
+参考链接：
+https://discussions.youdaxue.com/t/topic/38793
+https://www.bilibili.com/video/av8893941/index_9.html#page=9

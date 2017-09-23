@@ -419,7 +419,7 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  /*function determineDx (elem, size) {
+  function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
     var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
@@ -442,27 +442,14 @@ var resizePizzas = function(size) {
     var dx = (newSize - oldSize) * windowWidth;
 
     return dx;
-  }*/
+  }
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-  	switch(size) {
-        case "1":
-          newWidth = 25;
-          break;
-        case "2":
-          newWidth = 33.3;
-          break;
-        case "3":
-          newWidth = 50;
-          break;
-        default:
-          console.log("bug in sizeSwitcher");
-      }
-  	
-  	var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
-    for (var i = 0; i < randomPizzas.length; i++) {
-      randomPizzas[i].style.width = newWidth + "%";
+    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
@@ -479,7 +466,7 @@ window.performance.mark("mark_start_generating"); // 收集timing数据
 
 // 这个for循环在页面加载时创建并插入了所有的披萨
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.querySelector("#randomPizzas");
+  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -500,34 +487,23 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
   for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
     sum = sum + times[i].duration;
   }
-  //console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
+  console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
 // 下面的关于背景滑窗披萨的代码来自于Ilya的demo:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
-
-function getDomNodeArray(selector) {//创建DOM接点数组的函数
-  // get the elements as a DOM collection
-  var elemCollection = document.querySelectorAll(selector);
-
-  // coerce the DOM collection into an array
-  var elemArray = Array.prototype.slice.apply(elemCollection);
-
-  return elemArray;
-};
-
 
 // 基于滚动条位置移动背景中的披萨滑窗
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = getDomNodeArray('.mover');
-  items.forEach(function(currentValue,index,arr){
-  	 var phase = Math.sin((document.body.scrollTop / 1250) + (index % 5));
-     currentValue.style.transform =  "translateX(" + (currentValue.basicLeft + 100 * phase) + 'px)';
-  });
-  
+  var items = document.querySelectorAll('.mover');
+  for (var i = 0; i < items.length; i++) {
+    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  }
+
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
   window.performance.mark("mark_end_frame");
@@ -537,6 +513,7 @@ function updatePositions() {
     logAverageFrame(timesToUpdatePosition);
   }
 }
+
 // 在页面滚动时运行updatePositions函数
 window.addEventListener('scroll', updatePositions);
 
@@ -550,7 +527,6 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.style.left = '0px';
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     document.querySelector("#movingPizzas1").appendChild(elem);
