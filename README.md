@@ -56,20 +56,14 @@
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
 
+### 优化过程
+1. 压缩css并将CSS内联，减少请求次数；
+2. 使用media属性 <link href="css/print.min.css" rel="stylesheet" media="print">
+3. 对图片进行无损压缩，节省数据字节空间，加快首屏加载时间；
+4. 将js文件压缩；
+5. 在标签头中设置 Cache-Control的max-age值，为静态资源设置过期时间为3小时；
+6. 使用getElementById替代querySelector，getElementByClassName代替querySelectorAll，更快的获取
+7. 优化for循环，将不必要元素提出
 
-测试的方式：
 
-1.index.html 的优化
-压缩图片的方法: TinyPng35,
-异步加载 Google font34
-利用 media:none 不阻塞渲染地加载 CSS 方法31
 
-2.pizza 的滚动优化
-getelementById vs querySelector33
-tramsform36 代替 left 去移动pizza ，因为它不需要重新再绘制 pizza
-会导致重新布局的属性列表37
-用requestAnimationFrame优化Web动画36
-减少 pizza 个数，留意 : 以下的代码中的变量 s （size）为 pizza 大小的意思，即其边长为 256
-参考链接：
-https://discussions.youdaxue.com/t/topic/38793
-https://www.bilibili.com/video/av8893941/index_9.html#page=9
