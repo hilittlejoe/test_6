@@ -2,9 +2,9 @@
 
 ### 优化说明
 
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
-#####结果：mobile（92分），PC（94分）
-####实现步骤
+#### Part 1: 优化 index.html 的 PageSpeed Insights 得分
+##### 结果：mobile（92分），PC（94分）
+#### 实现步骤
 1. 解决页面中的css和js阻塞渲染问题；
 ```html 
 	<link href="css/print.css" rel="stylesheet" media="print">        
@@ -44,8 +44,9 @@
 
 ----
 
-###优化说明
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+### 优化说明
+
+#### Part 2: 优化 pizza.html 的 FPS（每秒帧数）
 
 1. 优化网页加载时的性能问题；
 ```javascript
