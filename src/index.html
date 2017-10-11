@@ -2,18 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Expires" content="Wed, 16 May 2018 12:00:00 GMT" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content=" FILL ME IN ">
     <meta name="author" content=" FILL ME IN ">
     <title>Cameron Pittman: Portfolio</title>
 
     <!-- 嗯，web 字体对速度的影响有多大呢？测量一下吧 -->
-    <!--
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
-    
-    <link href="css/style.css" rel="stylesheet">
-    -->
+    <!--<link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">-->
+
+    <!--<link href="css/style.css" rel="stylesheet">-->
     <style>
       html {
         font-size: 100%;
@@ -22,7 +19,7 @@
         -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: none;
       }
-      body { margin: 0; font-size: 14px; line-height: 1.61; font-weight: 400; background: #fff;}
+      body { margin: 0; font-size: 14px; line-height: 1.61; font-weight: 400; }
       body, button, input, select, textarea { font-family: 'Open Sans', sans-serif; color: #333; }
 
       a { color: #12C; }
@@ -30,9 +27,12 @@
       a:focus { outline: thin dotted; }
       a:hover, a:active { color: #c00; outline: 0; }
 
-      strong { font-weight: bold; }
+      b, strong { font-weight: bold; }
+      pre, code { font-family: monospace, monospace; font-size: 1em; }
+      ul, ol { margin: 1em 0; padding: 0 0 0 20px; }
       img { border: 0; max-width: 100%; }
-      
+
+      body { background: #fff; }
       header, footer, .container { max-width: 45em; margin: 0 auto; }
 
       header { padding: 0 0.5em; color: #C90B0B; }
@@ -47,7 +47,7 @@
 
       .content { padding: 1em 1em; }
       .content li { list-style-type: none; font-size: 1.1em;}
-      li img { float:left; padding-right: 1em; }
+      li img {width: 100px; float:left; padding-right: 1em; }
       li p { font-size: 0.9em; font-style: italic; }
 
       footer {
@@ -61,12 +61,11 @@
         body { font-size: 12px;}
         header p { padding-left: 4.5em;}
       }
-      
+
     </style>
-    <!-- 设置media，只在打印时候加载 -->
     <link href="css/print.css" rel="stylesheet" media="print">
 
-    <script>
+    <script async>
       (function(w,g){w['GoogleAnalyticsObject']=g;
       w[g]=w[g]||function(){(w[g].q=w[g].q||[]).push(arguments)};w[g].l=1*new Date();})(window,'ga');
 
@@ -74,14 +73,14 @@
       ga('create', 'UA-XXXX-Y');
       ga('send', 'pageview');
     </script>
-    <!-- 异步执行annlytics.js -->
-    <script async src="http://www.google-analytics.com/analytics.js"></script>
-    <script async src="js/perfmatters.js"></script>
+    <!--<script src="js/analytics.js" async></script>-->
+    <script src="http://www.google-analytics.com/analytics.js" async></script>
+    <script src="js/perfmatters.js" async></script>
   </head>
 
   <body>
     <header>
-      <a href="/"><img src="img/index_cprofilepic.jpg"></a>
+      <a href="/"><img src="img/profilepic.jpg"></a>
       <p>Cameron Pittman<br><span>Course Developer</span></p>
     </header>
 
@@ -93,25 +92,25 @@
       <div class="content">
         <ul>
           <li>
-            <img src="img/index_c2048.jpg">
+            <img src="img/1.jpg">
             <a href="project-2048.html">Build Your Own 2048!</a>
             <p>I made my own version of 2048. How cool is that!?</p>
           </li>
 
           <li>
-            <img src="img/index_cwpo.jpg">
+            <img src="img/2.jpg">
             <a href="project-webperf.html">Website Performance Optimization</a>
             <p>Hey... this class looks familiar.</p>
           </li>
 
           <li>
-            <img src="img/index_cmwb.jpg">
+            <img src="img/3.jpg">
             <a href="project-mobile.html">Mobile Web Development</a>
             <p>Making mobile apps isn't so hard after all.</p>
           </li>
 
           <li>
-            <img src="img/index_cpizzeria.jpg">
+            <img src="img/pizzeria.jpg">
             <a href="views/pizza.html">Cam's Pizzeria</a>
             <p>Who wants a performant pizza?</p>
           </li>
