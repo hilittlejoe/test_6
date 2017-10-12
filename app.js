@@ -1,16 +1,15 @@
 var express = require('express');
 var app = express();
-var path = require("path");
-var bodyParser = require('body-parser');
+var opn = require('opn');
+var port = 3000;
 
-app.use(express.static(path.join(__dirname, 'dist'), {
-    setHeaders: (res, path, stat) => {
-        res.set({'Expires': new Date('2018-12-12')})
-    }
-}));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-var server = app.listen(8089, function() {
-    console.log('Listening on port %d', server.address().port);
+app.get('*', function(req, res){
+    res.sendFile(req.path, {root: __dirname+'/', dotfiles: 'deny'});
+});
+
+app.listen(port, () => {
+    console.log(`App listening at port 3000`);
+    opn("http://localhost:" + port)
 });
