@@ -465,7 +465,7 @@ var resizePizzas = function(size) {
     }
 
     var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
-    
+
     for (var i = 0; i < randomPizzas.length; i++) {
       randomPizzas[i].style.width = newwidth + "%";
     }
@@ -518,7 +518,7 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
-  var Top=document.body.scrollTop/1250; //å°†layoutæ”¾åœ¨å‰é¢ï¼Œå¹¶ä¸”å°†ç®€å•çš„è®¡ç®—ä¹Ÿæ”¾åœ¨å¤–é¢ï¼Œå¯ä»¥åŽ»æŽ‰ä¸€ä¸ªæ‹¬å·
+  var Top=document.documentElement.scrollTop/1250; //å°†layoutæ”¾åœ¨å‰é¢ï¼Œå¹¶ä¸”å°†ç®€å•çš„è®¡ç®—ä¹Ÿæ”¾åœ¨å¤–é¢ï¼Œå¯ä»¥åŽ»æŽ‰ä¸€ä¸ªæ‹¬å·
   var phase;//phaseçš„å®šä¹‰æ”¾åœ¨å¾ªçŽ¯å¤–
   for (var i = 0; i < items.length; i++) {
     phase = Math.sin(Top + i % 5);
