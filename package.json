@@ -1,23 +1,32 @@
 {
-  "name": "p3",
+  "name": "1",
   "version": "1.0.0",
-  "description": "你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。",
-  "main": "Gruntfile.js",
+  "description": "1",
+  "main": "1",
   "dependencies": {
-    "express": "^4.16.2",
-    "ngrok": "^2.2.22",
-    "opn": "^5.1.0"
+    "http-server": "^0.10.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "grunt": "^1.0.1",
-    "ngrok": "^2.2.22"
+    "browser-sync": "^2.18.13",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-less": "^3.3.2",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-rename": "^1.2.2",
+    "gulp-sequence": "^0.4.6",
+    "gulp-uglify": "^3.0.0"
   },
   "scripts": {
-    "dev": "node app.js",
-    "build": "babel js -d output"
+    "test": "1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "1"
+  },
+  "author": "shmilyvidian",
   "license": "ISC"
 }
