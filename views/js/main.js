@@ -499,7 +499,7 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.getElementsByClassName('mover');
-  var scrollTop = document.body.scrollTop;
+  var scrollTop = document.documentElement.scrollTop;
   for (var i = 0; i < items.length; i++) {
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
@@ -515,6 +515,9 @@ function updatePositions() {
   }
 }
 
+
+
+
 // runs updatePositions on scroll
 window.addEventListener('scroll', updatePositions);
 
@@ -525,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var s = 256;
   var elem;
   var movingPizzas = document.getElementById('movingPizzas1');
-  
+
   var height = window.screen.height;
   var rows = height / s;
   var numPizzas = rows*cols;
