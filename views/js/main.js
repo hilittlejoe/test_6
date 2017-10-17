@@ -546,7 +546,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8
   var s = 256;
-  var rows = window.screen.width / s;
+  var rows = window.screen.width / 73;
   var numberOfPizzas = cols * rows;
   for (var i = 0; i < numberOfPizzas; i++) {
     elem = document.createElement('img'); //åˆ é™¤varæ ‡è¯†ç¬¦ï¼Œé˜²æ­¢å¤šæ¬¡å£°æ˜Ž
