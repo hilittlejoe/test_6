@@ -1,16 +1,12 @@
 /*
 Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
 jank-free at 60 frames per second.
-
 There are two major issues in this code that lead to sub-60fps performance. Can
 you spot and fix both?
-
-
 Built into the code, you'll find a few instances of the User Timing API
 (window.performance), which will be console.log()ing frame rate data into the
 browser console. To learn more about User Timing API, check out:
 http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
-
 Creator:
 Cameron Pittman, Udacity Course Developer
 cameron *at* udacity *dot* com
@@ -379,7 +375,7 @@ var pizzaElementGenerator = function(i) {
   pizzaImageContainer.style.width="35%";
 
   pizzaImage.src = "images/pizza.png";
-  pizzaImage.classList.add("img-responsive");
+  pizzaImage.classList.add("img-responsive","pc");
   pizzaImageContainer.appendChild(pizzaImage);
   pizzaContainer.appendChild(pizzaImageContainer);
 
@@ -424,8 +420,7 @@ var resizePizzas = function(size) {
    // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-  //querySelector-->getelementById,åŽè€…é€Ÿåº¦[æ›´å¿«]
-    var windowWidth = document.getElementById("#randomPizzas").offsetWidth;
+    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // Changes the slider value to a percent width
@@ -449,25 +444,12 @@ var resizePizzas = function(size) {
   }
 
   // Iterates through pizza elements on the page and changes their widths
-  //ä¿®æ”¹äº†domçš„é‡å¤æ€§é€‰æ‹©ä»¥åŠFSLé—®é¢˜
   function changePizzaSizes(size) {
-    switch(size) {
-      case "1":
-        newwidth = 25;
-        break;
-      case "2":
-        newwidth = 33.33;
-        break;
-      case "3":
-        newwidth = 50;
-        break;
-      default:
-    }
-
-    var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
-
-    for (var i = 0; i < randomPizzas.length; i++) {
-      randomPizzas[i].style.width = newwidth + "%";
+    var randPizzaContainers = document.getElementsByClassName("randomPizzaContainer");
+    var dx = determineDx(randPizzaContainers[0], size);
+    var newwidth = (randPizzaContainers[0].offsetWidth + dx) + 'px';
+    for (var i = 0, len = randPizzaContainers.length; i < len; i++) {
+      randPizzaContainers[i].style.width = newwidth;
     }
   }
 
@@ -483,9 +465,8 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // collect timing data
 
 // This for-loop actually creates and appends all of the pizzas when the page loads
-//å°†domçš„æ“ä½œæ”¾åœ¨å¾ªçŽ¯ä¹‹å¤–
-var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
+  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -517,17 +498,12 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
-  var Top=document.documentElement.scrollTop/1250; //å°†layoutæ”¾åœ¨å‰é¢ï¼Œå¹¶ä¸”å°†ç®€å•çš„è®¡ç®—ä¹Ÿæ”¾åœ¨å¤–é¢ï¼Œå¯ä»¥åŽ»æŽ‰ä¸€ä¸ªæ‹¬å·
-  var phase;//phaseçš„å®šä¹‰æ”¾åœ¨å¾ªçŽ¯å¤–
+  var items = document.getElementsByClassName('mover');
+  var scrollTop = document.body.scrollTop;
   for (var i = 0; i < items.length; i++) {
-    phase = Math.sin(Top + i % 5);
+    var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
-  //æ¯æ¬¡æ”¹å˜æ ·å¼çš„æ—¶å€™ï¼Œåˆšåˆšæ‰§è¡Œçš„å¸ƒå±€æµç¨‹éƒ½ä¼šå˜å¾—æ— æ•ˆ
-  //é”™è¯¯æç¤ºï¼šlikely performance bottleneckï¼Œä¹Ÿå«åšforced synchronous layoutï¼ˆFSLï¼‰
-  //åœ¨è¿™é‡Œæ˜¯å¸ƒå±€æŠ–åŠ¨
-
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
@@ -544,19 +520,25 @@ window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
-  var cols = 8
+  var cols = 8;
+
   var s = 256;
-  var rows = window.screen.width / 73;
-  var numberOfPizzas = cols * rows;
-  for (var i = 0; i < numberOfPizzas; i++) {
-    elem = document.createElement('img'); //åˆ é™¤varæ ‡è¯†ç¬¦ï¼Œé˜²æ­¢å¤šæ¬¡å£°æ˜Ž
+  var elem;
+  var movingPizzas = document.getElementById('movingPizzas1');
+  
+  var height = window.screen.height;
+  var rows = height / s;
+  var numPizzas = rows*cols;
+
+  for (var i = 0; i < numPizzas; i++) {
+    elem = document.createElement('img');
     elem.className = 'mover';
-    elem.src = "images/pizza.png";
+    elem.src = "images/pizzamini.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    movingPizzas.appendChild(elem);
   }
   updatePositions();
 });

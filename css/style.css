@@ -42,8 +42,13 @@ footer {
 }
 footer span { float: right; font-style: italic; }
 
+.pc{display: initail;}
+.smartphone{display: none;}
+
 /* Smartphones (portrait) */
 @media only screen and (max-width: 480px) {
   body { font-size: 12px;}
   header p { padding-left: 4.5em;}
+  .pc{display: none;}
+  .smartphone{display: initial;}
 }
