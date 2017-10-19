@@ -400,16 +400,17 @@ var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API 函数
 
   // 改变滑窗前披萨的尺寸值
+  var oPizS = document.getElementById("pizzaSize");
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.getElementById("#pizzaSize").innerHTML = "Small";
+        oPizS.innerHTML = "Small";
         return;
       case "2":
-        document.getElementById("#pizzaSize").innerHTML = "Medium";
+        oPizS.innerHTML = "Medium";
         return;
       case "3":
-        document.getElementById("#pizzaSize").innerHTML = "Large";
+        oPizS.innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -421,7 +422,7 @@ var resizePizzas = function(size) {
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-    var windowWidth = document.getElementById("#randomPizzas").offsetWidth;
+    var windowWidth = document.getElementById("randomPizzas").offsetWidth; //fix a bug：sample：document.getElementById("pizzaSize")
     var oldSize = oldWidth / windowWidth;
 
     // 将值转成百分比宽度
@@ -446,7 +447,7 @@ var resizePizzas = function(size) {
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-    var pizzas = document.getElementsByClassName(".randomPizzaContainer");
+    var pizzas = document.getElementsByClassName("randomPizzaContainer"); //fix a bug: delete "."
     var newWidths = [];
     for (var i = 0; i < pizzas.length; i++) {
       var dx = determineDx(pizzas[i], size);
@@ -512,7 +513,7 @@ function updatePositions() {
   var windowHeight = window.innerHeight;
   var windowWidth = window.innerWidth;
 
-  var items = document.getElementsByClassName('.mover');
+  var items = document.getElementsByClassName('mover'); //fix a bug: delete "."
 
   for (var i = 0; i < items.length; i++) {
     //note：把phasep变量单提出来，这样可以避免由于for循环导致的layout重复布局。
@@ -557,7 +558,9 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
- for (var i = 0; i < 200; i++) {
+  var oMp1 = document.getElementById("movingPizzas1"); //note: use "getElementById" instead of "querySelector"
+
+  for (var i = 0; i < 200; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     // note：将pizza.png原图等比例缩放至100px * 77px
@@ -572,7 +575,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     // note：定义elem.basicTop
     elem.basicTop = (Math.floor(i / cols) * s);
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    oMp1.appendChild(elem);
   }
   updatePositions();
 });
