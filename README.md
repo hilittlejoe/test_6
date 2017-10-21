@@ -4,89 +4,39 @@
 
 开始前，请导出这个代码库并检查代码。
 
-### Part 1: 优化 index.html 的 PageSpeed Insights 得分
+### 指南
 
-#### 项目准备
+####Part 1: 优化 index.html 的 PageSpeed Insights 得分
 
-##### 创建Repository
+以下是几个帮助你顺利开始本项目的提示：
 
-##### 配置ngrok
-1.运行一个本地服务器
+1. 将这个代码库导出
+2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
+
 ```bash
   $> cd /你的工程目录
   $> python -m SimpleHTTPServer 8080
 ```
-2.安装ngrok
-- Start by downloading ngrok.
-- Install your authtoken
-- Create your first secure tunnel
-```
-./ngrok http 8080
-```
-**复制URL到浏览器，检查是否能打开**
-3.访问PageSpeed Insights，获取改进意见，修改完善index.html
 
-##### 安装webq工具
-01. 安装
-02. 安装Xcode，App Store直接下载安装
-03. 安装macport
-[下载地址：](https://distfiles.macports.org/MacPorts/)
-**WARNING:)**
-- 注意选择支持本机的安装包，因为我的系统是machighSierra，所以选择MacPorts-2.4.2-10.13-HighSierra.pkg
+1. 打开浏览器，访问 localhost:8080
+2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
 
-- 打开终端，输入 port，正确显示版本号说明安装成功。
-
-- Update MacPorts： 用以下命令行sudo port selfupdate
-
-1. Install libwebp:
-```
- sudo port install webp
+``` bash
+  $> cd /你的工程目录
+  $> ./ngrok http 8080
 ```
 
-2. 使用
-- Images to the WebP Format
-```
-cwebp -q 80 image.png -o image.webp
-```
+1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
 
-More  instruction, check [ducumentation](https://developers.google.com/speed/webp/docs/cwebp)
+接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
 
-- WebP Format to Images
-```
-dwebp image.webp -o image.png
-```
-More  instruction, check [ducumentation](https://developers.google.com/speed/webp/docs/dwebp)
+----
 
-##### 安装node.js 和 gulp
- 
-[gulp使用教程](https://github.com/PARADISELIN/learn-gulp)
-
-#### 优化措施
-- Inline CSS
-- css使用media query
-- 所有JS文件异步 async
-- 图片本地化
-- 配图转为成webq格式
-- 移动main.js到body的末端
-
-
-#### Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
 
 你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
 
 你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
-
-##### 优化措施
-1. 用getElementById()替换querySelector()；getElementsByClassName()替代querySelectorAll()
-2. 优化function changePizzaSizes(size)：把newWidths单独提出来，优化函数内的for循环，避免因为循环导致layout重新布局。
-3. 优化function updatePositions()：
-- 把scrollTop作为变量单提出来，这样可以避免由于for循环导致的layout重复布局。
-- 把phasep变量单提出来，这样可以避免由于for循环导致的layout重复布局。
-- 设置一个变量newX，加入限定条件，只计算window之内的，降低layout压力
-- 使用transform: translate3d()替代left。
-- 调整pizza.png为100px * 77px
-- 定义elem.basicWidth初始值
-- elem.style.left定义初始值
 
 ### 一些关于优化的提示与诀窍
 * [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
@@ -106,4 +56,11 @@ More  instruction, check [ducumentation](https://developers.google.com/speed/web
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
 
+### 优化过程
+* 图片压缩，压缩了最大的那张图片
+* css媒体查询
+* font的那个css链接放到了页面最下面，就不阻塞渲染了，不知道为什么
+* script链接用async,也放到页面最下面
+* style.css用内联
+* main.js中有两处循环里访问了offsetWidth属性，拿到循环外部
 
