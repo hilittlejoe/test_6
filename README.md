@@ -1,68 +1,65 @@
-## ç½‘ç«™æ€§èƒ½ä¼˜åŒ–é¡¹ç›®
+# Ò³ÃæÓÅ»¯
+ÓÅ»¯ÏîÄ¿ÖĞÊ¹ÓÃÁË³£¼ûµÄÓÅ»¯·½Ê½£¬±ÈÈçÒ³ÃæµÄ½Å±¾¼ÓÔØË³Ğò£¬ÒÔ¼°Ó°ÏìFSLµÈµÄÒòËØ×öÁËÒ»Ğ©´¦Àí£¬¾ßÌåÓÅ»¯²¿·Ö¶Î½øĞĞÃèÊö¡£
+## Index.htmlÒ³ÃæµÄÓÅ»¯
+1.index.htmlµÄ·ÃÎÊÂ·¾¶Îª£º[index.html](https://chensdog.github.io/chenchao/p2/index.html)
+2.ÓÅ»¯ÄÚÈİËµÃ÷£º
+   - ½«×ÖÌåÎÄ¼ş`//fonts.googleapis.com/css?family=Open+Sans:400,700`ÒÆ¶¯µ½Ò³Ãæ`body`µ×²¿£¬ÓÉÓÚ×ÖÌåÎÄ¼şµÄ¼ÓÔØ¶ÔÓÚÒ³ÃæÏÔÊ¾ÄÚÈİÓ°Ïì²¢²»ÊÇ·Ç³£´ó£¬Òò´Ë½«×ÖÌå»á½«·Åµ½Ò³Ãæµ×²¿£¬ÏÈ¼ÓÔØÒ³ÃæÄÚÈİ½øĞĞ½âÎö
+   - ½«`js`ÎÄ¼şµÄ¼ÓÔØ±äÎª`async`
+       ```
+       <script src="js/perfmatters.js"></script>  
+       <script src="http://www.google-analytics.com/analytics.js"></script>
+       ¸ü¸ÄÎª£º
+       <script async src="js/perfmatters.js"></script>
+       <script async src="http://www.google-analytics.com/analytics.js"></script>
+       ```
+       ²¢ÇÒ½«`analytics.js`ÒÆ¶¯µ½bodyÌåµ×²¿
+   - ×ÊÔ´ÎÄ¼şÑ¹Ëõ´¦Àí
+   ½«Ò³ÃæÖĞ¾²Ì¬×ÊÔ´ÎÄ¼ş½øĞĞÑ¹Ëõ£¬ÀıÈçÆäÖĞ`views/images/pizzeria.jpg`µÄÑ¹Ëõ¿ÉÒÔÓÉ´óÓÚ`2MB`±äÎª`4kb`×óÓÒµÄÎÄ¼ş
+   - ½«`css`ÎÄ¼şÄÚÈİÇ¨ÒÆµ½`html`ÖĞ£¬ÓÉÓÚ`css`Ò»²¿·ÖÎÄ¼ş²¢²»ÊÇºÜ¶à£¬ËùÒÔ¿ÉÒÔÇ¶Èëµ½Ò³Ãæ`<style>`±êÇ©ÖĞ
+## pizza.htmlÒ³ÃæµÄÓÅ»¯
+1.Ö´ĞĞÂ·¾¶Îª:[pizza.html](https://chensdog.github.io/chenchao/p2/views/pizza.html)
+2.ÓÅ»¯µÄ·½·¨
+   - »¬¿éµÄÒÆ¶¯µ÷ÕûÍ¼Æ¬´óĞ¡³ß´çÍê³ÉĞ¡ÓÚ`5ms`
+½«main.jsÖĞ½øĞĞ¼ÆËãµÄÂß¼­±äÎªÑùÊ½µÄ`%`£¬´Ó¶øÈ¡´úÓ°ÏìFSLµÄ`px`£¬²¢ÇÒ¾¡Á¿¼õÉÙÑ­»·ÖĞ`document.getXX`»òÕß`document.queryXX`µÄÊ¹ÓÃ£¬½«Í¨¹ı`document`»ñÈ¡µ½µÄÄÚÈİ»º´æµ½`¾Ö²¿±äÁ¿`£¬ÔÚÑ­»·ÖĞ²Ù×÷¾Ö²¿±äÁ¿£¬ÓÅ»¯´úÂëÈçÏÂ£º
+        ```
+            var rpc = document.querySelectorAll(".randomPizzaContainer");
+        	var length = rpc.length || 0;
+        	//ÅĞ¶ÏsizeÊÇ·ñÂú×ã£¬large£¬small£¬middleµÄÄÚÈİÏî
+        	//½«°Ù·Ö±ÈÒÆ¶¯µ½ÄÚ²¿À´½øĞĞÅĞ¶Ï£¬
+        	function sizeSwitcher (size) {
+              switch(size) {
+                case "1":
+                  return 25;
+                case "2":
+                  return 33.33;
+                case "3":
+                  return 50;
+                default:
+                  console.log("bug in sizeSwitcher");
+              }
+            }
+        	//»ñÈ¡Ã¿´ÎÒÆ¶¯»¬¿éºóÍ¼Æ¬×îÖÕµÄwidthµÄ°Ù·Ö±È
+        	var newSize = sizeSwitcher(size);
+        	//×îÖÕÔÚÉèÖÃwidthµÄÊ±ºò£¬ÉèÖÃ°Ù·Ö±È£¬Ïà¶ÔÓÚ¸¸ÔªËØµÄ¿í¶ÈÀ´½øĞĞÉèÖÃ
+            for (var i = 0; i < length; i++) {
+              rpc[i].style.width = newSize + "%";
+            }
+     ```
 
-ä½ è¦åšçš„æ˜¯å°½å¯èƒ½ä¼˜åŒ–è¿™ä¸ªåœ¨çº¿é¡¹ç›®çš„é€Ÿåº¦ã€‚æ³¨æ„ï¼Œè¯·åº”ç”¨ä½ ä¹‹å‰åœ¨[ç½‘ç«™æ€§èƒ½ä¼˜åŒ–è¯¾ç¨‹](https://cn.udacity.com/course/website-performance-optimization--ud884/)ä¸­å­¦ä¹ çš„æŠ€æœ¯æ¥ä¼˜åŒ–å…³é”®æ¸²æŸ“è·¯å¾„å¹¶ä½¿è¿™ä¸ªé¡µé¢å°½å¯èƒ½å¿«çš„æ¸²æŸ“ã€‚
+   - ¹ö¶¯Ìõ¹ö¶¯´ïµ½`60fps`
+   1.ÓÉÓÚÒ³ÃæÖĞ `.mover`µÄÒÆ¶¯²»Ó¦¸ÃºÍÆäËûµØ·½ÓĞ¹ØÁª£¬Òò´Ë½«Õâ²¿·ÖÑùÊ½Ìí¼ÓÁË`will-change:transform,left`,µ±È»¸ÃÊôĞÔ¶ÔÓÚä¯ÀÀÆ÷´æÔÚ¼æÈİĞÔÎÊÌâ
+2.È¥µô`px`»»³É`%`£¬¿ÉÒÔ¹Û²ìµ½`.mover`ÔªËØ¼¯ºÏ£¬ËùÓĞµÄ`left`¶¼ÊÇÏà¶ÔÓÚ`body`µÄÀ´½øĞĞµÄ£¬Òò´Ë»ñÈ¡µ±Ç°ä¯ÀÀÆ÷ÊÓ´°`clientWidth`À´µ±×ö»ùÊı
+     ```
+    
+      var scroll_top = document.body.scrollTop || document.documentElement.scrollTop;
+      var client_width = document.body.clientWidth || document.documentElement.clientWidth; 
+      for (var i = 0; i < items.length; i++) {
+        var phase = Math.sin((scroll_top / 1250) + (i % 5));
+        items[i].style.left  = ((items[i].basicLeft + 100 * phase) * 100)/client_width + "%";
+      }
+     ```
 
-å¼€å§‹å‰ï¼Œè¯·å¯¼å‡ºè¿™ä¸ªä»£ç åº“å¹¶æ£€æŸ¥ä»£ç ã€‚
-
-### æŒ‡å—
-
-####Part 1: ä¼˜åŒ– index.html çš„ PageSpeed Insights å¾—åˆ†
-
-ä»¥ä¸‹æ˜¯å‡ ä¸ªå¸®åŠ©ä½ é¡ºåˆ©å¼€å§‹æœ¬é¡¹ç›®çš„æç¤ºï¼š
-
-1. å°†è¿™ä¸ªä»£ç åº“å¯¼å‡º
-2. ä½ å¯ä»¥è¿è¡Œä¸€ä¸ªæœ¬åœ°æœåŠ¡å™¨ï¼Œä»¥ä¾¿åœ¨ä½ çš„æ‰‹æœºä¸Šæ£€æŸ¥è¿™ä¸ªç«™ç‚¹
-
-```bash
-  $> cd /ä½ çš„å·¥ç¨‹ç›®å½•
-  $> python -m SimpleHTTPServer 8080
-```
-
-1. æ‰“å¼€æµè§ˆå™¨ï¼Œè®¿é—® localhost:8080
-2. ä¸‹è½½ [ngrok](https://ngrok.com/) å¹¶å°†å…¶å®‰è£…åœ¨ä½ çš„å·¥ç¨‹æ ¹ç›®å½•ä¸‹ï¼Œè®©ä½ çš„æœ¬åœ°æœåŠ¡å™¨èƒ½å¤Ÿè¢«è¿œç¨‹è®¿é—®ã€‚
-
-``` bash
-  $> cd /ä½ çš„å·¥ç¨‹ç›®å½•
-  $> ./ngrok http 8080
-```
-
-1. å¤åˆ¶ngrokæä¾›ç»™ä½ çš„å…¬å…±URLï¼Œç„¶åå°è¯•é€šè¿‡PageSpeed Insightsè®¿é—®å®ƒå§ï¼å¯é€‰é˜…è¯»ï¼š[æ›´å¤šå…³äºæ•´åˆngrokã€Gruntå’ŒPageSpeedçš„ä¿¡æ¯](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)ã€‚
-
-æ¥ä¸‹æ¥ï¼Œä½ å¯ä»¥ä¸€éåˆä¸€éçš„è¿›è¡Œé…ç½®ã€ä¼˜åŒ–ã€æ£€æµ‹äº†ï¼ç¥ä½ å¥½è¿ï¼
-
-----
-
-####Part 2: ä¼˜åŒ– pizza.html çš„ FPSï¼ˆæ¯ç§’å¸§æ•°ï¼‰
-
-ä½ éœ€è¦ç¼–è¾‘ views/js/main.js æ¥ä¼˜åŒ– views/pizza.htmlï¼Œç›´åˆ°è¿™ä¸ªç½‘é¡µçš„ FPS è¾¾åˆ°æˆ–è¶…è¿‡ 60fpsã€‚ä½ ä¼šåœ¨ main.js ä¸­æ‰¾åˆ°ä¸€äº›å¯¹æ­¤æœ‰å¸®åŠ©çš„æ³¨é‡Šã€‚
-
-ä½ å¯ä»¥åœ¨ Chrome å¼€å‘è€…å·¥å…·å¸®åŠ©ä¸­æ‰¾åˆ°å…³äº FPS è®¡æ•°å™¨å’Œ HUD æ˜¾ç¤ºçš„æœ‰ç”¨ä¿¡æ¯ã€‚[Chrome å¼€å‘è€…å·¥å…·å¸®åŠ©](https://developer.chrome.com/devtools/docs/tips-and-tricks).
-
-### ä¸€äº›å…³äºä¼˜åŒ–çš„æç¤ºä¸è¯€çª
-* [web æ€§èƒ½ä¼˜åŒ–](https://developers.google.com/web/fundamentals/performance/ "web æ€§èƒ½")
-* [åˆ†æå…³é”®æ¸²æŸ“è·¯å¾„](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "åˆ†æå…³é”®æ¸²æŸ“è·¯å¾„")
-* [ä¼˜åŒ–å…³é”®æ¸²æŸ“è·¯å¾„](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "ä¼˜åŒ–å…³é”®æ¸²æŸ“è·¯å¾„ï¼")
-* [é¿å… CSS æ¸²æŸ“é˜»å¡](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "cssæ¸²æŸ“é˜»å¡")
-* [ä¼˜åŒ– JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [é€šè¿‡ Navigation Timing è¿›è¡Œæ£€æµ‹](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")ã€‚åœ¨å‰ä¸¤ä¸ªè¯¾ç¨‹ä¸­æˆ‘ä»¬æ²¡æœ‰å­¦ä¹  Navigation Timing APIï¼Œä½†å®ƒå¯¹äºè‡ªåŠ¨åˆ†æé¡µé¢æ€§èƒ½æ˜¯ä¸€ä¸ªéå¸¸æœ‰ç”¨çš„å·¥å…·ã€‚æˆ‘å¼ºçƒˆæ¨èä½ é˜…è¯»å®ƒã€‚
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">ä¸‹è½½é‡è¶Šå°‘ï¼Œæ€§èƒ½è¶Šå¥½</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">å‡å°‘æ–‡æœ¬çš„å¤§å°</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">ä¼˜åŒ–å›¾ç‰‡</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTPç¼“å­˜</a>
-
-### ä½¿ç”¨ Bootstrap å¹¶å®šåˆ¶æ ·å¼
-è¿™ä¸ªé¡¹ç›®åŸºäº Twitter æ——ä¸‹çš„ <a href="http://getbootstrap.com/">Bootstrapæ¡†æ¶</a> åˆ¶ä½œã€‚æ‰€æœ‰çš„å®šåˆ¶æ ·å¼éƒ½åœ¨é¡¹ç›®ä»£ç åº“çš„ `dist/css/portfolio.css` ä¸­ã€‚
-
-* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
-* <a href="http://getbootstrap.com/components/">Bootstrapç»„ä»¶</a>
-
-### ä¼˜åŒ–è¿‡ç¨‹
-* å›¾ç‰‡å‹ç¼©ï¼Œå‹ç¼©äº†æœ€å¤§çš„é‚£å¼ å›¾ç‰‡
-* cssåª’ä½“æŸ¥è¯¢
-* fontç”¨jså¼‚æ­¥åŠ è½½
-* scripté“¾æ¥ç”¨async,ä¹Ÿæ”¾åˆ°é¡µé¢æœ€ä¸‹é¢
-* style.cssç”¨å†…è”
-* main.jsä¸­æœ‰ä¸¤å¤„å¾ªç¯é‡Œè®¿é—®äº†offsetWidthå±æ€§ï¼Œæ‹¿åˆ°å¾ªç¯å¤–éƒ¨
-* jquerySelectoræ¢æˆgetElementById
-* pizzaçš„æ•°é‡æ”¹æˆè‡ªåŠ¨è®¡ç®—çš„
-
+## ¹ØÓÚpizza.htmlÖĞ¸öÈËÈÏÎªµÄbug
+   - Ò³ÃæÖĞ¶ÔÓÚ`<head>`Î´Ìí¼Ó`<meta charset="UTF-8">`Òò´Ë¿ÉÄÜ²úÉú`ÖĞÎÄÂÒÂë`
+   - ÔÚ`main.js`ÖĞÊ¹ÓÃÁË`documnt.body`À´»ñÈ¡¹ö¶¯ÌõµÄ¸ß¶È£¬µ«ÊÇÒ³ÃæÖĞ²¢Î´Ê¹ÓÃ`DTD`£¬Òò´Ë»ñÈ¡µ½µÄ½á¹û£º`document.body.scrollTop`Ò»Ö±Îª`0`
+    ÒÔÉÏ¹Ûµã½ö½öÊÇ´ú±í¸öÈËÈÏÎª£¬Ò²Ğí´æÔÚ´íÎó

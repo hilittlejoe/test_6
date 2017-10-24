@@ -16,6 +16,7 @@ cameron@udacity.com
 // 你可能已经发现了，这个网站会随机地生成披萨。
 // 下面的数组是所有可能组成披萨的原料。
 var pizzaIngredients = {};
+//肉的披萨
 pizzaIngredients.meats = [
   "Pepperoni",
   "Sausage",
@@ -53,6 +54,7 @@ pizzaIngredients.meats = [
   "Scallops",
   "Filet Mignon"
 ];
+//不带肉的披萨
 pizzaIngredients.nonMeats = [
   "White Onions",
   "Red Onions",
@@ -94,6 +96,7 @@ pizzaIngredients.nonMeats = [
   "Zucchini",
   "Hummus"
 ];
+//寿司披萨
 pizzaIngredients.cheeses = [
   "American Cheese",
   "Swiss Cheese",
@@ -125,6 +128,7 @@ pizzaIngredients.cheeses = [
   "Ricotta Cheese",
   "Smoked Gouda"
 ];
+//酱汁
 pizzaIngredients.sauces = [
   "Red Sauce",
   "Marinara",
@@ -132,6 +136,7 @@ pizzaIngredients.sauces = [
   "No Sauce",
   "Hot Sauce"
 ];
+//面包皮
 pizzaIngredients.crusts = [
   "White Crust",
   "Whole Wheat Crust",
@@ -284,10 +289,10 @@ var nouns = ["animals", "everyday", "fantasy", "gross", "horror", "jewelry", "pl
 
 // 生成器随机地为getAdj和getNoun函数生成数字，并返回一个新的披萨名称
 function generator(adj, noun) {
-  var adjectives = getAdj(adj);
-  var nouns = getNoun(noun);
-  var randomAdjective = parseInt(Math.random() * adjectives.length);
-  var randomNoun = parseInt(Math.random() * nouns.length);
+  var adjectives = getAdj(adj);//返回披萨的形容词
+  var nouns = getNoun(noun);//返回披萨的名词
+  var randomAdjective = parseInt(Math.random() * adjectives.length);//获取随机数，从披萨的形容词中获取到随机的数组形容词
+  var randomNoun = parseInt(Math.random() * nouns.length);//获取随机数，从披萨的名词数组中获取到随机的数组名词
   var name = "The " + adjectives[randomAdjective].capitalize() + " " + nouns[randomNoun].capitalize();
   return name;
 }
@@ -355,7 +360,7 @@ var makeRandomPizza = function() {
   return pizza;
 };
 
-// 为每个披萨分别返回一个DOM元素
+// 为每个披萨分别返回一个DOM元素，创建披萨容器
 var pizzaElementGenerator = function(i) {
   var pizzaContainer,             // 披萨的名称、图片及原料清单容器
       pizzaImageContainer,        // 披萨图片容器
@@ -379,10 +384,7 @@ var pizzaElementGenerator = function(i) {
   pizzaImage.classList.add("img-responsive");
   pizzaImageContainer.appendChild(pizzaImage);
   pizzaContainer.appendChild(pizzaImageContainer);
-
-
   pizzaDescriptionContainer.style.width="65%";
-
   pizzaName = document.createElement("h4");
   pizzaName.innerHTML = randomName();
   pizzaDescriptionContainer.appendChild(pizzaName);
@@ -394,66 +396,51 @@ var pizzaElementGenerator = function(i) {
 
   return pizzaContainer;
 };
-
 // 当网站中"Our Pizzas"的滑窗部分移动时调用resizePizzas(size)函数
 var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API 函数
-
   // 改变滑窗前披萨的尺寸值
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.getElementById("pizzaSize").innerHTML = "Small";
+        document.querySelector("#pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.getElementById("pizzaSize").innerHTML = "Medium";
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.getElementById("pizzaSize").innerHTML = "Large";
+        document.querySelector("#pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
     }
   }
-
   changeSliderLabel(size);
-
-   // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  function determineDx (elem, size) {
-    var oldWidth = elem.offsetWidth;
-    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
-    var oldSize = oldWidth / windowWidth;
-
-    // 将值转成百分比宽度
-    function sizeSwitcher (size) {
+  // 遍历披萨的元素并改变它们的宽度
+  function changePizzaSizes(size) {
+	var rpc = document.querySelectorAll(".randomPizzaContainer");
+	var length = rpc.length || 0;
+	//判断size是否满足，large，small，middle的内容项
+	//将百分比移动到内部来进行判断，
+	function sizeSwitcher (size) {
       switch(size) {
         case "1":
-          return 0.25;
+          return 25;
         case "2":
-          return 0.3333;
+          return 33.33;
         case "3":
-          return 0.5;
+          return 50;
         default:
           console.log("bug in sizeSwitcher");
       }
     }
-
-    var newSize = sizeSwitcher(size);
-    var dx = (newSize - oldSize) * windowWidth;
-
-    return dx;
-  }
-
-  // 遍历披萨的元素并改变它们的宽度
-  function changePizzaSizes(size) {
-    var allPizzas = document.getElementsByClassName("randomPizzaContainer");
-    var dx = determineDx(allPizzas[0], size);
-    var newwidth = (allPizzas[0].offsetWidth + dx) + 'px';
-    for (var i = 0; i < allPizzas.length; i++) {
-      allPizzas[i].style.width = newwidth;
+	//获取每次移动滑块后图片最终的width的百分比
+	var newSize = sizeSwitcher(size);
+	//最终在设置width的时候，设置百分比，相对于父元素的宽度来进行设置
+    for (var i = 0; i < length; i++) {
+      rpc[i].style.width = newSize + "%";
     }
   }
-
   changePizzaSizes(size);
 
   // User Timing API 太棒了
@@ -462,9 +449,7 @@ var resizePizzas = function(size) {
   var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
   console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
 };
-
 window.performance.mark("mark_start_generating"); // 收集timing数据
-
 // 这个for循环在页面加载时创建并插入了所有的披萨
 for (var i = 2; i < 100; i++) {
   var pizzasDiv = document.getElementById("randomPizzas");
@@ -488,23 +473,33 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
   for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
     sum = sum + times[i].duration;
   }
+  //console.log(sum)
   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
 }
-
 // 下面的关于背景滑窗披萨的代码来自于Ilya的demo:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
-
 // 基于滚动条位置移动背景中的披萨滑窗
+/**
+*下面的代码中，采用了计算left的值，然后再和当前浏览器稳定窗口进行百分比计算宽度比例，不在使用 px作为绝对坐标，
+*同时在.mover的类型中 ，添加了will-change：transform,left 来进行变化不影响其他地方 
+*/
 function updatePositions() {
+	//console.log("这里被调用了");
   frame++;
   window.performance.mark("mark_start_frame");
-  var items = document.getElementsByClassName('mover');
-  var scrollTopDistance = document.body.scrollTop / 1250;
-  for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(scrollTopDistance + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-  }
 
+  var items = document.querySelectorAll('.mover');
+  //这里面需要加上一个判断，因为html中使用了文档头不带DTD，因此需要用document.documentElement来进行获取
+  var scroll_top = document.body.scrollTop || document.documentElement.scrollTop;
+  var client_width = document.body.clientWidth || document.documentElement.clientWidth; 
+  for (var i = 0; i < items.length; i++) {
+    var phase = Math.sin((scroll_top / 1250) + (i % 5));
+	/*换做百分比来显示left的值，由于页面中所有的背景图标的移动都是相对文档body来的，因此其left，
+	的相对位置位body本身，因此这里面获取了body的clientWidth可视区域的宽度，作为百分比计算的标准
+	*/
+    items[i].style.left  = ((items[i].basicLeft + 100 * phase) * 100)/client_width + "%";
+  }
+ // console.log("开始时间 ：" + (+new Date()));
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
   window.performance.mark("mark_end_frame");
@@ -522,8 +517,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  var pizzaNum = Math.floor((document.body.clientHeight / s ) * cols);
-  for (var i = 0; i < pizzaNum; i++) {
+  for (var i = 0; i < 200; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -531,7 +525,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.getElementById("movingPizzas1").appendChild(elem);
+    document.querySelector("#movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
