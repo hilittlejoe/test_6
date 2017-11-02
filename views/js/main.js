@@ -419,43 +419,28 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  function determineDx (elem, size) {
-    var oldWidth = elem.offsetWidth;
-    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
-    var oldSize = oldWidth / windowWidth;
-
-    // 将值转成百分比宽度
-    function sizeSwitcher (size) {
-      switch(size) {
-        case "1":
-          return 0.25;
-        case "2":
-          return 0.3333;
-        case "3":
-          return 0.5;
-        default:
-          console.log("bug in sizeSwitcher");
-      }
+   function sizeSwitcher (size) {
+    switch(size) {
+      case "1":
+        return 0.25;
+      case "2":
+        return 0.3333;
+      case "3":
+        return 0.5;
+      default:
+        console.log("bug in sizeSwitcher");
     }
-
-    var newSize = sizeSwitcher(size);
-    var dx = (newSize - oldSize) * windowWidth;
-
-    return dx;
   }
 
-  // 遍历披萨的元素并改变它们的宽度
+  var windowWidth = document.getElementById("randomPizzas").offsetWidth;
+
   function changePizzaSizes(size) {
-  //将计算以及选择从循环中提出
-    var dx = determineDx(document.querySelector(".randomPizzaContainer"), size);
-    var newWidth = (document.querySelector(".randomPizzaContainer").offsetWidth + dx) + 'px';
-    var elements = document.querySelectorAll(".randomPizzaContainer");
-  //优化循环
-    for (var i = elements.length; i--;) {
-      elements[i].style.width = newWidth;
+    var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
+
+    for (var i = 0; i < randomPizzas.length; i++) {
+      randomPizzas[i].style.width = (sizeSwitcher(size) * windowWidth) + 'px';
     }
   }
-
   changePizzaSizes(size);
 
   // User Timing API 太棒了
@@ -468,10 +453,12 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // 收集timing数据
 
 // 这个for循环在页面加载时创建并插入了所有的披萨
+var pizzasDivfrag = document.createDocumentFragment();
+var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
-  pizzasDiv.appendChild(pizzaElementGenerator(i));
+  pizzasDivfrag.appendChild(pizzaElementGenerator(i));
 }
+pizzasDiv.appendChild(pizzasDivfrag);
 
 // 使用User Timing API。这里的测量数据告诉了你生成初始的披萨用了多长时间
 window.performance.mark("mark_end_generating");
@@ -500,14 +487,15 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
-  var items = document.querySelectorAll('.mover');
-//将计算提出，优化循环
-  var top = document.body.scrollTop/1250;
+  var topPosition = document.body.scrollTop / 1250;
+  var phases = [];
+  var items = document.getElementsByClassName('mover');
+  for (var i = 0; i < 5; i++) {
+    phases.push(Math.sin(topPosition + i));
+  }
 
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin( top + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    items[i].style.left = items[i].basicLeft + 100 * phases[i % 5] + 'px';
   }
 
   // 再次使用User Timing API。这很值得学习
@@ -521,15 +509,14 @@ function updatePositions() {
 }
 
 // 在页面滚动时运行updatePositions函数
-window.addEventListener('scroll', function(){
-//优化Animation
-  window.requestAnimationFrame(updatePositions);
-});
+window.addEventListener('scroll', updatePositions);
 
 // 当页面加载时生成披萨滑窗
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  var pizzafrag = document.createDocumentFragment();
+
   for (var i = 0; i < 200; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
@@ -538,7 +525,9 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    pizzafrag.appendChild(elem);
   }
+  document.querySelector("#movingPizzas1").appendChild(pizzafrag);
+
   updatePositions();
 });
