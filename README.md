@@ -55,3 +55,29 @@
 
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+
+## 优化概述：
+
+### Index Page:
+
+###### 优化图片
+
+###### -CSS
+在HTML开头InLined 最小化的CSS表
+给print style加上媒体选择器
+
+###### -JS
+使用 HTML async attribute
+删除googlefonts
+
+### Pizza Page:
+
+###### -优化循环
+
+###### -替换querySelector
+
+###### -优化动画渲染
+
+###### -使用最小化后的Script
+
+
