@@ -400,7 +400,6 @@ var resizePizzas = function(size) {
   window.performance.mark("mark_start_resize");   // User Timing API 函数
 
   // 改变滑窗前披萨的尺寸值
-  // 使用getELement替换querySelector提升效率
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
@@ -420,40 +419,27 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  function determineDx (elem, size) {
-    var oldWidth = elem.offsetWidth;
-    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
-    var oldSize = oldWidth / windowWidth;
-
-    // 将值转成百分比宽度
-    function sizeSwitcher (size) {
-      switch(size) {
-        case "1":
-          return 0.25;
-        case "2":
-          return 0.3333;
-        case "3":
-          return 0.5;
-        default:
-          console.log("bug in sizeSwitcher");
-      }
-    }
-
-    var newSize = sizeSwitcher(size);
-    var dx = (newSize - oldSize) * windowWidth;
-
-    return dx;
-  }
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-  //将计算以及选择从循环中提出
-    var dx = determineDx(document.getElementsByClassName("randomPizzaContainer"), size);
-    var newWidth = (document.getElementsByClassName("randomPizzaContainer").offsetWidth + dx) + 'px';
-    var elements = document.getElementsByClassName("randomPizzaContainer");
-  //优化循环
-    for (var i = elements.length; i--;) {
-      elements[i].style.width = newWidth;
+    var newwidth = 0;
+      switch(size) {
+          case "1":
+              newwidth =  25;
+              break;
+          case "2":
+              newwidth = 33.3;
+              break;
+          case "3":
+              newwidth = 50;
+              break;
+          default:
+              console.log("bug in sizeSwitcher");
+      }
+
+    var elems = document.getElementsByClassName("randomPizzaContainer");
+    for (var i = 0; i < elems.length; i++) {
+        elems[i].style.width = newwidth + '%';
     }
   }
 
@@ -469,8 +455,8 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // 收集timing数据
 
 // 这个for循环在页面加载时创建并插入了所有的披萨
+var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -501,13 +487,10 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
   var items = document.getElementsByClassName('mover');
-//将计算提出，优化循环
-  var top = document.body.scrollTop/1250;
-
+  var scrollTop = document.body.scrollTop / 1250;
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin( top + (i % 5));
+    var phase = Math.sin(scrollTop + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -522,20 +505,14 @@ function updatePositions() {
 }
 
 // 在页面滚动时运行updatePositions函数
-window.addEventListener('scroll', function(){
-//优化Animation
-  window.requestAnimationFrame(updatePositions);
-});
+window.addEventListener('scroll', updatePositions);
 
 // 当页面加载时生成披萨滑窗
-// 重新计算渲染背景披萨数量
-// 优化循环，并将querySelector替换为getElementBy*
 document.addEventListener('DOMContentLoaded', function() {
+  var cols = 8;
   var s = 256;
-  var cols = Math.ceil(document.body.offsetWidth/73.333);
-  var movingPizzas = document.getElementById('movingPizzas1');
-  var pizzaNum = Math.ceil(window.innerHeight/100) * cols;
-
+  var pizzaNum = Math.ceil(document.documentElement.clientHeight / s) * cols;
+  var movingPizzas1 = document.getElementById("movingPizzas1");
   for (var i = 0; i < pizzaNum; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
@@ -544,7 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    movingPizzas.appendChild(elem);
+    movingPizzas1.appendChild(elem);
   }
   updatePositions();
 });

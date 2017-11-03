@@ -56,28 +56,23 @@
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
 
-## 优化概述：
+### How to run
+    1.安装 **JDK** 环境
+    2.配置 **JDK** 和 **Tomcat** 环境变量
+    3.将项目文件夹拷贝到Tomcat服务的_webapps_目录下
+    4.运行Tomcat_bin_目录下的**startup.bat**
+    5.从浏览器访问URLs(http://localhost:8080/Website Optimization_zh/)
 
-### Index Page:
+### 网站性能优化内容
+ ## index.html
+    1.使用内部css样式加载style.css中的内容，减少网络请求次数
+    2.设置print.css的媒介类型为print（仅在打印时加载的样式）
+    3.为script添加async，实现异步加载
+    4.利用 Web Font Loader实现异步载入字体资源，优化网页字体;
+    5.将图片裁剪、压缩，减少图片大小
 
-###### 优化图片
-
-###### -CSS
-在HTML开头InLined 最小化的CSS表
-给print style加上媒体选择器
-
-###### -JS
-使用 HTML async attribute
-删除googlefonts
-
-### Pizza Page:
-
-###### -优化循环
-
-###### -替换querySelector
-
-###### -优化动画渲染
-
-###### -使用最小化后的Script
-
+ ## views/js/main.js
+    1.将采用querySelector*获取元素的方法改成了getElementById或getElementsByClassName
+    2.将不需要依赖循环来执行的代码提取出来，避免强制同步布局
+    3.将pizza滑窗中pizza图片的数量改为可见区域内能显示出的最多数量;
 
