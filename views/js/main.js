@@ -403,13 +403,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.getElementById("pizzaSize").innerHTML = "Small";
+        document.querySelector("#pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.getElementById("pizzaSize").innerHTML = "Medium";
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.getElementById("pizzaSize").innerHTML = "Large";
+        document.querySelector("#pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -419,27 +419,38 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
+  var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+  function determineDx (offsetWidth, size) {
+    var oldWidth = offsetWidth;
+    var oldSize = oldWidth / windowWidth;
+
+    // 将值转成百分比宽度
+    function sizeSwitcher (size) {
+      switch(size) {
+        case "1":
+          return 0.25;
+        case "2":
+          return 0.3333;
+        case "3":
+          return 0.5;
+        default:
+          console.log("bug in sizeSwitcher");
+      }
+    }
+
+    var newSize = sizeSwitcher(size);
+    var dx = (newSize - oldSize) * windowWidth;
+
+    return dx;
+  }
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-    var newwidth = 0;
-      switch(size) {
-          case "1":
-              newwidth =  25;
-              break;
-          case "2":
-              newwidth = 33.3;
-              break;
-          case "3":
-              newwidth = 50;
-              break;
-          default:
-              console.log("bug in sizeSwitcher");
-      }
-
-    var elems = document.getElementsByClassName("randomPizzaContainer");
-    for (var i = 0; i < elems.length; i++) {
-        elems[i].style.width = newwidth + '%';
+    var eleWidth = document.querySelectorAll(".randomPizzaContainer")[0].offsetWidth;
+    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+      var dx = determineDx(eleWidth, size);
+      var newwidth = (eleWidth + dx) + 'px';
+      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
@@ -455,8 +466,8 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // 收集timing数据
 
 // 这个for循环在页面加载时创建并插入了所有的披萨
-var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
+  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -484,13 +495,13 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
 // 基于滚动条位置移动背景中的披萨滑窗
+var scrollTop = document.body.scrollTop;
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-  var items = document.getElementsByClassName('mover');
-  var scrollTop = document.documentElement.scrollTop / 1250;
+  var phase = Math.sin((scrollTop / 1250) + (i % 5));
+  var items = document.querySelectorAll('.mover');
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin(scrollTop + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
@@ -511,9 +522,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  var pizzaNum = Math.ceil(document.documentElement.clientHeight / s) * cols;
-  var movingPizzas1 = document.getElementById("movingPizzas1");
-  for (var i = 0; i < pizzaNum; i++) {
+  for (var i = 0; i < 200; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -521,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    movingPizzas1.appendChild(elem);
+    document.querySelector("#movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
