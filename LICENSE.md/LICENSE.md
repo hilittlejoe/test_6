@@ -1,3 +1,0 @@
-MIT 
-
-as you like
