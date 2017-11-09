@@ -1,50 +1,5 @@
 ## 网站性能优化项目
 
-#### Part 1: 如何访问我优化后的网站？
-
->1. 我将优化后的项目提交到github上，仓库地址[https://github.com/epitomizelu/websiteOptimization](https://github.com/epitomizelu/websiteOptimization)
->2. 该项目已经托管到github pages，访问地址[https://epitomizelu.github.io/websiteOptimization/dest/index.html](https://epitomizelu.github.io/websiteOptimization/dest/index.html)
-
-#### Part 2: 我的优化思路
-
-##### 1，对于 index.html 关键渲染路径的优化
->1. 用媒体查询(media='print')取消外部样式文件 print.css 阻塞渲染;
->2. 用异步脚本（async）取消外部js文件 analytics.js 阻塞html解析;
->3. 用构建工具 gulp 压缩js、html、css和图片;
->4. 异步加载字体文件,在index.html的head标签内添加了内联脚本
-
-
-##### 2，对于 main.js 中滚动时要达到 60fps 的优化
->1. 用css样式属性transform 取代left属性，transform不会导致浏览器执行layout，left会导致浏览器执行layout;
->2. 减少pizza滑窗中的pizza 个数 和 大小;
->3. 用getElementsByClassName 取代 querySelectorAll;
->4. 优化函数 updatePositions 中可能导致强制同步布局（fsl）的for循环； 
->5. 用 requestAnimationFrame 执行pizza滑窗的位置更新； 
-
-
- 
-##### 3，对于 pizza尺寸滑块调整pizza大小动画的执行时间的优化
-
->1. 用getElementsByClassName 取代 querySelectorAll;
->2. 优化函数 changePizzaSizes 中可能导致强制同步布局（fsl）的for循环； 
->3. 优化函数 changePizzaSizes 中在dom树中频繁查询相同元素集合的for循环；
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
 
 开始前，请导出这个代码库并检查代码。
