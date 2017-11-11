@@ -516,15 +516,17 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
-  var top=document.body.scrollTop / 1250;
+  // var top=document.body.scrollTop / 1250;
+  var top = (document.documentElement.scrollTop||document.body.scrollTop) / 1250;
   var phase;
   for (var i = 0; i < items.length; i++) {
-    phase = Math.cos(top + (i % 5));
-    //items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-// if(phase<0){
-//   phase=Math.abs(phase);
-// }
-    items[i].style.transform = 'translateX('+100 * phase+'px)';
+    phase = Math.sin(top + (i % 5));
+    // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    //   items[i].style.transform = 'translateX('+items[i].basicLeft+phase*100+'px)';
+      //在这里+会导致数值自动转化为字符串，没实现加的功能，加个（）可以解决。
+  items[i].style.transform = 'translateX('+(items[i].basicLeft+phase*100)+'px)';
+  // console.log(items[i].basicLeft);
+      // console.log(items[i].basicLeft + 100 * phase + 'px');
   }
 
   // 再次使用User Timing API。这很值得学习
@@ -547,7 +549,7 @@ function requestUpdate() {
 document.addEventListener('DOMContentLoaded', function(){
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 30; i++) {
+  for (var i = 0; i < 50; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
