@@ -1,74 +1,12 @@
-## 网站性能优化项目
-
-你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
-
-开始前，请导出这个代码库并检查代码。
-###网站进入
-[https://allenjacen.github.io/Udacity-p3.io/]
-###优化的步骤
-1.压缩图片,由于图片在项目资源空间中占的比例大，所以有必要压缩图片，在这里我手动的压缩了图片。压缩图片有以下两种方式。
-  - 通过网站 [TinyPng][1]和[Base64 Image][2]来手动的压缩图片
-  - 通过构建工具gulp或者webpack，自动化的压缩图片。
-2.字体文件异步加载,Google退出中国市场，导致了诸多Google服务无法正常使用,导致页面加载速度受影响,采用字体文件异步加载,不影响页面渲染.
-3.内联css。对于一些内容较少的css文件,内联会使性能大大提高,这样可以减少页面加载时由于下载css文件而阻塞的问题，提高性能。
-4.用getElementById代替querySelector和querySelectorAll,因为getElementById消耗性能低,处理速度更块。[详见][3]
-5.用requestAnimationFrame优化Web动画，requestAnimationFrame会使得web动画更流畅。[详见][4]
-6.tramsform替换left，left会每次重新绘制，影响性能。
-
-
-[1]:https://tinypng.com/
-[2]:https://www.base64-image.de/
-[3]:https://jsperf.com/getelementbyid-vs-queryselector-vs-queryselector-by-id
-[4]:http://www.webhek.com/post/requestanimationframe.html
-
-### 指南
-
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
-
-以下是几个帮助你顺利开始本项目的提示：
-
-1. 将这个代码库导出
-2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
-
-```bash
-  $> cd /你的工程目录
-  $> python -m SimpleHTTPServer 8080
-```
-
-1. 打开浏览器，访问 localhost:8080
-2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
-
-``` bash
-  $> cd /你的工程目录
-  $> ./ngrok http 8080
-```
-
-1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
-
-接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
-
-----
-
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
-
-你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
-
-你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
-
-### 一些关于优化的提示与诀窍
-* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
-* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
-* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
-* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
-* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
-
-### 使用 Bootstrap 并定制样式
-这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
-
-* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+##对index.html所作的优化
+####通过使用google性能分析器，按照分析器的提示，对页面进行优化。
+1. 通过在服务器上设置gzip压缩页面；
+2. 将打印样式设置成 media="print";
+3. 将js文件设置成异步加载；
+4. 在服务器上设置文件缓存时间;
+####疑问：如何优化css加载
+1. 选择器的性能问题好像不太需要考虑；
+2. 不能简单的直接将css文件放在文档最后加载吧；
+##对pizza页面的优化
+####使用谷歌浏览器的开发者工具，将标有红色三角符的问题处理掉
+1. 在取元素尺寸时，只取一次，更不要在循环里面取值，从而导致渲染事件重复执行;
