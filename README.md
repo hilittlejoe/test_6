@@ -1,12 +1,29 @@
-##对index.html所作的优化
-####通过使用google性能分析器，按照分析器的提示，对页面进行优化。
-1. 通过在服务器上设置gzip压缩页面；
-2. 将打印样式设置成 media="print";
-3. 将js文件设置成异步加载；
-4. 在服务器上设置文件缓存时间;
-####疑问：如何优化css加载
-1. 选择器的性能问题好像不太需要考虑；
-2. 不能简单的直接将css文件放在文档最后加载吧；
-##对pizza页面的优化
-####使用谷歌浏览器的开发者工具，将标有红色三角符的问题处理掉
-1. 在取元素尺寸时，只取一次，更不要在循环里面取值，从而导致渲染事件重复执行;
+## 网站性能优化项目
+
+### 项目一 
+#### 操作步骤
+1.下载代码并执行命令：
+
+``` bash
+  $> cd /你的工程目录
+  $> npm install
+  $> gulp serve
+  $> ./ngrok http 8000
+```
+2.访问
+[pagespeed网址](https://developers.google.com/speed/pagespeed/insights?_blank)输入ngrok映射地址测试
+
+3.推荐使用[https://gzp4836.github.io?_blank](https://gzp4836.github.io/)，ngrok的实现网络比较慢
+#### 修改点
+* 添加了gulp及其多个插件，压缩js，css，启动本地服务等
+* 修改`index.html`使用压缩后的js
+* 字体css合并到了style.css中，再把`style.css`内联到了html中，减少关键资源的http请求
+* Google Analytics 内联js放到`perfmatters.js`中的onload事件，不会阻塞dom解析
+* 两个脚本都添加async 因为没有样式和dom操作，不用阻塞
+* 压缩了pizzeria.jpg图片到100px宽度，大小减小到5kb,也压缩了头像图片到2.6kb
+
+### 项目二
+#### 修改点
+* `style.css`  在父布局中添加对pizza的大中小三种样式布局
+* `pizza.html` 去掉原有html中固定写好的前两个pizza的宽度设定。因为宽度已经在父布局中添加了百分比样式
+* `main.js` 在 `resizePizzas` 方法中注销了原有的计算每个pizza设定宽度的做法，添加新方法 `changeSliderLabelAndSliderLabel`，方法实现就是修改父布局的样式，调整pizza的宽度。
