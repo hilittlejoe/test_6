@@ -101,9 +101,8 @@
             <input id="sizeSlider" type="range" min="1" max="3" value="2" step="1" onchange="resizePizzas(this.value)"></input>
           </div>
         </div>
-        <div id="randomPizzas" class="row Medium">
-          <!-- 不用再指定宽度了，js修改每个元素宽度，计算时间很长有116.8ms之多 -->
-          <div id="pizza0" class="randomPizzaContainer" style="height: 325px;">
+        <div id="randomPizzas" class="row">
+          <div id="pizza0" class="randomPizzaContainer" style="width:33.33%; height: 325px;">
             <div style="width:35%">
               <img src="images/pizza.png" class="img-responsive">
             </div>
@@ -120,7 +119,7 @@
               </ul>
             </div>
           </div>
-          <div id="pizza1" class="randomPizzaContainer" style="height: 325px;">
+          <div id="pizza1" class="randomPizzaContainer" style="width:33.33%; height: 325px;">
             <div style="width:35%">
               <img src="images/pizza.png" class="img-responsive">
             </div>

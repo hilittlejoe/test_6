@@ -34,16 +34,7 @@ form {
   width: 256px;
   z-index: -1;
 }
-/* 添加大小尺寸的样式 */
-.Small .randomPizzaContainer{
-  width: 25%
-}
-.Medium .randomPizzaContainer{
-  width: 33.33%
-}
-.Large .randomPizzaContainer{
-  width: 50%
-}
+
 .randomPizzaContainer {
   float: left;
   display: flex;
