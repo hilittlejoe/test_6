@@ -1,4 +1,4 @@
-// 使用Navigation Timing测量关键渲染路径
+// Measuring the Critical Rendering Path with Navigation Timing
 // https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp
 
 function logCRP() {
