@@ -401,17 +401,15 @@ var resizePizzas = function(size) {
 
   // 改变滑窗前披萨的尺寸值
   function changeSliderLabel(size) {
-  // 减少querySelector执行次数
-    var pizzaSize = document.querySelector("#pizzaSize");
     switch(size) {
       case "1":
-        pizzaSize.innerHTML = "Small";
+        document.querySelector("#pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        pizzaSize.innerHTML = "Medium";
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        pizzaSize.innerHTML = "Large";
+        document.querySelector("#pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -420,26 +418,38 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
-  // 遍历披萨的元素并改变它们的宽度
-  function changePizzaSizes(size) {
-      var randomPizzaContainer = document.querySelectorAll(".randomPizzaContainer");
-      var newwidth;
+   // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
+  function determineDx (elem, size) {
+    var oldWidth = elem.offsetWidth;
+    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    var oldSize = oldWidth / windowWidth;
+
+    // 将值转成百分比宽度
+    function sizeSwitcher (size) {
       switch(size) {
         case "1":
-          pizzaWidth =  25;
-          break;
+          return 0.25;
         case "2":
-          pizzaWidth =  33.33;
-          break;
+          return 0.3333;
         case "3":
-          pizzaWidth =  50;
-          break;
+          return 0.5;
         default:
-          console.log('no define.');
-          break;
+          console.log("bug in sizeSwitcher");
       }
-    for (var i = 0; i < randomPizzaContainer.length; i++) {
-      randomPizzaContainer[i].style.width = pizzaWidth + "%";
+    }
+
+    var newSize = sizeSwitcher(size);
+    var dx = (newSize - oldSize) * windowWidth;
+
+    return dx;
+  }
+
+  // 遍历披萨的元素并改变它们的宽度
+  function changePizzaSizes(size) {
+    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
@@ -455,9 +465,8 @@ var resizePizzas = function(size) {
 window.performance.mark("mark_start_generating"); // 收集timing数据
 
 // 这个for循环在页面加载时创建并插入了所有的披萨
-// 将pizzasDiv移出for循环
-var pizzasDiv = document.getElementById("randomPizzas");
 for (var i = 2; i < 100; i++) {
+  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -489,8 +498,11 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  //用requestAnimationFrame优化动画，在新增的render函数中进行动画绘制操作
-  window.requestAnimationFrame(render);
+  var items = document.querySelectorAll('.mover');
+  for (var i = 0; i < items.length; i++) {
+    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  }
 
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
@@ -501,16 +513,6 @@ function updatePositions() {
     logAverageFrame(timesToUpdatePosition);
   }
 }
-
-//将一些操作从循环中移出以优化性能，用transform代替了left以避免强制同步布局
-function render(){
-    var items = document.querySelectorAll('.mover');
-    var p = document.body.scrollTop / 1250;
-    for (var i = 0; i < items.length; i++) {
-      var phase = Math.sin( p + (i % 5));
-      items[i].style.transform = "translateX("+ (100 * phase) +"px)";
-    }
-};
 
 // 在页面滚动时运行updatePositions函数
 window.addEventListener('scroll', updatePositions);
@@ -527,10 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    elem.style.left = elem.basicLeft + 'px';
-    //给pizza增加will-change属性来避免图层重绘制
-    elem.style['will-change'] = "transform";
-    document.getElementById("movingPizzas1").appendChild(elem);
+    document.querySelector("#movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
