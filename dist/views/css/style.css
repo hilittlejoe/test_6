@@ -30,6 +30,8 @@ form {
 }
 
 .mover {
+  background-color: transparent;
+  background-image: none;
   position: fixed;
   width: 256px;
   z-index: -1;

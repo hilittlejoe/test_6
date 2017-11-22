@@ -22,10 +22,15 @@
 ####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
 
 你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
+
 1. 优化图片
+
 2. 利用开发者工具。你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。
+
 3. 对pizza放大、缩小动画进行优化（停止FLS）
-4. 对pizza对pizza移动滑窗进行优化，是网页滚动时能够达到60fps（pizza图片的数量，处理强制性同步问题，压缩图片）
+
+
+4. 对pizza对pizza移动滑窗进行优化，是网页滚动时能够达到60fps（pizza图片的数量，处理强制性同步问题，压缩图片,querySelectorAll更改成getElementByClass）
 
 ### 一些关于优化的提示与诀窍
 * [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
