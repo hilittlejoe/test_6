@@ -65,9 +65,10 @@ function createLiNode(dataItem) {
 //---------------------------生成结构------------------------------------------------------
 function createCards(data) {
     global.listCon.innerHTML = '';
-    const arr = data.slice().sort(function() {
-        return Math.random() - 0.5;
-    });
+    const arr = data.slice()
+    // .sort(function() {
+    //     return Math.random() - 0.5;
+    // });
     arr.forEach(function(item) {
         global.listCon.appendChild(createLiNode(item));
     });
