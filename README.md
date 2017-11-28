@@ -6,6 +6,13 @@ npm install
 npm run build
 ```
 
+### Update
+#### 2017/11/28
+- 内联`style.css`的样式
+- 压缩`pizzeria.jpg`
+- 披萨背景左右移动的效果正常了
+- 初始化时，根据视窗高度计算披萨的数量
+
 ### 优化 index.html 的 PageSpeed Insights 得分
 - 使用gulp自动压缩图片、css和html
 - 移除不必要的Google font css

@@ -12,7 +12,7 @@ gulp.task('css', () => {
 });
 
 gulp.task('images', () => {
-  return gulp.src(['src/img/*', 'src/*/img/*'], {base: './src/'})
+  return gulp.src(['src/img/*', 'src/*/images/*'], {base: './src/'})
       .pipe(imagemin({
         interlaced: true,
         progressive: true,
