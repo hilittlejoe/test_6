@@ -1,0 +1,27 @@
+{
+  "name": "websiteoptimization",
+  "version": "1.0.0",
+  "description": "Udacity website optimization projiect",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fancyer/udacity-optimization"
+  },
+  "author": "fancyer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fancyer/udacity-optimization/issues"
+  },
+  "homepage": "https://github.com/fancyer/udacity-optimization#readme",
+  "devDependencies": {
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.9.0",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-imagemin": "^4.0.0",
+    "gulp-uglify": "^3.0.0"
+  }
+}
