@@ -8,65 +8,12 @@
     <title>Cameron Pittman: Portfolio</title>
 
     <!-- 嗯，web 字体对速度的影响有多大呢？测量一下吧 -->
-    <!-- <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet"> -->
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 
-    <!-- <link href="css/style.css" rel="stylesheet"> -->
-    <style type="text/css">
-      /** {
-        outline: 1px solid red !important;
-      }*/
-      * {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -box-sizing: border-box;
-      }
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/print.css" rel="stylesheet">
 
-      body {
-        font-family: "Trebuchet MS", Helvetica, sans-serif;
-        background: black;
-      }
-
-      input {
-        background: grey;
-        font-size: 18px;
-      }
-
-      form {
-        display: inline-block;
-      }
-
-      .centered {
-        text-align: center;
-      }
-
-      #pizzaSize {
-        font-weight: 800;
-      }
-
-      .mover {
-        position: fixed;
-        width: 256px;
-        z-index: -1;
-      }
-
-      .randomPizzaContainer {
-        float: left;
-        display: flex;
-      }
-
-      .randomPizzaContainer:after {
-        content: "";
-        display: table;
-        clear:both;
-      }
-
-       .container {
-        background-color: rgba(240, 60, 60, 0.8);
-      }
-    </style>
-    <link href="css/print.css" rel="stylesheet"  media="print">
-
-    <script async>
+    <script>
       (function(w,g){w['GoogleAnalyticsObject']=g;
       w[g]=w[g]||function(){(w[g].q=w[g].q||[]).push(arguments)};w[g].l=1*new Date();})(window,'ga');
 
@@ -74,7 +21,7 @@
       ga('create', 'UA-XXXX-Y');
       ga('send', 'pageview');
     </script>
-    <script async src="http://www.google-analytics.com/analytics.js"></script>
+    <script src="http://www.google-analytics.com/analytics.js"></script>
     <script async src="js/perfmatters.js"></script>
   </head>
 
@@ -110,7 +57,7 @@
           </li>
 
           <li>
-            <img style="width: 100px;" src="views/images/pizzeria-min.jpg">
+            <img style="width: 100px;" src="views/images/pizzeria.jpg">
             <a href="views/pizza.html">Cam's Pizzeria</a>
             <p>Who wants a performant pizza?</p>
           </li>
@@ -122,12 +69,4 @@
       </footer>
     </div>
   </body>
-  <script  src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"> </script>
-  <script>
-    WebFont.load({
-      google: {
-        families: ['Trebuchet MS', 'Helvetica', 'sans-serif']
-      }
-    });
-</script>
 </html>
