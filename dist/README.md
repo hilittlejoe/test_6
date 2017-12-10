@@ -14,8 +14,6 @@
 
 * Inline javascript
 
-* 删除谷歌字体
-
 * 压缩所有图片
 
 ----
