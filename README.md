@@ -1,42 +1,38 @@
 ## 网站性能优化项目
 
-你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
+### 1. 如何运行本项目
+以下是几个帮助你顺利开始本项目的提示：
 
-开始前，请导出这个代码库并检查代码。
+1. 将这个代码库导出
+2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
 
-### 指南
+```bash
+  $> cd /你的工程目录
+  $> python -m SimpleHTTPServer 8080
+```
 
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
+1. 打开浏览器，访问 localhost:8080
+2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
 
-1. inline css: 复制CSS内容到HTML <style> 标签；
-2.下载图片到本地，并压缩图片；
-3. 部署网页到github.io, 查看pagespeed insight 得分； 网页链接：
-  https://maybeatles.github.io/Web_Optimization/
+``` bash
+  $> cd /你的工程目录
+  $> ./ngrok http 8080
+```
 
-----
+1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
 
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
-                                                                     
-1. Chrome developer tools 绘制 time line， 主要瓶颈是强制同步布局：  dx,newwidth,scrollTop 的计算移动到循环的外部。
-2. 使用requestAnimationFrame 使动画匹配屏幕刷新率。
-3. 使用transform = translateX(100px)方式代替  left 设置。
-4. 使用getElementById 代替querySelector 来提高性能。
-5. 减少 背景pizza .mover的数量
+### 2. 提升index.html的PageSpeed分数
+##### 采取措施:
+1. script异步加载,加入async
+2. 增加缓存处理,增加expires配置
+3. 图片做了压缩处理
+4. style.css嵌入index.html以缩短关键渲染路径长度
+5. print.css变为异步加载
+6. Google Fonts css做了异步加载
 
-### 一些关于优化的提示与诀窍
-* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
-* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
-* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
-* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
-* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
-
-### 使用 Bootstrap 并定制样式
-这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
-
-* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+### 3. 去除pizza.html页面卡顿
+##### 采取措施:
+1. 取消没有用的背景移动,window.addEventListener('scroll', updatePositions); 取消了updatePositions函数
+2. 重构changePizzaSizes函数,先读取样式而后执行更改以避免强制同步布局问题。
+3. 使用 requestAnimationFrame 优化 updatePositions 中的绘制动画操作。
+4. 为披萨增加了 will-change CSS 属性,可以避免图层重绘制。
