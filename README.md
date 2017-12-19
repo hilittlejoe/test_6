@@ -36,3 +36,12 @@
 2. 重构changePizzaSizes函数,先读取样式而后执行更改以避免强制同步布局问题。
 3. 使用 requestAnimationFrame 优化 updatePositions 中的绘制动画操作。
 4. 为披萨增加了 will-change CSS 属性,可以避免图层重绘制。
+
+
+### 第二次提交
+#### 优化点
+1. querySelector* 替换为效率更高的getElementByClassName
+2. 之前取document.body.scrollTop值,改为取window.pageYOffset值
+3. 修复找不到frame的bug
+4. 取消注释背景交互效果
+5. index.html和pizza.html共用的图片pizzaria.jpg分别采取了resize和压缩处理,提高加载效率

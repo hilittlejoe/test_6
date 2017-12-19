@@ -403,13 +403,13 @@ var resizePizzas = function (size) {
     function changeSliderLabel(size) {
         switch (size) {
             case "1":
-                document.querySelector("#pizzaSize").innerHTML = "Small";
+                document.getElementsByClassName("pizzaSize").innerHTML = "Small";
                 return;
             case "2":
-                document.querySelector("#pizzaSize").innerHTML = "Medium";
+                document.getElementsByClassName("pizzaSize").innerHTML = "Medium";
                 return;
             case "3":
-                document.querySelector("#pizzaSize").innerHTML = "Large";
+                document.getElementsByClassName("pizzaSize").innerHTML = "Large";
                 return;
             default:
                 console.log("bug in changeSliderLabel");
@@ -489,72 +489,60 @@ console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "
 
 // 背景披萨滚动时调用函数的次数和
 // 由updatePositions()函数使用，用来决定什么时候记录平均帧率
-//var frame = 0;
+var frame = 0;
 //
 // 记录滚动时背景滑窗披萨移动的每10帧的平均帧率
-//function logAverageFrame(times) {   // times参数是updatePositions()由User Timing得到的测量数据
-//    var numberOfEntries = times.length;
-//    var sum = 0;
-//    var length = numberOfEntries - 11;
-//    for (var i = numberOfEntries - 1; i > length; i--) {
-//        sum = sum + times[i].duration;
-//    }
-//    console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
-//}
-//
-// 下面的关于背景滑窗披萨的代码来自于Ilya的demo:
-// https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
-//
+function logAverageFrame(times) {   // times参数是updatePositions()由User Timing得到的测量数据
+    var numberOfEntries = times.length;
+    var sum = 0;
+    var length = numberOfEntries - 11;
+    for (var i = numberOfEntries - 1; i > length; i--) {
+        sum = sum + times[i].duration;
+    }
+    console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
+}
+
 // 基于滚动条位置移动背景中的披萨滑窗
 function updatePositions() {
     frame++;
     window.performance.mark("mark_start_frame");
-    var items = document.querySelectorAll('.mover');
-    function animate() {
-        var bodyScrollTop = document.body.scrollTop;
-        var length = items.length;
-        var phase = [];
-        for (var i = 0; i < 5; i++) {
-            var num = Math.sin((bodyScrollTop / 1250) + (i % 5));
-            phase.push(num);
-        }
-        for (var i = 0; i < length; i++) {
-            //var phase = Math.sin((scrollTop / 1250) + (i % 5));
-            items[i].style.left = items[i].basicLeft + 100 * phase[i % 5] + 'px';
-        }
 
-        // 再次使用User Timing API。这很值得学习
-        // 能够很容易地自定义测量维度
-        window.performance.mark("mark_end_frame");
-        window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
-        if (frame % 10 === 0) {
-            var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
-            logAverageFrame(timesToUpdatePosition);
-        }
+    var items = document.getElementsByClassName('mover');
+    var scrollTop =  window.pageYOffset;
+    var length = items.length;
+    var phase = [];
+    for (var i = 0; i < length; i++) {
+        var num = Math.sin((scrollTop / 1250) + (i % 5));
+        phase.push(num);
+        //var phase = Math.sin((scrollTop / 1250) + (i % 5));
+        items[i].style.left = items[i].basicLeft + 100 * phase[i % 5] + 'px';
     }
 
-    requestAnimationFrame(animate);
+    // 再次使用User Timing API。这很值得学习
+    // 能够很容易地自定义测量维度
+    window.performance.mark("mark_end_frame");
+    window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+    if (frame % 10 === 0) {
+        var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+        logAverageFrame(timesToUpdatePosition);
+    }
 }
 // 在页面滚动时运行updatePositions函数
-//window.addEventListener('scroll', updatePositions);
+window.addEventListener('scroll', updatePositions);
 
 // 当页面加载时生成披萨滑窗
 document.addEventListener('DOMContentLoaded', function () {
     var cols = 8;
     var s = 256;
-    var movingPizzas1 = document.querySelector("#movingPizzas1");
-    var elem;
-    for (var i = 0; i < 200; i++) {
-        elem = document.createElement('img');
+    var movingPizzas1 = document.getElementById("movingPizzas1");
+    for (var i = 0; i < 20; i++) {
+        var elem = document.createElement('img');
         elem.className = 'mover';
         elem.src = "images/pizza.png";
         elem.style.height = "100px";
         elem.style.width = "73.333px";
         elem.basicLeft = (i % cols) * s;
         elem.style.top = (Math.floor(i / cols) * s) + 'px';
-        //给pizza增加will-change属性来避免图层重绘制
-        elem.style.left = elem.basicLeft + 'px';
-        elem.style['will-change'] = "transform";
         movingPizzas1.appendChild(elem);
     }
     updatePositions();
