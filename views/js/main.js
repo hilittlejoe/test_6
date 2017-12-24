@@ -419,13 +419,10 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  function determineDx (elem, size) {
-    var oldWidth = elem.offsetWidth;
-    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
-    var oldSize = oldWidth / windowWidth;
+  function determineDx (size) { 
 
     // 将值转成百分比宽度
-    function sizeSwitcher (size) {
+    //function sizeSwitcher (size) {
       switch(size) {
         case "1":
           return 0.25;
@@ -436,19 +433,14 @@ var resizePizzas = function(size) {
         default:
           console.log("bug in sizeSwitcher");
       }
-    }
-
-    var newSize = sizeSwitcher(size);
-    var dx = (newSize - oldSize) * windowWidth;
-
-    return dx;
+  
   }
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
+	var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
     for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      var newwidth = (windowWidth *  determineDx(size)) + 'px';
       document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
   }
@@ -492,21 +484,19 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 
 // 下面的关于背景滑窗披萨的代码来自于Ilya的demo:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
-// 监听animation frame，用raf代替scroll事件
-var scroll = window.requestAnimationFrame ||window.webkitRequestAnimationFrame ||window.mozRequestAnimationFrame ||
-             window.msRequestAnimationFrame ||window.oRequestAnimationFrame ||
-             // IE Fallback, you can even fallback to onscroll
-             function(callback){ window.setTimeout(callback, 1000/60) };
+
 // 基于滚动条位置移动背景中的披萨滑窗
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-
+ var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
   var items = document.querySelectorAll('.mover');
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+   
+    var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
+
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
   window.performance.mark("mark_end_frame");
