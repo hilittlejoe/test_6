@@ -419,10 +419,11 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  function determineDx (size) { 
-
+  function determineDx (size) {
+    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
+  }
     // 将值转成百分比宽度
-    //function sizeSwitcher (size) {
+    function sizeSwitcher (size) {
       switch(size) {
         case "1":
           return 0.25;
@@ -433,15 +434,16 @@ var resizePizzas = function(size) {
         default:
           console.log("bug in sizeSwitcher");
       }
-  
-  }
+    }
 
   // 遍历披萨的元素并改变它们的宽度
+  //将获取网页元素的 document.querySelectorAll(".randomPizzaContainer") 移到 for 循环外部用一个变量保存起来，然后附近的其它地方都通过这个变量来访问，避免不必要的重复获取。
+  //newwidth 的计算也移到循环外部
   function changePizzaSizes(size) {
-	var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      var newwidth = (windowWidth *  determineDx(size)) + 'px';
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    var randomPizza = document.getElementsByClassName("randomPizzaContainer");
+    var newwidth = (determineDx (size) * sizeSwitcher (size)) + 'px';
+    for (var i = 0; i < randomPizza.length; i++) {
+      randomPizza[i].style.width = newwidth;
     }
   }
 
@@ -489,14 +491,14 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
- var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-  var items = document.querySelectorAll('.mover');
+  //将获取网页元素移到循环外部，避免重复获取。
+  //将 scrollTop 移到循环体外部用一个变量保存起来
+  var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+  var items = document.getElementsByClassName("mover");
   for (var i = 0; i < items.length; i++) {
-   
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
-
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
   window.performance.mark("mark_end_frame");
@@ -514,7 +516,11 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  //200 个背景披萨 .mover 实在是太多,为了减少背景披萨的数量，方法是动态的计算需要的披萨的个数。
+  var pizzaHeight = 100;//背景披萨高度
+  var screenHeight = document.documentElement.clientHeight||document.body.clientHeight; //浏览器可视区域高度
+  var pizzaNumber = window.innerHeight/pizzaHeight * cols;// 披萨的个数
+  for (var i = 0; i < pizzaNumber; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
