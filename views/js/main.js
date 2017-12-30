@@ -1,20 +1,23 @@
 /*
-欢迎来到我们的60fps项目！你的目标是使Cam's Pizzeria网站能流畅的运行在60fps下。
+Welcome to the 60fps project! Your goal is to make Cam's Pizzeria website run
+jank-free at 60 frames per second.
 
-在这里的代码中主要有两个问题使性能低于60fps。你能发现并修复它们吗？
-
-在代码中，你会发现一些使用User Timing API(window.performance)的例子，它们使用
-console.log()将帧率数据输入到浏览器的控制台中。如果你想了解更多关于User Timing API
-的信息，请访问：http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
+There are two major issues in this code that lead to sub-60fps performance. Can
+you spot and fix both?
 
 
-创建者:
-Cameron Pittman, Udacity 课程开发者
-cameron@udacity.com
+Built into the code, you'll find a few instances of the User Timing API
+(window.performance), which will be console.log()ing frame rate data into the
+browser console. To learn more about User Timing API, check out:
+http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
+
+Creator:
+Cameron Pittman, Udacity Course Developer
+cameron *at* udacity *dot* com
 */
 
-// 你可能已经发现了，这个网站会随机地生成披萨。
-// 下面的数组是所有可能组成披萨的原料。
+// As you may have realized, this website randomly generates pizzas.
+// Here are arrays of all possible pizza ingredients.
 var pizzaIngredients = {};
 pizzaIngredients.meats = [
   "Pepperoni",
@@ -139,13 +142,13 @@ pizzaIngredients.crusts = [
   "Stuffed Crust"
 ];
 
-// 名称生成器取自 http://saturdaykid.com/usernames/generator.html
-// 将每个单词的首字母大写
+// Name generator pulled from http://saturdaykid.com/usernames/generator.html
+// Capitalizes first letter of each word
 String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
-// 用生成器发出的随机数来从数组中取出形容词
+// Pulls adjective out of array using random number sent from generator
 function getAdj(x){
   switch(x) {
     case "dark":
@@ -209,7 +212,7 @@ function getAdj(x){
   }
 }
 
-// 用生成器发出的随机数来从数组中取出名词
+// Pulls noun out of array using random number sent from generator
 function getNoun(y) {
   switch(y) {
     case "animals":
@@ -279,10 +282,10 @@ function getNoun(y) {
   }
 }
 
-var adjectives = ["dark", "color", "whimsical", "shiny", "noisy", "apocalyptic", "insulting", "praise", "scientific"];  // 披萨名字形容词的种类
-var nouns = ["animals", "everyday", "fantasy", "gross", "horror", "jewelry", "places", "scifi"];                        // 披萨名字名词的种类
+var adjectives = ["dark", "color", "whimsical", "shiny", "noisy", "apocalyptic", "insulting", "praise", "scientific"];  // types of adjectives for pizza titles
+var nouns = ["animals", "everyday", "fantasy", "gross", "horror", "jewelry", "places", "scifi"];                        // types of nouns for pizza titles
 
-// 生成器随机地为getAdj和getNoun函数生成数字，并返回一个新的披萨名称
+// Generates random numbers for getAdj and getNoun functions and returns a new pizza name
 function generator(adj, noun) {
   var adjectives = getAdj(adj);
   var nouns = getNoun(noun);
@@ -292,14 +295,14 @@ function generator(adj, noun) {
   return name;
 }
 
-// 选择随机的形容词及名词
+// Chooses random adjective and random noun
 function randomName() {
   var randomNumberAdj = parseInt(Math.random() * adjectives.length);
   var randomNumberNoun = parseInt(Math.random() * nouns.length);
   return generator(adjectives[randomNumberAdj], nouns[randomNumberNoun]);
 }
 
-// 这些函数从各自的原料目录中取出并返回随机的原料
+// These functions return a string of a random ingredient from each respective category of ingredients.
 var selectRandomMeat = function() {
   var randomMeat = pizzaIngredients.meats[Math.floor((Math.random() * pizzaIngredients.meats.length))];
   return randomMeat;
@@ -329,7 +332,7 @@ var ingredientItemizer = function(string) {
   return "<li>" + string + "</li>";
 };
 
-// 返回嵌套在<li>中的披萨原料字符串
+// Returns a string with random pizza ingredients nested inside <li> tags
 var makeRandomPizza = function() {
   var pizza = "";
 
@@ -355,24 +358,25 @@ var makeRandomPizza = function() {
   return pizza;
 };
 
-// 为每个披萨分别返回一个DOM元素
+// returns a DOM element for each pizza
 var pizzaElementGenerator = function(i) {
-  var pizzaContainer,             // 披萨的名称、图片及原料清单容器
-      pizzaImageContainer,        // 披萨图片容器
-      pizzaImage,                 // 披萨的图片
-      pizzaDescriptionContainer,  // 披萨名称及原料清单容器
-      pizzaName,                  // 披萨名称
-      ul;                         // 原料清单
-
+  var pizzaContainer,             // contains pizza title, image and list of ingredients
+      pizzaImageContainer,        // contains the pizza image
+      pizzaImage,                 // the pizza image itself
+      pizzaDescriptionContainer,  // contains the pizza title and list of ingredients
+      pizzaName,                  // the pizza name itself
+      ul;                         // the list of ingredients
+  //js create html div as container£¬img£¬div as description container
   pizzaContainer = document.createElement("div");
   pizzaImageContainer = document.createElement("div");
   pizzaImage = document.createElement("img");
   pizzaDescriptionContainer = document.createElement("div");
 
+  //set style and value
   pizzaContainer.classList.add("randomPizzaContainer");
   pizzaContainer.style.width = "33.33%";
   pizzaContainer.style.height = "325px";
-  pizzaContainer.id = "pizza" + i;                // 给每个披萨元素赋一个独一无二的id
+  pizzaContainer.id = "pizza" + i;                // gives each pizza element a unique id
   pizzaImageContainer.style.width="35%";
 
   pizzaImage.src = "images/pizza.png";
@@ -383,10 +387,12 @@ var pizzaElementGenerator = function(i) {
 
   pizzaDescriptionContainer.style.width="65%";
 
+  //js create html h4, and set value
   pizzaName = document.createElement("h4");
   pizzaName.innerHTML = randomName();
   pizzaDescriptionContainer.appendChild(pizzaName);
 
+  //js create html ul, and set value
   ul = document.createElement("ul");
   ul.innerHTML = makeRandomPizza();
   pizzaDescriptionContainer.appendChild(ul);
@@ -395,11 +401,12 @@ var pizzaElementGenerator = function(i) {
   return pizzaContainer;
 };
 
-// 当网站中"Our Pizzas"的滑窗部分移动时调用resizePizzas(size)函数
+// resizePizzas(size) is called when the slider in the "Our Pizzas" section of the website moves.
 var resizePizzas = function(size) {
-  window.performance.mark("mark_start_resize");   // User Timing API 函数
+  window.performance.mark("mark_start_resize");   // User Timing API function
 
-  // 改变滑窗前披萨的尺寸值
+  // Changes the value for the size of the pizza above the slider
+  // Choice id = pizzaSize, and modify the value in html
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
@@ -418,80 +425,72 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
-   // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-   // 重新编写determineDx函数，将实现的简单化
-   /**
-    * @description 给定pizza 的 size值，返回对应的显示大小
-    * @param {string} size
-    * @returns {number} 网页上的像素值
-    */
+   // Returns the size difference to change a pizza element from one size to another. Called by changePizzaSlices(size).
   function determineDx (size) {
-    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
-    
-    // 将值转成百分比宽度，并返回新的元素值
-    switch(size) {
-      case "1":
-        return 0.25 * windowWidth;
-      case "2":
-        return 0.3333 * windowWidth;
-      case "3":
-        return 0.5 * windowWidth;
-      default:
-        console.log("bug in sizeSwitcher");
-        //发生错误，返回一个默认值
-        return windowWidth;
+    //var oldWidth = elem.offsetWidth;
+    //var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    //var oldSize = oldWidth / windowWidth;
+
+    // Changes the slider value to a percent width
+    function sizeSwitcher (size) {
+      switch(size) {
+        case "1":
+          return 0.25;
+        case "2":
+          return 0.3333;
+        case "3":
+          return 0.5;
+        default:
+          console.log("bug in sizeSwitcher");
+      }
     }
+
+    var newSize = sizeSwitcher(size);
+    //var dx = (newSize - oldSize) * windowWidth;
+
+    return newSize;
   }
 
-  // 遍历披萨的元素并改变它们的宽度
-  // 重新编写 changePizzaSizes 适应新的 determineDx 函数
+  // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    // newwidth对于每一个randomPizzaContainer都是一致的，计算一次即可
-    var newwidth = determineDx(size) + 'px'
-    var randomPizzaContainers = document.getElementsByClassName("randomPizzaContainer");
-    Array.prototype.forEach.call(randomPizzaContainers, function(pizzaContainer) {
-      pizzaContainer.style.width = newwidth;
-    });
+    var dx = determineDx(size);
+    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
+    var newwidth = (dx * windowWidth) + 'px';
+    var pizzaItems = document.getElementsByClassName("randomPizzaContainer");
+    for (var i = 0; i < pizzaItems.length; i++) {
+      pizzaItems[i].style.width = newwidth;
+    }
   }
 
   changePizzaSizes(size);
 
-  // User Timing API 太棒了
+  // User Timing API is awesome
   window.performance.mark("mark_end_resize");
   window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
   var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
   console.log("Time to resize pizzas: " + timeToResize[timeToResize.length-1].duration + "ms");
 };
 
-window.performance.mark("mark_start_generating"); // 收集timing数据
+window.performance.mark("mark_start_generating"); // collect timing data
 
-// 这个for循环在页面加载时创建并插入了所有的披萨
-// 默认 pizzaElementGenerator 生成的 pizzaContainer 高度是325px
-// 仅显示当前屏幕高度显示的下的 pizza
-var screenHeight = window.innerHeight;
-var pizzasDiv = document.getElementById("randomPizzas");
-
-var pizzaAdd = Math.ceil((screenHeight-pizzasDiv.getBoundingClientRect().top) / 325) * 3;
-// 记录pizza的数量
-var pizzaCount = 2;
-
-for (var i = 2; i < pizzaAdd; i++) {
+// This for-loop actually creates and appends all of the pizzas when the page loads
+for (var i = 2; i < 100; i++) {
+  var pizzasDiv = document.getElementById("randomPizzas");
   pizzasDiv.appendChild(pizzaElementGenerator(i));
-  pizzaCount ++;
 }
 
-// 使用User Timing API。这里的测量数据告诉了你生成初始的披萨用了多长时间
+// User Timing API again. These measurements tell you how long it took to generate the initial pizzas
 window.performance.mark("mark_end_generating");
 window.performance.measure("measure_pizza_generation", "mark_start_generating", "mark_end_generating");
 var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
 console.log("Time to generate pizzas on load: " + timeToGenerate[0].duration + "ms");
 
-// 背景披萨滚动时调用函数的次数和
-// 由updatePositions()函数使用，用来决定什么时候记录平均帧率
+// Iterator for number of times the pizzas in the background have scrolled.
+// Used by updatePositions() to decide when to log the average time per frame
 var frame = 0;
 
-// 记录滚动时背景滑窗披萨移动的每10帧的平均帧率
-function logAverageFrame(times) {   // times参数是updatePositions()由User Timing得到的测量数据
+// Logs the average amount of time per 10 frames needed to move the sliding background pizzas on scroll.
+function logAverageFrame(times) {   // times is the array of User Timing measurements from updatePositions()
   var numberOfEntries = times.length;
   var sum = 0;
   for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
@@ -500,80 +499,65 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
-// 下面的关于背景滑窗披萨的代码来自于Ilya的demo:
+// The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
-// 在这里存储scrollTop最大值
-var maxScrollTop = 0;
-
-// 基于滚动条位置移动背景中的披萨滑窗
+// Moves the sliding background pizzas based on scroll position
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('.mover');
+
+  // document.body.scrollTop is no longer supported in Chrome.
   var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-  var pizzaSize = document.getElementById("sizeSlider").value;
-  var windowWidth = document.getElementById("randomPizzas").offsetWidth;
-  var newwidth = 0.3333 * windowWidth;
-  switch(pizzaSize) {
-    case "1":
-      newwidth = 0.25 * windowWidth;
-      break;
-    case "2":
-      newwidth = 0.3333 * windowWidth;
-      break;
-    case "3":
-      newwidth = 0.5 * windowWidth;
-      break;
-  }
-
-  // Pizza 的总数不超过 200
-  // 滚动添加pizza 
-  if ( scrollTop > maxScrollTop && pizzaCount < 200 ){
-    var pizzaAdd = Math.ceil((scrollTop-maxScrollTop) / 325) * 3;
-    for (var i = 0; i < pizzaAdd; i++) {
-      var pizzaElement = pizzaElementGenerator(i);
-      pizzaElement.style.width = newwidth  + 'px';
-      pizzasDiv.appendChild(pizzaElement);
-      pizzaCount ++;
-    }
-    maxScrollTop = scrollTop;
-  }
-
+  var scrFac = scrollTop / 1250;
   for (var i = 0; i < items.length; i++) {
-    //每次变量声明消耗了大量时间，将该变量定义移动到循环外
-    //var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    var phase = Math.sin((scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    var phase = Math.sin(scrFac + (i % 5));
+    //items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    //for layout cost most, change position
+    items[i].style.transform="translateX("+ 800 * phase+ "px", 100 * phase+ "px)";
   }
 
-  // 再次使用User Timing API。这很值得学习
-  // 能够很容易地自定义测量维度
+  // User Timing API to the rescue again. Seriously, it's worth learning.
+  // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
   window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
   if (frame % 10 === 0) {
     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
     logAverageFrame(timesToUpdatePosition);
   }
+  window.requestAnimationFrame(updatePositions);
 }
 
-// 在页面滚动时运行updatePositions函数
-window.addEventListener('scroll', updatePositions);
+// runs updatePositions on scroll
+//window.addEventListener('scroll', updatePositions);
+window.addEventListener('scroll', function() {
+  window.requestAnimationFrame(updatePositions);
+});
 
-// 当页面加载时生成披萨滑窗
-document.addEventListener('DOMContentLoaded', function() {
+//running JS as early as possible every frame
+//running js before the page loads
+function preparePizza(){
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
-    var elem = document.createElement('img');
+  var winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  var totalPizzas = (winHeight / s) * cols;
+  var elem;
+  for (var i = 0; i < totalPizzas; i++) {
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    document.getElementById("movingPizzas1").appendChild(elem);
   }
-  updatePositions();
+}
+
+// Generates the sliding pizzas when the page loads.
+document.addEventListener('DOMContentLoaded', function() {
+  preparePizza();
+  window.requestAnimationFrame(updatePositions);
 });
