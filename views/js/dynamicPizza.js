@@ -35,7 +35,9 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 function createBackgroundPizze() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  // 披萨数量 = (浏览器高度 / 背景披萨高度) * cols
+  var num = (document.documentElement.clientHeight / 100) * cols;
+  for (var i = 0; i < num; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -50,8 +52,8 @@ requestAnimationFrame(createBackgroundPizze);
 
 function updateMover() {
   var items = document.querySelectorAll('.mover');
+  var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
   for (var i = 0; i < items.length; i++) {
-    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
