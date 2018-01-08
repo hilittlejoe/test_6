@@ -1,4 +1,31 @@
-## 网站性能优化项目
+# 网站性能优化项目
+
+## 优化 index.html 的 PageSpeed Insights 得分
+
+### Installation
+- yarn
+
+### Usage
+- gulp default 压缩文件
+- yarn start 启动项目
+- yarn watch 使本地服务器可以被远程访问
+
+### 优化步骤
+- CSS内联方式
+- 使用在线压缩工具压缩图片:https://www.reduceimages.com/
+- JS异步
+- gulp压缩引入的html文件
+- 媒体查询print.css
+- 字体引入修改
+
+## 优化 pizza.html 的 FPS（每秒帧数）
+- updatePositions 移出scrollTop
+- changePizzaSizes
+- 减少pizzas数量
+
+
+
+### 优达学城原本提示
 
 你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
 
@@ -25,6 +52,8 @@
   $> cd /你的工程目录
   $> ./ngrok http 8080
 ```
+    {% comment %} <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet" media="none"> {% endcomment %}
+    {% comment %} <link href="css/style.css" rel="stylesheet"> {% endcomment %}
 
 1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
 
@@ -55,14 +84,3 @@
 
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
-
-### 优化之处
-* 字体使用国内 CDN
-* 不必要的 CSS 使用媒体查询
-* 图片进行压缩和尺寸处理使得图片资源变小
-* 不重要的 JS 使用 async 异步加载
-* 使用 +=
-* querySelector 改为 getElementById
-* 使用 requestAnimationFrame 调用 updatePositions 函数
-* 将 updatePositions、changePizzaSizes  函数里 for 循环里重复计算的操作移出到 for 循环外以提升性能
-* 页面加载时比萨的滑窗改为根据浏览器高度动态设计
