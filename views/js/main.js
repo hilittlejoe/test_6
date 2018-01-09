@@ -453,7 +453,7 @@ var resizePizzas = function(size) {
     // }
     var randomWidth = document.querySelector("#randomPizzas").offsetWidth;  //获得页面宽度
     var newwidth = (determineDx(size) * randomWidth) + 'px';  //页面宽度*百分比获得披萨宽度
-    var pizzas = document.querySelectorAll(".randomPizzaContainer");
+    var pizzas = document.getElementsByClassName("randomPizzaContainer");
     for (var i = 0;i < pizzas.length; i++) {
       pizzas[i].style.width = newwidth;
     }
