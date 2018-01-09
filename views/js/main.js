@@ -419,10 +419,10 @@ var resizePizzas = function(size) {
   changeSliderLabel(size);
 
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  function determineDx (elem, size) {
-    var oldWidth = elem.offsetWidth;
-    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
-    var oldSize = oldWidth / windowWidth;
+  function determineDx (size) {
+    // var oldWidth = elem.offsetWidth;
+    // var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    // var oldSize = oldWidth / windowWidth;
 
     // 将值转成百分比宽度
     function sizeSwitcher (size) {
@@ -439,40 +439,24 @@ var resizePizzas = function(size) {
     }
 
     var newSize = sizeSwitcher(size);
-    var dx = (newSize - oldSize) * windowWidth;
+    // var dx = (newSize - oldSize) * windowWidth;
 
-    return dx;
+    return newSize;
   }
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-    // determineDx函数没有实际意义，故直接使用百分比的形式
-    var newWidth;
-    switch(size) {
-      case "1":
-        newWidth = 25;
-        break;
-      case "2":
-        newWidth = 33.3;
-        break;
-      case "3":
-        newWidth = 50;
-        break;
-      default:
-        console.log("bug in sizeSwitcher");
-    }
-    // 减少节点调用同时把querySelectorAll修改为getElementsByClassName一定程度上提高了性能
-    var randomPizzas = document.getElementsByClassName("randomPizzaContainer");
-    for (var i = 0; i < randomPizzas.length; i++) {
-      randomPizzas[i].style.width = newWidth + "%";
-    }
-    // 减少节点调用
-    // var randomPizzaContainers = document.querySelectorAll(".randomPizzaContainer");
-    // for (var i = 0; i < randomPizzaContainers.length; i++) {
-    //   var dx = determineDx(randomPizzaContainers[i], size);
-    //   var newwidth = (randomPizzaContainers[i].offsetWidth + dx) + 'px';
-    //   randomPizzaContainers[i].style.width = newwidth;
+    // for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+    //   var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+    //   var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+    //   document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     // }
+    var randomWidth = document.querySelector("#randomPizzas").offsetWidth;  //获得页面宽度
+    var newwidth = (determineDx(size) * randomWidth) + 'px';  //页面宽度*百分比获得披萨宽度
+    var pizzas = document.querySelectorAll(".randomPizzaContainer");
+    for (var i = 0;i < pizzas.length; i++) {
+      pizzas[i].style.width = newwidth;
+    }
   }
 
   changePizzaSizes(size);
@@ -518,14 +502,12 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 // 基于滚动条位置移动背景中的披萨滑窗
 function updatePositions() {
   frame++;
-  // 为相应的视点做标记
   window.performance.mark("mark_start_frame");
-  // 将querySelectorAll替换为getElementsByClassName
-  var items = document.getElementsByClassName('.mover');
-  // 获取scrollTop的值，兼容各大浏览器，依次是IE、safari、chrome
-  var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
+  var items = document.querySelectorAll('.mover');
+  var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop; //页面高度为定量，移出循环以加快加载速度
   for (var i = 0; i < items.length; i++) {
+    // var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
@@ -545,18 +527,10 @@ window.addEventListener('scroll', updatePositions);
 
 // 当页面加载时生成披萨滑窗
 document.addEventListener('DOMContentLoaded', function() {
-  // 获取浏览器窗口高度
-  var scrollHeigtht = document.body.scrollHeight;
   var cols = 8;
   var s = 256;
-  // 需要的pizzas行数
-  var rows = scrollHeigtht/s;
-  // 需要的pizzas总数
-  var total = cols * rows > 30 ? 30 : cols * rows;
-  var elem;
-  // 缩减生成的Pizzas数量
-  for (var i = 0; i < total; i++) {
-    elem = document.createElement('img');
+  for (var i = 0; i < 50; i++) {  //减少Pizza个数，加快加载速度
+    var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
