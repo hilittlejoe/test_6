@@ -451,12 +451,15 @@ var resizePizzas = function(size) {
     //   var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
     //   document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     // }
-    var randomWidth = document.querySelector("#randomPizzas").offsetWidth;  //获得页面宽度
-    var newwidth = (determineDx(size) * randomWidth) + 'px';  //页面宽度*百分比获得披萨宽度
-    var pizzas = document.getElementsByClassName("randomPizzaContainer");
-    for (var i = 0;i < pizzas.length; i++) {
-      pizzas[i].style.width = newwidth;
-    }
+
+      var randomWidth=document.querySelector("#randomPizzas").offsetWidth;
+      var newWidth=(determineDx(size) * randomWidth)+'px';
+      var pizzas=document.querySelectorAll(".randomPizzaContainer");
+      for (var i=0;i<pizzas.length;i++){
+        pizzas[i].style.width=newWidth;
+      }
+
+
   }
 
   changePizzaSizes(size);
@@ -505,9 +508,8 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
-  var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop; //页面高度为定量，移出循环以加快加载速度
-  for (var i = 0; i < items.length; i++) {
-    // var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    for (var i = 0; i < items.length; i++) {
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
@@ -529,7 +531,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 50; i++) {  //减少Pizza个数，加快加载速度
+  for (var i = 0; i < 50; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
