@@ -1,18 +1,11 @@
-## 项目优化概述
-1. index.html 
-1) css外部载入文件改为内联方式
-2) 压缩图片
-3) 给js文件添加 async 属性，避免脚本阻止 DOM 的构建。
+## 网站性能优化项目
 
-2. views/js/main.js 
-1) 改用 CSS 设置披萨元素的尺寸，避免了之前的强制布局
-2) 优化updatePositions()函数
-3) 修改DOM元素选择方法querySelector为getElementBy
-4) 动态计算背景披萨个数
+### how to use
+双击项目根目录 index.html 即可打开项目
 
-3. pizza.html
-1) css外部载入文件改为内联方式
-2) 压缩图片
 
-## 项目运行指南
-点击[进入页面](https://hf024.github.io/optimize/)
+### 优化概述
+在`index.html`中， 优化了关键渲染路径。
+在`views/js/main.js`中 对于调节pizza尺寸时进行了优化，停止了其强制同步布局， 同时对于在滚动页面时候，披萨滑窗的变化也进行了停止FSL，另外在页面加载的时候减少了披萨的生成数量
+
+
