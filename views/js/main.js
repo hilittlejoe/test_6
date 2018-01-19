@@ -472,6 +472,11 @@ function updatePositions() {
   }
 }
 
+//  披萨数量 = (浏览器高度 / 背景披萨高度) * cols
+function getPizzaTotal (pizzaHeight, cols) {
+	return Math.ceil(window.innerHeight / pizzaHeight )  * cols
+}
+
 // 在页面滚动时运行updatePositions函数
 window.addEventListener('scroll', updatePositions);
 
@@ -479,7 +484,8 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  var pizzaTotal = getPizzaTotal(256, cols)
+  for (var i = 0; i < pizzaTotal; i++) {
 	var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
