@@ -421,17 +421,17 @@ var resizePizzas = function(size) {
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-    let randomPizzasContainer = document.querySelectorAll('.randomPizzaContainer');
+    let randomPizzasContainer = document.getElementsByClassName('randomPizzaContainer');
     let newWidth;
     switch(size) {
       case "1":
-        newwidth = 0.25
-        break;
+        newWidth = 25
+      break;
       case "2":
-      newwidth = 0.3333
+        newWidth = 33.33
       break;
       case "3":
-      newwidth = 0.5
+        newWidth = 50
       break;
       default:
         console.log("bug in sizeSwitcher");
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
   // 此处循环的总数量 有所变化 无需循环过多数量
-  for (var i = 0; i < 25; i++) {
+  for (var i = 0; i < 60; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
