@@ -451,11 +451,12 @@ var resizePizzas = function(size) {
 //    var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
 //    document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
 //  }
-    var randomWidth=document.querySelector("#randomPizzas").offsetWidth;
-    var newwidth=(determineDx(size)*randomWidth)+'px';
-    var pizzas=document.querySelectorAll(".randomPizzaContainer");
+    // var randomWidth=document.querySelector("#randomPizzas").offsetWidth;
+    // var newwidth=(determineDx(size)*randomWidth)+'px';
+    var newwidth = determineDx(size) * 100 + '%';
+    var pizzas=document.getElementsByClassName("randomPizzaContainer");
     for(var i=0;i<pizzas.length;i++){
-    	pizzas[i].style.width=newwidth; 
+    	pizzas[i].style.width=newwidth;
     }
   }
 
@@ -503,12 +504,12 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-  
+
   var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
   var items = document.querySelectorAll('.mover');
   for (var i = 0; i < items.length; i++) {
-    
+
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
