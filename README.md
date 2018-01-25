@@ -1,57 +1,45 @@
-## 网站性能优化项目
+# index.html 在移动设备和桌面上的 PageSpeed 分数至少为90分
+将任务分成三部分
 
-你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
+- [] 压缩图片
+- [] 处理css加载
+- [] 异步加载js
 
-开始前，请导出这个代码库并检查代码。
+## 压缩图片
+ 
+主要压缩 'views/images/pizzeria.jpg' 这张图片
 
-### 指南
+## 处理css加载
 
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
+看到 'index.html' 一共有三处CSS link
 
-以下是几个帮助你顺利开始本项目的提示：
+- 用JS代码工具异步加载google fonts
 
-1. 将这个代码库导出
-2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
+- 对于晓得css文件，我们选择**压缩之后**内联进 'index.html' 文件中
 
-```bash
-  $> cd /你的工程目录
-  $> python -m SimpleHTTPServer 8080
+- <link href="css/print.css" rel="stylesheet">只有在打印的时候才会用到，对其添加 'media=print' 属性
+
+## 异步加载js
+
+- 第一个js是可选项，将其注释
+- 第二个js用于分析页面，在页面呈现时不必加载，添加 'async' 属性，进行异步处理
+- 第三个本身即异步加载，不用处理
+
+
+
+# 对 views/js/main.js 进行的优化可使 views/pizza.html 在滚动时保持 60fps 的帧速
+
+在 'views/js/main.js' 第497行，for循环中，由于这一行不断的在取一固定值，导致了性能问题，将 'for' 移除；
+另外，代码中实际有**200**个背景披萨，但实际呈现的并没有那么多，故将其减少到**50**个。
+
+
+
+# 利用 views/pizza.html 页面上的 pizza 尺寸滑块调整 pizza 大小的时间小于5毫秒，大小的调整时间在浏览器开发工具中显示。
+
+滑块调用的函数是 'resizePizzas'，将此函数的逻辑优化为：
+```javascript
+newWidth=50;
+对所有pizza赋值新宽度50；
 ```
 
-1. 打开浏览器，访问 localhost:8080
-2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
 
-``` bash
-  $> cd /你的工程目录
-  $> ./ngrok http 8080
-```
-
-1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
-
-接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
-
-----
-
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
-
-你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
-
-你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
-
-### 一些关于优化的提示与诀窍
-* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
-* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
-* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
-* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
-* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
-
-### 使用 Bootstrap 并定制样式
-这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
-
-* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
