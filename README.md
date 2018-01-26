@@ -1,32 +1,49 @@
 ## 网站性能优化项目
 
-### 运行说明
+####项目一：优化index.html的pagespeed insights得分
 
-1: 没有服务器运行
+#####git -- 版本控制
 
-该项目没有后端组件，因此您可以选择简单地下载项目，双击index.html并在本地浏览。
+1. 在GitHub新建仓库
+2. 把初始代码文件推送到在线仓库
 
-2: 服务器
+##### PageSpeed Insights --  评估网站性能
 
-下载此项目文件放置在服务器工程根目录下，打开浏览器，访问 localhost:8080
+1. python3 -- 创建本地服务器
 
-#### 优化
+   ```shell
+     $> cd /src
+     $> python -m http.server 8080
+   ```
 
-1: index.html
-*将 style.css 整个文件里的全部样式都内联在 HTML 文档内，减少网络请求的时间，避免阻塞首次渲染
+2. ngrok -- 让本地服务器能被远程访问
 
-*添加打印媒体查询来打印CSS
+   ```shell
+     $> cd /你的工程目录
+     $> ./ngrok http 8080
+   ```
 
-*设置 async 属性，避免了脚本阻止 DOM 的构建
+3. 复制ngrok提供给你的公共URL，然后通过PageSpeed Insights访问
 
-*优化pizzeria.jpg，压缩图片质量
+##### 优化步骤
 
-2: views/js/main.js
+1. 压缩关键路径文件
+   - `gulp-htmlmin`缩减html文件
+   - `gulp-cssnano`缩减css文件
+   - `gulp-uglify`缩减js文件
+   - `gulp-watch`实时更新文件变化
+2. 使用`media = 'print'`减少无关的阻塞css文件
+3. 删除google字体和analytics
 
-*使用 getElementsByClassName代替querySelector* 类提高效率
 
-*将计算 newwidth 移到循环外部
+#### 项目二：优化pizza.html的frames
 
-*将获取网页元素移到循环外部，避免了不必要的重复
+1. ##### 卡顿原因
 
-*减少背景pizza的个数
+   强制同步布局
+
+2. ##### 优化步骤
+
+   - pizza尺寸滑块：减少读取的页面属性的种类；不在循环中读取页面属性
+   - 滚动页面：在循环外读取页面属性，然后在循环中批量处理元素样式
+
