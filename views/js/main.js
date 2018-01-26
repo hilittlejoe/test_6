@@ -418,62 +418,51 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
-  function changePizzaSizes(size) {
-  	switch(size) {
-  		case "1":
-  			newwidth = 25;
-  			break;
-  		case "2":
-  			newwidth = 33.3;
-  			break;
-  		case "3":
-  			newwidth = 50;
-  			break;
-  		default:
-  			console.log("bug in sizeSwitcher");
-  	}
-  var randomPizzas = document.querySelectorAll(".randomPizzaContainer");
-
-  for (var i = 0; i < randomPizzas.length; i++) {
-  	randomPizzas[i].style.width = newwidth + "%";
-  }
-  }
-
-
-  //  // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
+   // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
   // function determineDx (elem, size) {
-  //   var oldWidth = elem.offsetWidth;
-  //   var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
-  //   var oldSize = oldWidth / windowWidth;
+  var determineDx = function (size) {
+    // var oldWidth = elem.offsetWidth;
+    // var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    // var oldSize = oldWidth / windowWidth;
 
-  //   // 将值转成百分比宽度
-  //   function sizeSwitcher (size) {
-  //     switch(size) {
-  //       case "1":
-  //         return 0.25;
-  //       case "2":
-  //         return 0.3333;
-  //       case "3":
-  //         return 0.5;
-  //       default:
-  //         console.log("bug in sizeSwitcher");
-  //     }
-  //   }
+    // 将值转成百分比宽度
+    function sizeSwitcher (size) {
+      switch(size) {
+        case "1":
+          return 0.25;
+        case "2":
+          return 0.3333;
+        case "3":
+          return 0.5;
+        default:
+          console.log("bug in sizeSwitcher");
+      }
+    }
 
-  //   var newSize = sizeSwitcher(size);
-  //   var dx = (newSize - oldSize) * windowWidth;
+    var newSize = sizeSwitcher(size);
+    // var dx = (newSize - oldSize) * windowWidth;
 
-  //   return dx;
-  // }
+    // return dx;
+    return newSize;
+  }
 
-  // // 遍历披萨的元素并改变它们的宽度
-  // function changePizzaSizes(size) {
-  //   for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-  //     var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-  //     var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-  //     document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
-  //   }
-  // }
+  // 遍历披萨的元素并改变它们的宽度
+  function changePizzaSizes(size) {
+    // for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+    //   var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+    //   var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+    //   document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    // }
+      //计算实际pizza宽度
+      var determineD2 = determineDx(size);
+      // var newwidth = windowWidth*determineD2+'px';
+      var newwidth = 100*determineD2+'%';
+      //对所有pizza宽度进行赋值
+      var nodeList = document.querySelectorAll(".randomPizzaContainer div");
+      for (var i = 0; i < nodeList.length; i++) {
+          nodeList[i].style.width = newwidth;
+      }
+  }
 
   changePizzaSizes(size);
 
@@ -521,9 +510,8 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
-  var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
   for (var i = 0; i < items.length; i++) {
-    
+    var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
@@ -545,7 +533,7 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < 50; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
