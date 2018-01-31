@@ -1,32 +1,63 @@
+前几个月从卡在无法用vpn打开外网到工作加班没有时间学习到后面没有勇气再次做这个不会做的项目，总算磨完了这版作业，不是很懂这个项目的用意，很多细节地方也不懂，如果有问题，麻烦导师讲解详细一点，主要4个多月没学这个课程，基本都忘记了。
+
 ## 网站性能优化项目
 
-### 运行说明
+你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
 
-1: 没有服务器运行
+开始前，请导出这个代码库并检查代码。
 
-该项目没有后端组件，因此您可以选择简单地下载项目，双击index.html并在本地浏览。
+### 指南
 
-2: 服务器
+####Part 1: 优化 index.html 的 PageSpeed Insights 得分
 
-下载此项目文件放置在服务器工程根目录下，打开浏览器，访问 localhost:8080
+以下是几个帮助你顺利开始本项目的提示：
 
-#### 优化
+1. 将这个代码库导出
+2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
 
-1: index.html
-*将 style.css 整个文件里的全部样式都内联在 HTML 文档内，减少网络请求的时间，避免阻塞首次渲染
+```bash
+  $> cd /你的工程目录
+  $> python -m SimpleHTTPServer 8081
+```
 
-*添加打印媒体查询来打印CSS
+1. 打开浏览器，访问 localhost:8081
+2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
 
-*设置 async 属性，避免了脚本阻止 DOM 的构建
+``` bash
+  $> cd /你的工程目录
+  $> ./ngrok http 8081
+```
 
-*优化pizzeria.jpg，压缩图片质量
+1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
 
-2: views/js/main.js
+接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
+----
 
-*使用 getElementsByClassName代替querySelector* 类提高效率
+####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
 
-*将计算 newwidth 移到循环外部
+你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
 
-*将获取网页元素移到循环外部，避免了不必要的重复
+你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
 
-*减少背景pizza的个数
+### 一些关于优化的提示与诀窍
+* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
+* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
+* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
+* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
+* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
+* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
+
+### 使用 Bootstrap 并定制样式
+这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
+
+* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
+* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+
+动作1、imageopmi优化图片，并将网址图片下载到本地img中加载
+动作2、用media="none" onload="if(media!='all')media='all'"来避免css阻塞渲染
+动作3、Cache-Control ，http缓存
+
