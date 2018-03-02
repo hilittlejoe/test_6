@@ -438,7 +438,7 @@ var resizePizzas = function(size) {
       //这会引起样式更改和重新布局，由于每个PizzaContainer的offsetwidth实际上是一样的，
       //因此这是不必要的读取，故将其删去并简化。
       var dx = determineDx(size);
-      var objs = document.querySelectorAll(".randomPizzaContainer");
+      var objs = document.getElementsByClassName("randomPizzaContainer");
     for (var i = 0; i < objs.length; i++) {
       objs[i].style.width = dx + '%';
     }
@@ -505,10 +505,10 @@ function updatePositions() {
 //另外，用transform代替了left以避免强制同步布局
 function render(){
     var items = document.querySelectorAll('.mover');
-    var p = document.body.scrollTop / 1250;
     for (var i = 0; i < items.length; i++) {
-      var phase = Math.sin( p + (i % 5));
-      items[i].style.transform = "translateX("+ (100 * phase) +"px)";
+      var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      var phase = Math.sin((scrollTop / 1250) + (i % 5));
+      items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
     }
 };
 
@@ -516,22 +516,20 @@ function render(){
 window.addEventListener('scroll', updatePositions);
 
 // 当页面加载时生成披萨滑窗
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 100; i++) {
-    var elem = document.createElement('img');
-    elem.className = 'mover';
-    elem.src = "images/pizza.png";
-    elem.style.height = "100px";
-    elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * s;
-    elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    //由于更改了移动pizza的css属性为transform故在这里初始化left
-    //给pizza增加will-change属性来避免图层重绘制
-    elem.style.left = elem.basicLeft + 'px';
-    elem.style['will-change'] = "transform";
-    document.getElementById("movingPizzas1").appendChild(elem);
+  var pizzaNum = (window.innerHeight / s) * cols;
+  var movingPizzas1 = document.getElementById("movingPizzas1");
+  for (var i = 0; i < pizzaNum; i++) {
+      var elem = document.createElement('img');
+      elem.className = 'mover';
+      elem.src = "images/pizza.png";
+      elem.style.height = "100px";
+      elem.style.width = "73.333px";
+      elem.basicLeft = (i % cols) * s;
+      elem.style.top = (Math.floor(i / cols) * s) + 'px';
+      movingPizzas1.appendChild(elem);
   }
   updatePositions();
 });
