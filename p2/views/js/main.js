@@ -504,9 +504,9 @@ function updatePositions() {
 //基本上实现了原来的updatePositions函数的功能，将一些操作从循环中移出以优化性能，
 //另外，用transform代替了left以避免强制同步布局
 function render(){
-    var items = document.querySelectorAll('.mover');
+    var items = document.getElementsByClassName('mover');
+    var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
     for (var i = 0; i < items.length; i++) {
-      var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
       var phase = Math.sin((scrollTop / 1250) + (i % 5));
       items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
     }
