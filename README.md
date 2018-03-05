@@ -1,12 +1,33 @@
-﻿P2优化实现
-指南
+## 网站性能优化项目
 
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
+#### 如何运行
 
-1，去掉多余的需要翻墙的js引用。考虑国内cdn加速地址。 2，css文件的media设置避免阻断 3，js文件下移到html文件底部。 4，去掉不必要的代码执行。 5，压缩图片大小，减少资源占用
+直接访问[githup pages](http://cuilei.top/Website-Optimization_zh/)
 
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+```bash
+  $> cd /你的工程目录
+  $> python -m SimpleHTTPServer 8080
+```
 
-1，优化代码中反复对固定值的循环操作：如计算浮屏的披萨效果的left计算 2，对不必要的scroll事件注销，减少页面回流和重绘 3，减少代码循环次数提高性能 4，压缩图片大小，减少资源占用
+1. 打开浏览器，访问 localhost:8080
+2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
 
-###其他 考虑继续压缩js和css可以实现更快的加载速度。
+``` bash
+  $> cd /你的工程目录
+  $> ./ngrok http 8080
+```
+
+#### Part 1: 优化 index.html 的 PageSpeed Insights 得分
+
+-  用gulp.js
+  - 压缩图片
+  - 压缩css
+- 内联css
+- 添加media：print
+- 异步JavaScript
+
+#### Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+
+- 参考避免强制同步布局对 changePizzaSizes 函数进行了重构，先读取样式而后执行更改以避免强制同步布局问题。
+- 使用 requestAnimationFrame 优化 updatePositions 中的绘制动画操作。
+- 为披萨滑窗增加了 will-change CSS 属性，这样每一个 pizza 都会有自己的图层，可以避免图层重绘制。
