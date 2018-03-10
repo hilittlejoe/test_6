@@ -452,9 +452,9 @@ var resizePizzas = function(size) {
     //   document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     // }
     var randomWidth = document.querySelector("#randomPizzas".offsetWitdh);
-    var newwidth = (documentDx(size)*randomWidth)+"px";
-    var pizzas =document.querySelectorAll(".randomPizzaContainer");
-    for (var i=0；i<pizzas.length;i++){
+    var newwidth = (determineDx(size)*randomWidth)+"px";
+    var pizzas =document.getElementsByClassName("randomPizzaContainer");
+    for (var i=0;i<pizzas.length;i++){
       pizzas[i].style.width = newwidth;
     }
   }
@@ -505,12 +505,12 @@ function updatePositions() {
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    // var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+  var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+
+  for (var i = 0;i < items.length; i++) {
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
-  var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
@@ -522,6 +522,7 @@ function updatePositions() {
   }
 }
 
+
 // 在页面滚动时运行updatePositions函数
 window.addEventListener('scroll', updatePositions);
 
@@ -529,7 +530,8 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 50; i++) {
+  //电脑像素1600除以图片像素300乘以屏幕出现的行数3  为i的值  啊   还要考虑宽度
+  for (var i = 0; i < 36; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
