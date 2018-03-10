@@ -1,9 +1,13 @@
 /*
 欢迎来到我们的60fps项目！你的目标是使Cam's Pizzeria网站能流畅的运行在60fps下。
+
 在这里的代码中主要有两个问题使性能低于60fps。你能发现并修复它们吗？
+
 在代码中，你会发现一些使用User Timing API(window.performance)的例子，它们使用
 console.log()将帧率数据输入到浏览器的控制台中。如果你想了解更多关于User Timing API
 的信息，请访问：http://www.html5rocks.com/en/tutorials/webperformance/usertiming/
+
+
 创建者:
 Cameron Pittman, Udacity 课程开发者
 cameron@udacity.com
@@ -399,13 +403,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.getElementById("pizzaSize").innerHTML = "Small";
+        document.querySelector("#pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.getElementById("pizzaSize").innerHTML = "Medium";
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.getElementById("pizzaSize").innerHTML = "Large";
+        document.querySelector("#pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -416,27 +420,42 @@ var resizePizzas = function(size) {
 
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
   function determineDx (size) {
+    // var oldWidth = elem.offsetWidth;
+    // var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
+    // var oldSize = oldWidth / windowWidth;
+
+    // 将值转成百分比宽度
+    function sizeSwitcher (size) {
       switch(size) {
         case "1":
-          return 25;
+          return 0.25;
         case "2":
-          return 33.33;
+          return 0.3333;
         case "3":
-          return 50;
+          return 0.5;
         default:
-          console.log("bug in determineDx");
+          console.log("bug in sizeSwitcher");
       }
+    }
+
+    var newSize = sizeSwitcher(size);
+    // var dx = (newSize - oldSize) * windowWidth;
+
+    return newSize;
   }
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-      //原来的changePizzaSize函数会在for循环中重新多次读取元素的offsetwidth，
-      //这会引起样式更改和重新布局，由于每个PizzaContainer的offsetwidth实际上是一样的，
-      //因此这是不必要的读取，故将其删去并简化。
-      var dx = determineDx(size);
-      var objs = document.querySelectorAll(".randomPizzaContainer");
-    for (var i = 0; i < objs.length; i++) {
-      objs[i].style.width = dx + '%';
+    // for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+    //   var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+    //   var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+    //   document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    // }
+    var randomWidth = document.querySelector("#randomPizzas".offsetWitdh);
+    var newwidth = (documentDx(size)*randomWidth)+"px";
+    var pizzas =document.querySelectorAll(".randomPizzaContainer");
+    for (var i=0；i<pizzas.length;i++){
+      pizzas[i].style.width = newwidth;
     }
   }
 
@@ -485,8 +504,13 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  //使用requestAnimationFrame来优化动画，动画绘制操作都转移进新增的render函数中
-  window.requestAnimationFrame(render);
+  var items = document.querySelectorAll('.mover');
+  for (var i = 0; i < items.length; i++) {
+    // var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    var phase = Math.sin((scrollTop / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  }
+  var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
@@ -497,16 +521,6 @@ function updatePositions() {
     logAverageFrame(timesToUpdatePosition);
   }
 }
-//基本上实现了原来的updatePositions函数的功能，将一些操作从循环中移出以优化性能，
-//另外，用transform代替了left以避免强制同步布局
-function render(){
-    var items = document.querySelectorAll('.mover');
-    var p = document.body.scrollTop / 1250;
-    for (var i = 0; i < items.length; i++) {
-      var phase = Math.sin( p + (i % 5));
-      items[i].style.transform = "translateX("+ (100 * phase) +"px)";
-    }
-};
 
 // 在页面滚动时运行updatePositions函数
 window.addEventListener('scroll', updatePositions);
@@ -515,19 +529,15 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 100; i++) {
+  for (var i = 0; i < 50; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
-    elem.src = "images/pizza.min.png";
+    elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    //由于更改了移动pizza的css属性为transform故在这里初始化left
-    //给pizza增加will-change属性来避免图层重绘制
-    elem.style.left = elem.basicLeft + 'px';
-    elem.style['will-change'] = "transform";
-    document.getElementById("movingPizzas1").appendChild(elem);
+    document.querySelector("#movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });
