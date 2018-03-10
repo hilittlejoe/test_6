@@ -451,7 +451,7 @@ var resizePizzas = function(size) {
     //   var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
     //   document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     // }
-    var randomWidth = document.querySelector("#randomPizzas".offsetWitdh);
+    var randomWidth = document.querySelector("#randomPizzas").offsetWidth;
     var newwidth = (determineDx(size)*randomWidth)+"px";
     var pizzas =document.getElementsByClassName("randomPizzaContainer");
     for (var i=0;i<pizzas.length;i++){
@@ -504,7 +504,7 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('mover');
   var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
   for (var i = 0;i < items.length; i++) {
@@ -530,8 +530,9 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  //电脑像素1600除以图片像素300乘以屏幕出现的行数3  为i的值  啊   还要考虑宽度
-  for (var i = 0; i < 36; i++) {
+  //浏览器高度  736  图片 256  4行  每行6个  大约66个  已在移动端 检测过
+  //因为着急赶进度  毕业   所以 提交的项目都没检查  以为都没啥错   不好意思  结果花了这么久的时间改错  感谢指正！！
+  for (var i = 0; i < 66; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
