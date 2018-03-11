@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">  
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="https://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dimple/2.3.0/dimple.latest.min.js"></script>
     <style>
-    
+
       h2{
       	text-align:center;
       }
-      
+
       div.buttons{
       	position:fixed;
       	top:100px;
       	right:200px;
       }
-      
+
       div.buttons div{
       	background-color:rgb(107,207,250);
       	padding:20px;
       	margin:10px;
-      }	
-  
+      }
+
     </style>
 
     <script type="text/javascript">
@@ -51,7 +51,7 @@
 	          	}else{
 	          		data[i]['weight-1']='240+'
 	          	}
-	          	
+
 	          	//给avg分组
 	          	if(data[i]['avg']<=0.05){
 	          		data[i]['avg-1']='0-0.05'
@@ -67,13 +67,13 @@
 	          		data[i]['avg-1']='0.3-0.35'
 	          	} else  {
 	          		data[i]['avg-1']='0.35+'
-	          	} 
+	          	}
 	          }
-	
+
 	        var val = ['handedness','height', 'weight-1', 'avg-1'];
-	      	        
-        
-	        
+
+
+
 	        // Add a button
 	        var buttons = d3.select("body")
 	                        .append("div")
@@ -83,41 +83,41 @@
 	                        .enter()
 	                        .append("div")
 	                        .text(function(d) {return d;
-	                        	});	
-	
+	                        	});
+
 	        var svg = dimple.newSvg("body", 1280, 720);
-	
-	
+
+
 	        function update(val){
-	
+
 	          // Remove existed svg before update
 	          svg.selectAll("*").remove()
-	
+
 	          var myChart = new dimple.chart(svg, data);
 	          myChart.setBounds(300, 45, 800, 600);//设定边界
-	
+
 	          if (val != 'handedness') {
 	            var x = myChart.addCategoryAxis("x", [val, "handedness"]);
 	            x.title = val;
-	            
+
 	          } else {
 	            var x = myChart.addCategoryAxis("x", [val]);
 	          }
-	          
-	          
-	          
+
+
+
 	          x.addOrderRule(val);
 	          var x2 = myChart.addCategoryAxis("x", val)
 	          x2.addOrderRule(val);//设置x2的排列顺序
 	          x2.hidden = true;
-	
+
 	          var y1 = myChart.addMeasureAxis("y", "HR");
-	          
+
 	          var y2 = myChart.addMeasureAxis("y", "name");
 	          y1.title = "Average Homers Score(HR)";
 	          y2.title = "Total Number of Players";
-	
-	          
+
+
 	          var s = myChart.addSeries("handedness", dimple.plot.bar,[x,y1]);
 	          s.aggregate = dimple.aggregateMethod.avg;
 
@@ -125,16 +125,16 @@
 	          var l = myChart.addSeries(null, dimple.plot.line, [x2, y2]);
 	          var l = myChart.addSeries(null, dimple.plot.circle, [x2,y2]);
 	          l.lineMarkers = true;
-	
-	
+
+
 	          myChart.addLegend(300, 20, 800, 200, "right");
 	          myChart.draw(800);
 	        } ;
-	
-	
+
+
 	        //update('handedness', 'HR'); // 初始化图形
-	
-	
+
+
 	        buttons.on("click", function(d) {
 	          d3.select(".buttons")
 	            .selectAll("div")
@@ -142,19 +142,19 @@
 	            .duration(100)
 	            .style("color", "black")
 	            .style("background", "rgb(107, 207, 250)");
-	         
+
 	          d3.select(this)
 	            .transition()
 	            .duration(500)
 	            .style("color", "white")
 	            .style("background", "rgb(150, 107, 235)");
-	         
+
 	          update(d);
 	        });
-	
+
 	      update('handedness');
 	      }
-    
+
 
     </script>
   </head>
