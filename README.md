@@ -13,3 +13,6 @@
 * 不使用web字体
 * 使用 requestAnimationFrame
 * 改变updatePositions、changpizzsize里面重复的layout 
+* 用getElementsByClassName代替querySelector
+* 将重复计算放在for循环外部 
+* 加载披萨数量动态化

@@ -440,19 +440,17 @@ var resizePizzas = function(size) {
 
     var newSize = sizeSwitcher(size);
     var dx = (newSize - oldSize) * windowWidth;
-
     return dx;
   }
 
   // 遍历披萨的元素并改变它们的宽度
   function changePizzaSizes(size) {
-    var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[0], size);
-    var newwidth = (document.querySelectorAll(".randomPizzaContainer")[0].offsetWidth + dx) + 'px';
-
-
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-      
-      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    
+    var tidai = document.getElementsByClassName("randomPizzaContainer");
+    var dx = determineDx(tidai[0], size);
+    var newwidth = (tidai[0].offsetWidth + dx) + 'px';
+    for (var i = 0; i < tidai.length; i++) {      
+      tidai[i].style.width = newwidth;
     }
   }
 
@@ -501,12 +499,11 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover');
+  var items = document.getElementsByClassName('mover');
   var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-  for (var i = 0; i < items.length; i++) {
-    
+  for (var i = 0; i < items.length; i++) {    
     var phase = Math.sin((scrollTop / 1250) + (i % 5));
-    items[i].style.left = (i%8)*256 + 100 * phase + 'px';
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
   // 再次使用User Timing API。这很值得学习
@@ -528,7 +525,9 @@ window.addEventListener('scroll',function(){
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 200; i++) {
+  var pizzaNumber = Math.floor( window.innerHeight / s ) * cols;
+  var daiti2 = document.getElementById("movingPizzas1");
+  for (var i = 0; i < pizzaNumber; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -536,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    daiti2.appendChild(elem);
   }
   updatePositions();
 });
