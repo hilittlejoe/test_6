@@ -375,7 +375,7 @@ var pizzaElementGenerator = function(i) {
   pizzaContainer.id = "pizza" + i;                // 给每个披萨元素赋一个独一无二的id
   pizzaImageContainer.style.width="35%";
 
-  pizzaImage.src = "images/pizza.png";
+  pizzaImage.src = "images/pizza.webp";
   pizzaImage.classList.add("img-responsive");
   pizzaImageContainer.appendChild(pizzaImage);
   pizzaContainer.appendChild(pizzaImageContainer);
@@ -403,13 +403,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.getElementById("pizzaSize").innerHTML = "Small";
+        document.querySelector("#pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.getElementById("pizzaSize").innerHTML = "Medium";
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.getElementById("pizzaSize").innerHTML = "Large";
+        document.querySelector("#pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -418,12 +418,8 @@ var resizePizzas = function(size) {
 
   changeSliderLabel(size);
 
-   // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  function determineDx (elem, size) {
-    var oldWidth = elem.offsetWidth;
-    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
-    var oldSize = oldWidth / windowWidth;
-
+   // 根据windowWidth和size获得randomPizzaContainer的宽度，由changePizzaSlices(size)函数调用
+  function determineNewWidth (size, windowWidth) {
     // 将值转成百分比宽度
     function sizeSwitcher (size) {
       switch(size) {
@@ -438,18 +434,23 @@ var resizePizzas = function(size) {
       }
     }
 
-    var newSize = sizeSwitcher(size);
-    var dx = (newSize - oldSize) * windowWidth;
+    var newwidth = sizeSwitcher(size) * windowWidth;
 
-    return dx;
+    return newwidth;
   }
 
   // 遍历披萨的元素并改变它们的宽度
+  /* 
+    1.将windowWidth从determinDx中移出（并且使用querySelector→getElementById微优化），避免FSL
+    2.将document.querySelectorAll(".randomPizzaContainer")用变量randomPizzaContainers记住
+    3.实际上原代码那么复杂的计算也只是要根据size和windowWidth来计算新randomPizzaContainer的width，优化计算流程减少计算量并使之不需要用到randomPizzaContainers[i].offsetWidth，避免FSL，故舍弃determinDx使用新算法determineNewWidth
+  */
   function changePizzaSizes(size) {
-    for (var i = 0; i < document.getElementsByClassName("randomPizzaContainer").length; i++) {
-      var dx = determineDx(document.getElementsByClassName("randomPizzaContainer")[i], size);
-      var newwidth = (document.getElementsByClassName("randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-      document.getElementsByClassName("randomPizzaContainer")[i].style.width = newwidth;
+    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
+    var randomPizzaContainers = document.querySelectorAll(".randomPizzaContainer");
+    var newwidth = determineNewWidth(size, windowWidth) + 'px';
+    for (var i = 0; i < randomPizzaContainers.length; i++) {
+      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
@@ -498,11 +499,19 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.getElementsByClassName('mover');
-  for (var i = 0; i < items.length; i++) {
+  // 减少动画次数，每3frams执行一次动画，一般察觉不出变化的
+  if(frame%3==1) {
+    var items = document.querySelectorAll('.mover');
+    /* 
+      1.移出scrollTop，使之不会强制同步布局
+      2.微优化循环中的lenth计算，使之只需计算一次
+      3.优化left为transform，不会触发重绘布局
+    */
     var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-    var phase = Math.sin((scrollTop / 50) + (i % 5));
-    items[i].style.transform = 'translateX(' + 800 * phase +'px)';
+    for (var i = 0, len=items.length; i < len; i++) {
+      var phase = Math.sin((scrollTop / 1250) + (i % 5));
+      items[i].style.transform = "translateX(" + (items[i].basicLeft + 100 * phase) + "px)";
+    }
   }
 
   // 再次使用User Timing API。这很值得学习
@@ -519,18 +528,24 @@ function updatePositions() {
 window.addEventListener('scroll', updatePositions);
 
 // 当页面加载时生成披萨滑窗
+/* 
+    1.优化背景pizza的数量，根据屏幕高度计算
+    2.设置的图片宽高远小于原图片，压缩了图片pizza.png
+*/
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  for (var i = 0; i < 40; i++) {
+  var counts = parseInt(document.documentElement.clientHeight / 100 * cols);
+  for (var i = 0; i < counts; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
-    elem.src = "images/pizza.png";
+    elem.src = "images/pizza.webp";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
+    elem.style.left = "0";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.getElementById("movingPizzas1").appendChild(elem);
+    document.querySelector("#movingPizzas1").appendChild(elem);
   }
   updatePositions();
 });

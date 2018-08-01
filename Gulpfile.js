@@ -1,22 +1,18 @@
-//引入gulp，项目文件中安装的gulp的引入方式 
-var gulp =require('gulp'),
+//引入gulp
+var gulp = require('gulp'),
 //引入组件 
-    jshint = require("gulp-jshint"), // js检测
     minifycss = require("gulp-minify-css"), // css压缩
-    concat = require("gulp-concat"), // 文件合并
     uglify = require("gulp-uglify"), // js压缩
     rename = require("gulp-rename"), // 重命名
     runSequence = require('run-sequence'), // 解决异步问题
     htmlmin = require('gulp-htmlmin'), // 压缩html
-    imagemin = require('gulp-imagemin'), // 压缩图片
-    pngquant = require('imagemin-pngquant'), // 深度压缩图片
-    del = require('del');                   // 删除文件
+    del = require('del'); // 删除文件
     autoprefixer = require('gulp-autoprefixer'), // 根据设置浏览器版本自动处理浏览器前缀
-    htmlreplace = require('gulp-html-replace');
+    replace = require('gulp-replace'); // 路径更换
 
 // 执行clean任务，删除dist目录下所有文件
 gulp.task('clean', function() {
-    return del(['dist/**/*']);
+    return del(['dist/**/*', '!dist/README.md']);
 });
 
 // 压缩html和css,js路径替换
@@ -32,12 +28,11 @@ gulp.task('htmlmin', function() {
         minifyCSS: true//压缩页面CSS
     };
     return gulp.src(['src/*html', 'src/views/*.html'], {base: 'src'})
-        .pipe(htmlreplace({
-            'css': ['css/style.min.css', 'css/print.min.css'],
-            'pizzacss': ['css/style.min.css', 'css/bootstrap-grid.min.css'],
-            'js': 'js/perfmatters.min.js',
-            'pizzajs': 'js/main.min.js'
-        }))
+        .pipe(replace(`<link href="css/print.css" rel="stylesheet" media="print">`, `<link href="css/print.min.css" rel="stylesheet" media="print">`))
+        .pipe(replace(`<script async src="js/perfmatters.js"></script>`, `<script async src="js/perfmatters.min.js"></script>`))
+        .pipe(replace(`<link rel="stylesheet" href="css/style.css">`, `<link rel="stylesheet" href="css/style.min.css">`))
+        .pipe(replace(`<link rel="stylesheet" href="css/bootstrap-grid.css">`, `<link rel="stylesheet" href="css/bootstrap-grid.min.css">`))
+        .pipe(replace(`<script type="text/javascript" src="js/main.js"></script>`, `<script type="text/javascript" src="js/main.min.js"></script>`))
         .pipe(htmlmin(options))
         .pipe(gulp.dest('dist/'));
 });
@@ -71,24 +66,9 @@ gulp.task('uglify', function() {
         .pipe(gulp.dest('dist/'));
 });
 
-// JS合并压缩 例子
-gulp.task('concatjsmin', function() {
-    return gulp.src(['src/js/*.js', '!src/js/perfmatters.js'])
-        .pipe(concat('main.js'))              //合并除perfmatters的所有js到main.js
-        // .pipe(gulp.dest('dist/js/'))          //输出main.js到文件夹
-        .pipe(rename({suffix: '.min'}))      //rename压缩后的文件名
-        .pipe(uglify())                      //压缩
-        .pipe(gulp.dest('dist/js/'));          //输出
-});
-
-// 压缩图片(效果不理想) 推荐在线压缩：http://zhitu.isux.us/
-gulp.task('imagemin', function() {
-    return gulp.src(['src/img/*.{png,jpg,gif,ico}', 'src/views/images/*.{png,jpg,gif,ico}'], {base: 'src'})
-        .pipe(imagemin({
-            progressive: true,
-	        optimizationLevel: 7,
-            use: [pngquant()]
-        }))
+// 复制图片和md
+gulp.task('filetrans', function() {
+    return gulp.src(['src/img/*.{png,jpg,gif,ico,webp}', 'src/views/images/*.{png,jpg,gif,ico,webp}', 'src/*.md'], {base: 'src'})
         .pipe(gulp.dest('dist'));
 });
 
@@ -101,11 +81,8 @@ gulp.task('script', function() {
 
 // 输出生产代码
 gulp.task('build', function(cb) {
-    // gulp的任务都是异步执行，htmlmin不会等到clean执行完后再执行
-    runSequence('clean', 'autoFx', ['htmlmin', 'minifycss', 'uglify', 'concatjsmin', 'imagemin'], cb);
+    // 同步执行任务
+    runSequence('clean', 'autoFx', ['htmlmin', 'minifycss', 'uglify', 'filetrans'], cb);
 });
 
 gulp.task('jshint', ['script']);
-
-
-// cnpm install --save-dev jshint gulp-jshint

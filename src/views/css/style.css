@@ -33,6 +33,8 @@ form {
   position: fixed;
   width: 256px;
   z-index: -1;
+  /* 提前告知浏览器做好准备 */
+  will-change: transform;
 }
 
 .randomPizzaContainer {
