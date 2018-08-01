@@ -1,45 +1,33 @@
-* ## 网站性能优化项目
+## Udacity Website Optimization Project
 
-  ### 说明
+This project is a udacity nano-degree front-end development project about website optimization.
 
-  1. 本项目通过优化CRT路径、js代码、压缩文件等方式实现网站的优化；
-  2. 优化的目标主要有PageSpeed分数90+、帧率60fps、调整时间<5ms；
-  3. 优化的主要方式有CRT优化、消除FSL、防止css触发layout等；
-  4. 详细优化步骤请参见下方的项目相关操作记录
+### References
+* [Web Front Loader](https://github.com/typekit/webfontloader#modules)
+* [Compressing Images](https://compressjpeg.com/)
+* [Analyze FPS](https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/#analyze_frames_per_second)
+* [requestAnimationFrame()](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame)
+### How to use
 
-  ------
+####Part 1: PageSpeed Insights for index.html
 
-  ###项目地址
+This website is hosted at https://jeremyleeeee.github.io/WebOptimization/. I searched online and it seemed that it is 
+not possible to get PageSpeed Insights score if you open index.html directly on your machine. By simply entering the
+address above in the input box of PageSpeed website, you could see that it should be 99/100 for mobile devices and 
+96/100 for desktop devices.
 
-  ##### GitHub Rep：[CyfforPro/Udacity_Website_Optimization](https://github.com/CyfforPro/Udacity_Website_Optimization)
+1. I used Web Font Loader to get Google Fonts asynchronously, it dramatically increases the score.
+2. I embedded the style.css into the html, which I am not sure helps a lot.
+3. Another important part that increases my score a lot is compressing all the images used in the website. By doing that,
+the speed for loading these images increase.
+####Part 2: FPS for pizza.html
 
-  ##### GitHub Pages：[Udacity_Website_Optimization](https://cyfforpro.github.io/Udacity_Website_Optimization/)
-
-  ------
-
-  ### 项目相关操作记录
-
-  ####Part 1: 优化 index.html 的 PageSpeed Insights 得分
-
-  1. 设置meta允许浏览器缓存html；
-  2. 字体加载通过js改为异步加载；
-  3. 将style.css设为内联
-  4. 对print.css设置媒体查询条件，使之不会阻塞渲染；
-  5. 利用gulp minify css/html/js、uglify js，通过ImageMagick/智图压缩图片；
-  6. 对于index.html外链中的图片，似乎因为某墙的关系，可能加载不出来，为了能够对图片进行优化，将之下载到了本地文件夹并进行了压缩
-
-  #### Part 2: 优化 pizza.html 的 滚动/滑动 帧率60fps
-
-  1. 滚动时发现存在FSL问题，故将updatePositions中的scrollTop移出循环；
-  2. 微优化updatePositions中循环的lenth计算，使之只需计算一次；
-  3. 优化updatePositions中的变更items的left值为transform实现，避免触发layout；
-  4. 在style.css的.mover中添加will-change: transform;提前告知浏览器做好准备；
-  5. 利用frame的值，每三次frame刷新才触发一次pizza的移动，能减少js计算、重计算样式、合成图层的次数；
-  6. 优化滚动背景pizza的数量，根据屏幕高度生成；
-  7. 压缩图片pizza.png为更高性能的webp格式
-
-  #### Part 3: 优化 pizza.html 的 滑动调整pizza大小 时间<5ms
-
-  1. 将windowWidth从determinDx中移出（并且使用querySelector→getElementById微优化），避免FSL；
-  2. 将document.querySelectorAll(".randomPizzaContainer")用变量randomPizzaContainers记住；
-  3. 实际上原代码那么复杂的计算也只是要根据size和windowWidth来计算新randomPizzaContainer的width，优化计算流程减少计算量并使之不需要用到randomPizzaContainers[i].offsetWidth，避免FSL，故舍弃determinDx使用新算法determineNewWidth
+For this part, you need to turn on the FPS meter provided by Chrome and after that you just navigate to the pizza.html 
+page and start scrolling and see what the FPS is. As I was testing, the FPS is generally around 60, but at some point it
+would drop below 60.
+1. In updatePositions(), I used a requestAnimationFrame(callback) to increase performance.
+2. The code removed from updatePositions() is put inside the callback() function and I used transform instead of left, 
+this requires me to make some changes at the end of the DOMContentLoaded listener as well.
+3. Since every pizza generated is the same, I removed some of the code in the loop.
+4. Replace all the query with getElementbyId or getElementsbyClass
+5. Calculate the number of pizza needed so we do not have to do more loops than necessary.
