@@ -70,14 +70,17 @@
       // 可选 TODO: 用你的 Google Analytics ID 替换它
       ga('create', 'UA-XXXX-Y');
       ga('send', 'pageview');
+      
       // 异步加载google fonts
-      WebFont.load({
-        google: {
-          families: ['Open+Sans:400,700']
-        }
-      });
+      window.onload = function() {
+        WebFont.load({
+          google: {
+            families: ['Open+Sans:400,700']
+          }
+        });
+      }
     </script>
-    <script src="http://www.google-analytics.com/analytics.js"></script>
+    <script src="https://www.google-analytics.com/analytics.js"></script>
     <!-- 引入webfontloader -->
     <script defer src="//staticfile.qnssl.com/webfont/1.6.16/webfontloader.js"></script>
     <script async src="js/perfmatters.js"></script>
