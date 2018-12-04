@@ -1,33 +1,70 @@
-## Udacity Website Optimization Project
+## 网站性能优化项目
 
-This project is a udacity nano-degree front-end development project about website optimization.
+你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
 
-### References
-* [Web Front Loader](https://github.com/typekit/webfontloader#modules)
-* [Compressing Images](https://compressjpeg.com/)
-* [Analyze FPS](https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/#analyze_frames_per_second)
-* [requestAnimationFrame()](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestAnimationFrame)
-### How to use
+开始前，请导出这个代码库并检查代码。
 
-####Part 1: PageSpeed Insights for index.html
+### 指南
 
-This website is hosted at https://jeremyleeeee.github.io/WebOptimization/. I searched online and it seemed that it is 
-not possible to get PageSpeed Insights score if you open index.html directly on your machine. By simply entering the
-address above in the input box of PageSpeed website, you could see that it should be 99/100 for mobile devices and 
-96/100 for desktop devices.
+####Part 1: 优化 index.html 的 PageSpeed Insights 得分
 
-1. I used Web Font Loader to get Google Fonts asynchronously, it dramatically increases the score.
-2. I embedded the style.css into the html, which I am not sure helps a lot.
-3. Another important part that increases my score a lot is compressing all the images used in the website. By doing that,
-the speed for loading these images increase.
-####Part 2: FPS for pizza.html
+[Project Repo] https://github.com/kamiimeteor/Udacity-P6-Website-Optimization
 
-For this part, you need to turn on the FPS meter provided by Chrome and after that you just navigate to the pizza.html 
-page and start scrolling and see what the FPS is. As I was testing, the FPS is generally around 60, but at some point it
-would drop below 60.
-1. In updatePositions(), I used a requestAnimationFrame(callback) to increase performance.
-2. The code removed from updatePositions() is put inside the callback() function and I used transform instead of left, 
-this requires me to make some changes at the end of the DOMContentLoaded listener as well.
-3. Since every pizza generated is the same, I removed some of the code in the loop.
-4. Replace all the query with getElementbyId or getElementsbyClass
-5. Calculate the number of pizza needed so we do not have to do more loops than necessary.
+以下是几个帮助你顺利开始本项目的提示：
+
+1. 将这个代码库导出
+2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
+
+```bash
+  $> cd /你的工程目录
+  $> python -m SimpleHTTPServer 8080
+```
+
+1. 打开浏览器，访问 localhost:8080
+2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
+
+``` bash
+  $> cd /你的工程目录
+  $> ./ngrok http 8080
+```
+
+1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
+
+接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
+
+----
+
+####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
+
+你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
+
+你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
+
+### 一些关于优化的提示与诀窍
+* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
+* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
+* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
+* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
+* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
+* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
+* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
+
+### 使用 Bootstrap 并定制样式
+这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
+
+* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
+* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+
+### 已优化
+  * 不必要的 CSS 使用媒体查询
+  * 对JS文件使用异步加载
+  * 图片进行压缩和尺寸处理使得图片资源变小
+  * 页面加载时比萨的滑窗改为根据浏览器高度动态设计
+
+  * 将querySelector改为getElementById
+  * 将 updatePositions、changePizzaSizes  函数里 for 循环里重复计算的操作移出到 for 循环外以提升性能
+  * 使用 requestAnimationFrame 调用 updatePositions 函数
+

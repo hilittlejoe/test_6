@@ -403,13 +403,13 @@ var resizePizzas = function(size) {
   function changeSliderLabel(size) {
     switch(size) {
       case "1":
-        document.getElementById("pizzaSize").innerHTML = "Small";
+        document.querySelector("#pizzaSize").innerHTML = "Small";
         return;
       case "2":
-        document.getElementById("pizzaSize").innerHTML = "Medium";
+        document.querySelector("#pizzaSize").innerHTML = "Medium";
         return;
       case "3":
-        document.getElementById("pizzaSize").innerHTML = "Large";
+        document.querySelector("#pizzaSize").innerHTML = "Large";
         return;
       default:
         console.log("bug in changeSliderLabel");
@@ -421,7 +421,7 @@ var resizePizzas = function(size) {
    // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
   function determineDx (elem, size) {
     var oldWidth = elem.offsetWidth;
-    var windowWidth = document.getElementById("randomPizzas").offsetWidth;
+    var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
     var oldSize = oldWidth / windowWidth;
 
     // 将值转成百分比宽度
@@ -443,21 +443,21 @@ var resizePizzas = function(size) {
 
     return dx;
   }
-  // Create a variable so we do not have to query it all the time
-  var pizza = document.getElementsByClassName("randomPizzaContainer");
 
   // 遍历披萨的元素并改变它们的宽度
-  // Every pizza is basically the same, so we do not have to put some of the code in the loop
   function changePizzaSizes(size) {
-      var dx = determineDx(pizza[0], size);
-      var newwidth = (pizza[0].offsetWidth + dx) + 'px';
+    var rPZ = document.getElementsByClassName("randomPizzaContainer");
 
-      for (var i = 0; i < pizza.length; i++) {
-          pizza[i].style.width = newwidth;
-      }
-  }
+    // 只算一个
+    var dx = determineDx(rPZ[0], size);
+    var newwidth = (rPZ[0].offsetWidth + dx) + 'px';
 
-  changePizzaSizes(size);
+    for (var i = 0; i < rPZ.length; i++) {
+        rPZ[i].style.width = newwidth;
+    }
+}
+
+changePizzaSizes(size);
 
   // User Timing API 太棒了
   window.performance.mark("mark_end_resize");
@@ -501,8 +501,14 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
-  // Add a requestAnimationFrame method to optimize animation
-  window.requestAnimationFrame(callback);
+
+  var items = document.getElementsByClassName('mover');
+  var scroll = (document.body.scrollTop / 1250);
+  for (var i = 0; i < items.length; i++) {    
+    var phase = Math.sin((scrollTop.body.scrollTop / 1250) + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  }
+
   // 再次使用User Timing API。这很值得学习
   // 能够很容易地自定义测量维度
   window.performance.mark("mark_end_frame");
@@ -513,16 +519,6 @@ function updatePositions() {
   }
 }
 
-// Code removed from updatePositions() goes here, also use transform instead of left
-function callback(){
-    var items = document.getElementsByClassName('mover');
-    for (var i = 0; i < items.length; i++) {
-        var scrollTop =  window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        var phase = Math.sin((scrollTop / 1250) + (i % 5));
-        items[i].style.transform = "translateX("+ (100 * phase) +"px)";
-    }
-}
-
 // 在页面滚动时运行updatePositions函数
 window.addEventListener('scroll', updatePositions);
 
@@ -530,20 +526,21 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-  // Calculate the pizza needed so we do not have to do more loops than necessary
-  var number = (window.innerHeight / 75) + (window.innerWidth / 75);
-  for (var i = 0; i < number; i++) {
-    var elem = document.createElement('img');
+
+  var winHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+  var totalPizzas = Math.floor(winHeight / s) * cols;
+  var elem;
+
+  // 从200改到50 降低fps
+  for (var i = 0 ; i < totalPizzas; i++) {
+    elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    // In the callback function we used transform instead of left, so here we need to reinitialize
-    elem.style.left = elem.basicLeft + 'px';
-    elem.style['separate'] = "transform";
-
+    // replace "querySelector" method with "getElementsById"
     document.getElementById("movingPizzas1").appendChild(elem);
   }
   updatePositions();
